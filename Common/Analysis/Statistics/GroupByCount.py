@@ -15,22 +15,24 @@ def plug_in(data, classification, type) :
 
     DF = pd.DataFrame(DL, columns=[CNM])
     DFG = DF.groupby([CNM]).size().reset_index(name='counts')
-    DFGS = DFG.sort_values(by="counts", ascending=False)
+    #DFGS = DFG.sort_values(by="counts", ascending=False)
 
     if classification == 'os' :
-        statistics_unique = classification + '_' + DFGS.OP
-        item = DFGS.OP
+        statistics_unique = classification + '_' + DFG.OP
+        item = DFG.OP
     elif classification == 'virtual':
-        statistics_unique = classification + '_' + DFGS.IV
-        item = DFGS.IV
+        statistics_unique = classification + '_' + DFG.IV
+        item = DFG.IV
     elif classification == 'asset':
-        statistics_unique = classification+'_'+DFGS.CT
-        item = DFGS.CT
+        statistics_unique = classification+'_'+DFG.CT
+        item = DFG.CT
     elif classification == 'installed_applications':
-        statistics_unique = classification+'_'+DFGS.IANM
-        item = DFGS.IANM
+        statistics_unique = classification+'_'+DFG.IANM
+        item = DFG.IANM
+    item_count = DFG.counts
+    #for DFC in range(len(DFG)) :
+        #print({"minutely_statistics_unique" : statistics_unique[DFC], "classification" : classification, "item" : item[DFC], "count" : item_count[DFC]})
 
-    item_count = DFGS.counts
 
     #print(statistics_unique)
     #print(classification)
