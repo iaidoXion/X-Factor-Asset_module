@@ -12,8 +12,8 @@ def plug_in(period, type) :
         DL = []
         selectConn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHost, DBPort, DBName, DBUser, DBPwd))
         selectCur = selectConn.cursor()
-        if period == 'today' :
-            if type == 'all' :
+        if period == 'minutely' :
+            if type == 'minutely_asset_all' :
                 SQ = """
                     select 
                         computer_id, computer_name, last_reboot, disk_total_space, disk_used_space, os_platform, 
@@ -51,13 +51,24 @@ def plug_in(period, type) :
                         minutely_asset 
                     group by os_platform
                 """
-            elif type == 'statistics' :
+            elif type == 'installed_applications' :
+                SQ = """
+                    select 
+                        installed_applications_name
+                    from 
+                        minutely_asset;
+                """
+
+            elif type == 'minutely_daily_asset' :
                 SQ = """
                     select
                         ma.computer_id as today_computer_id,
                         ma.last_reboot as today_last_reboot,
                         ma.disk_used_space as today_disk_used_space,
                         da.disk_used_space as yesterday_disk_used_space,
+                        ma.os_platform, 
+                        ma.is_virtual, 
+                        ma.chassis_type,
                         ma.ipv_address as today_ipv_address,
                         ma.listen_port_count as today_listen_port_count,
                         da.listen_port_count as yesterday_listen_port_count,
@@ -73,6 +84,9 @@ def plug_in(period, type) :
                             computer_id, 
                             last_reboot, 
                             disk_used_space, 
+                            os_platform, 
+                            is_virtual, 
+                            chassis_type,
                             ipv_address, 
                             listen_port_count, 
                             established_port_count,
