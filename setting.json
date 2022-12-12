@@ -1,0 +1,83 @@
+{
+  "PROJECT" : {
+    "CUSTOMER" : "NC",
+    "TYPE" : "System",
+    "WAITING" : {
+      "USE" : "true",
+      "DATE" : "2022-08-24"
+    },
+    "LOG" : {
+      "directory" : "log/",
+      "fileName" : "log_",
+      "fileFormat" : ".log"
+    }
+  },
+  "COREUSE" : {
+    "Tanium" : "true",
+    "Zabbix" : "false"
+  },
+  "PLUGIN" : {
+    "Tanium" : {
+      "COLLECTIONTYPE" : "online",
+      "COLLECTIONCYCLE" : {
+        "MINUTELY": "true",
+        "DAILY": "true"
+      },
+      "INPUT" : {
+        "API" : {
+          "URL": "https://1.223.168.93:49105",
+          "PATH": {
+            "SesstionKey": "/api/v2/session/login",
+            "Sensor": "/api/v2/result_data/saved_question/"
+          },
+          "username": "administrator",
+          "password": "xion123!",
+          "SensorID": {
+            "COMMON" : "4080",
+            "VUL" : "3754"
+          }
+        },
+        "DB" : {
+          "PS" : {
+            "HOST": "1.223.168.93",
+            "PORT": "40011",
+            "NAME": "postgres",
+            "USER": "postgres",
+            "PWD": "psql",
+            "TNM": {
+              "MA" : "minutely_asset",
+              "DA": "daily_asset",
+              "MSL" : "minutely_statistics_list",
+              "DSL" : "daily_statistics_list",
+              "MS" : "minutely_statistics",
+              "DS" : "daily_statistics"
+            }
+          }
+        }
+      },
+      "Transform" : "true",
+      "OUTPUT" : {
+        "DB" : {
+          "PS" : {
+            "HOST": "1.223.168.93",
+            "PORT": "40011",
+            "NAME": "postgres",
+            "USER": "postgres",
+            "PWD": "psql",
+            "TNM": {
+              "MA" : "minutely_asset",
+              "DA": "daily_asset",
+              "MSL" : "minutely_statistics_list",
+              "DSL" : "daily_statistics_list",
+              "MS" : "minutely_statistics",
+              "DS" : "daily_statistics"
+            }
+          }
+        }
+      }
+    },
+    "Zabbix" : {
+
+    }
+  }
+}

@@ -1,23 +1,25 @@
 import requests
 import json
+with open("setting.json", encoding="UTF-8") as f:
+    SETTING = json.loads(f.read())
+
+APIURL = SETTING['PLUGIN']['Tanium']['INPUT']['API']['URL']
+CSP = SETTING['PLUGIN']['Tanium']['INPUT']['API']['PATH']['Sensor']
+CSID = SETTING['PLUGIN']['Tanium']['INPUT']['API']['SensorID']['COMMON']
 
 def plug_in(sessionKey) :
-    apiUrl = "https://1.223.168.93:49105"
-
-    commonSensorPath = "/api/v2/result_data/saved_question/"
-    commonSensorID = "2307"
-    commonSensorHeaders = {'session': sessionKey}
-    commonSensorUrls = apiUrl + commonSensorPath + commonSensorID
-    commonSensorResponse = requests.post(commonSensorUrls, headers=commonSensorHeaders, verify=False)
-    commonSensorResCode = commonSensorResponse.status_code
-    commonSensorResponseText = commonSensorResponse.content.decode('utf-8')
-    commonSensorResponseJson = json.loads(commonSensorResponseText)
-    commonSensorResponseJsonData = commonSensorResponseJson['data']
+    CSH = {'session': sessionKey}
+    CSU = APIURL + CSP + CSID
+    CSR = requests.post(CSU, headers=CSH, verify=False)
+    CSRC = CSR.status_code
+    CSRT = CSR.content.decode('utf-8')
+    CSRJ = json.loads(CSRT)
+    CSRJD = CSRJ['data']
     dataList = []
-    for d in commonSensorResponseJsonData['result_sets'][0]['rows'] :
+    for d in CSRJD['result_sets'][0]['rows']:
         DL = []
         for i in d['data'] :
             DL.append(i)
         dataList.append(DL)
-    RD = {'resCode': commonSensorResCode, 'dataList': dataList}
+    RD = {'resCode': CSRC, 'dataList': dataList}
     return RD
