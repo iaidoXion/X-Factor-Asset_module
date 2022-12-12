@@ -16,7 +16,8 @@ def plug_in(data, inputPlugin) :
         'open_share_details_name', 'open_share_details_path', 'open_share_details_status',
         'open_share_details_type', 'open_share_details_permissions', 'primary_owner_name', 'uptime',
         'usb_write_protected', 'user_accounts', 'ad_query_last_logged_in_user_date',
-        'ad_query_last_logged_in_user_name', 'ad_query_last_logged_in_user_time'
+        'ad_query_last_logged_in_user_name', 'ad_query_last_logged_in_user_time',
+        'tanium_client_subnet','manufacturer', 'sessionIp', 'nvidiaSmi', 'online'
     ]
     DFL = []
     for d in data:
@@ -122,6 +123,15 @@ def plug_in(data, inputPlugin) :
             ADQLLIUD = d[50][0]['text']
             ADQLLIUN = d[51][0]['text']
             ADQLLIUT = d[52][0]['text']
+            TCS = d[53][0]['text']
+            manufacturer = d[54][0]['text']
+            SI =[]
+            for SID in d[55] :
+                SI.append(SID['text'])
+            nvidiaSmi = d[56][0]['text']
+            OL = d[57][0]['text']
+
+
         if inputPlugin == 'DB':
             CI = d[0]
             CN = d[1]
@@ -176,10 +186,16 @@ def plug_in(data, inputPlugin) :
             ADQLLIUD = d[50]
             ADQLLIUN = d[51]
             ADQLLIUT = d[52]
+            TCS = d[53]
+            SI = d[54]
+            manufacturer = d[55]
+            nvidiaSmi = d[56]
+            OL = d[57]
+
         DFL.append(
             [CI, CN, LR, DTS, DUS, OP, OS, IV, CT, IP, LPC, EPC, RUS, RTS, IA, IAV, IASUS, IAU, RP, RS, CPUC,
              CPUDST, CPUDCPU, CPUDCPUS, CPUDTPP, CPUDTC, CPUDTLP, DFS, HCPUP, HMP, HU, IPA, TCNATIPA, LLIU,
              LPP, LPN, LPLP, LSC, MACA, MC, openPort, OSDN, OSDPath, OSDS, OSDT, OSDP, PON, Uptime, USBWP,
-             UA, ADQLLIUD, ADQLLIUN, ADQLLIUT])
+             UA, ADQLLIUD, ADQLLIUN, ADQLLIUT, TCS, manufacturer, SI, nvidiaSmi, OL ])
     DF = pd.DataFrame(DFL, columns=DFC)
     return DF
