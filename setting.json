@@ -12,16 +12,64 @@
       "fileFormat" : ".log"
     }
   },
-  "COREUSE" : {
-    "Tanium" : "true",
-    "Zabbix" : "false"
-  },
-  "PLUGIN" : {
+  "CORE" : {
     "Tanium" : {
-      "COLLECTIONTYPE" : "online",
-      "COLLECTIONCYCLE" : {
-        "MINUTELY": "true",
-        "DAILY": "true"
+      "COREUSE" : "true",
+      "SOURCE" : {
+        "INPUT" : {
+          "API" : "true",
+          "DB" : {
+          "PS" : "false",
+          "MY" : "false"
+          }
+        },
+        "Transform" : "false",
+        "OUTPUT": {
+          "API" : "false",
+          "DB" : {
+            "PS" : "true",
+            "MY" : "false"
+          }
+        }
+      },
+      "STATISTICS" : {
+        "COLLECTIONUSE" : "true",
+        "INPUT" : {
+          "API" : "false",
+          "DB" : {
+          "PS" : "true",
+          "MY" : "false"
+          }
+        },
+        "OUTPUT": {
+          "API" : "false",
+          "DB" : {
+            "PS" : "true",
+            "MY" : "false"
+          }
+        }
+      },
+
+
+      "PLUGIN" : {
+        "VUL": {
+          "USE" : "true",
+          "INPUT" : {
+            "API" : "true",
+            "DB" : {
+              "PS" : "false",
+              "MY" : "false"
+            }
+          },
+          "OUTPUT": {
+            "API" : "false",
+            "DB" : {
+              "PS" : "true",
+              "MY" : "false"
+            }
+          }
+        },
+        "ONOFFTYPE" : "online"
       },
       "INPUT" : {
         "API" : {

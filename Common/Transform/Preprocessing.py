@@ -14,8 +14,9 @@ def plug_in(data, dataType):
             CNM = data['computer_name'][c]
             if not data['last_reboot'][c].startswith('[current') and not data['last_reboot'][c].startswith('TSE-Error') and not data['last_reboot'][c].startswith('Unknown'):
                 LR = datetime.strptime(data['last_reboot'][c].replace('-', '+').split(' +')[0], "%a, %d %b %Y %H:%M:%S")
-            else :
-                LR = data['last_reboot'][c]
+            else:
+                LR = 'unconfirmed'
+
             DTS = []
             DTS_item = []
             DTS_sum = 0
@@ -57,7 +58,7 @@ def plug_in(data, dataType):
                         DTS_sum += DTS_result
                     items = round(DTS_sum / 1024 / 1024)
                 DTS.append(str(items))
-            else :
+            else:
                 DTS.append(data['disk_total_space'][c].replace('{"', '').replace('"}', ''))
 
             DUS = []
@@ -101,34 +102,46 @@ def plug_in(data, dataType):
                         DUS_sum += DUS_result
                     items = round(DUS_sum / 1024 / 1024)
                 DUS.append(str(items))
-            else :
+            else:
                 DUS.append(data['disk_used_space'][c].replace('{"', '').replace('"}', ''))
 
-            OP = data['os_platform'][c]
-            IV = data['is_virtual'][c]
-            CT = data['chassis_type'][c]
-            IPA = data['ipv_address'][c]
+            if not data['os_platform'][c].startswith('[current') and not data['os_platform'][c].startswith('TSE-Error') and not data['os_platform'][c].startswith('Unknown'):
+                OP = data['os_platform'][c]
+            else:
+                OP = 'unconfirmed'
 
-            if not data['today_listen_port_count'][c] == None and not data['today_listen_port_count'][c].startswith('[current') and not data['today_listen_port_count'][c].startswith('TSE-Error')  and not data['today_listen_port_count'][c].startswith('Unknown'):
+            if not data['is_virtual'][c].startswith('[current') and not data['is_virtual'][c].startswith('TSE-Error') and not data['is_virtual'][c].startswith('Unknown'):
+                IV = data['is_virtual'][c]
+            else:
+                IV = 'unconfirmed'
+            if not data['chassis_type'][c].startswith('[current') and not data['chassis_type'][c].startswith('TSE-Error') and not data['chassis_type'][c].startswith('Unknown'):
+                CT = data['chassis_type'][c]
+            else:
+                CT = 'unconfirmed'
+            if not data['ipv_address'][c].startswith('[current') and not data['ipv_address'][c].startswith('TSE-Error') and not data['ipv_address'][c].startswith('Unknown'):
+                IPV = data['ipv_address'][c]
+            else:
+                IPV = 'unconfirmed'
+
+            if not data['today_listen_port_count'][c] == None and not data['today_listen_port_count'][c].startswith('[current') and not data['today_listen_port_count'][c].startswith('TSE-Error') and not data['today_listen_port_count'][c].startswith('Unknown'):
                 LPC = data['today_listen_port_count'][c]
-            else :
-                LPC = '확인불가'
+            else:
+                LPC = 'unconfirmed'
 
-
-            if not data['today_established_port_count'][c] == None and not data['today_established_port_count'][c].startswith('[current') and not data['today_established_port_count'][c].startswith('TSE-Error')  and not data['today_established_port_count'][c].startswith('Unknown'):
+            if not data['today_established_port_count'][c] == None and not data['today_established_port_count'][c].startswith('[current') and not data['today_established_port_count'][c].startswith('TSE-Error') and not data['today_established_port_count'][c].startswith('Unknown'):
                 EPC = data['today_established_port_count'][c]
             else:
-                EPC = '확인불가'
+                EPC = 'unconfirmed'
 
-            if not data['yesterday_listen_port_count'][c] == None and not data['yesterday_listen_port_count'][c].startswith('[current') and not data['yesterday_listen_port_count'][c].startswith('TSE-Error')  and not data['yesterday_listen_port_count'][c].startswith('Unknown'):
+            if not data['yesterday_listen_port_count'][c] == None and not data['yesterday_listen_port_count'][c].startswith('[current') and not data['yesterday_listen_port_count'][c].startswith('TSE-Error') and not data['yesterday_listen_port_count'][c].startswith('Unknown'):
                 YLPC = data['yesterday_listen_port_count'][c]
-            else :
-                YLPC = '확인불가'
+            else:
+                YLPC = 'unconfirmed'
 
-            if not data['yesterday_established_port_count'][c] == None and not data['yesterday_established_port_count'][c].startswith('[current') and not data['yesterday_established_port_count'][c].startswith('TSE-Error')  and not data['yesterday_established_port_count'][c].startswith('Unknown'):
+            if not data['yesterday_established_port_count'][c] == None and not data['yesterday_established_port_count'][c].startswith('[current') and not data['yesterday_established_port_count'][c].startswith('TSE-Error') and not data['yesterday_established_port_count'][c].startswith('Unknown'):
                 YEPC = data['yesterday_established_port_count'][c]
-            else :
-                YEPC = '확인불가'
+            else:
+                YEPC = 'unconfirmed'
 
             if not data['ram_use_size'][c].startswith('[current') and not data['ram_use_size'][c].startswith('TSE-Error') and not data['ram_use_size'][c].startswith('Unknown'):
                 RUS = data['ram_use_size'][c].split(' ')[0]
@@ -145,7 +158,7 @@ def plug_in(data, dataType):
                 CPUC = data['cup_consumption'][c]
 
             OL = data['online'][c]
-            DL.append([CID, CNM, LR, DTS, DUS, OP, IV, CT, IPA, LPC, YLPC, EPC, YEPC, RUS, RTS, IANM, RP, CPUC, OL])
+            DL.append([CID, CNM, LR, DTS, DUS, OP, IV, CT, IPV, LPC, YLPC, EPC, YEPC, RUS, RTS, IANM, RP, CPUC, OL])
         elif dataType == 'minutely_asset':
             manufacturer = data['manufacturer'][c]
             DL.append([CID, IANM, manufacturer, RP])

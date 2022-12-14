@@ -3,9 +3,9 @@ import json
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
 
-APIURL = SETTING['PLUGIN']['Tanium']['INPUT']['API']['URL']
-CSP = SETTING['PLUGIN']['Tanium']['INPUT']['API']['PATH']['Sensor']
-CSID = SETTING['PLUGIN']['Tanium']['INPUT']['API']['SensorID']['COMMON']
+APIURL = SETTING['CORE']['Tanium']['INPUT']['API']['URL']
+CSP = SETTING['CORE']['Tanium']['INPUT']['API']['PATH']['Sensor']
+CSID = SETTING['CORE']['Tanium']['INPUT']['API']['SensorID']['COMMON']
 
 def plug_in(sessionKey) :
     CSH = {'session': sessionKey}

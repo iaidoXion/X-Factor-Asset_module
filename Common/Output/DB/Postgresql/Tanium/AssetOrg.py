@@ -6,14 +6,14 @@ def plug_in(data, cycle) :
     try :
         with open("setting.json", encoding="UTF-8") as f:
             SETTING = json.loads(f.read())
-        DBHOST = SETTING['PLUGIN']['Tanium']['OUTPUT']['DB']['PS']['HOST']
-        DBPORT = SETTING['PLUGIN']['Tanium']['OUTPUT']['DB']['PS']['PORT']
-        DBNM = SETTING['PLUGIN']['Tanium']['OUTPUT']['DB']['PS']['NAME']
-        DBUNM = SETTING['PLUGIN']['Tanium']['OUTPUT']['DB']['PS']['USER']
-        DBPWD = SETTING['PLUGIN']['Tanium']['OUTPUT']['DB']['PS']['PWD']
-        MAT = SETTING['PLUGIN']['Tanium']['OUTPUT']['DB']['PS']['TNM']['MA']
-        DAT = SETTING['PLUGIN']['Tanium']['OUTPUT']['DB']['PS']['TNM']['DA']
-        #COLLECTIONTYPE = SETTING['PLUGIN']['Tanium']['COLLECTIONTYPE']
+        DBHOST = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['HOST']
+        DBPORT = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['PORT']
+        DBNM = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['NAME']
+        DBUNM = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['USER']
+        DBPWD = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['PWD']
+        MAT = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['TNM']['MA']
+        DAT = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['TNM']['DA']
+        #COLLECTIONTYPE = SETTING['CORE']['Tanium']['COLLECTIONTYPE']
         if cycle == 'minutely' :
             TNM = MAT
             insertDate = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
@@ -112,7 +112,7 @@ def plug_in(data, cycle) :
                     online = excluded.online,
                     asset_collection_date = '""" + insertDate + """'                                                                
             """
-            print(insertDate)
+            #print(insertDate)
         elif cycle == 'daily':
             IQ = """
                 INSERT INTO """ + TNM + """ (

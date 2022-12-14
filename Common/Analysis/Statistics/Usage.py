@@ -5,17 +5,17 @@ def plug_in(data) :
         if data.disk_used_space[c][0].isdigit() and data.disk_total_space[c][0].isdigit() :
             driveUsage = int(data.disk_used_space[c][0]) / int(data.disk_total_space[c][0]) * 100
         else :
-            driveUsage = 'Drive사용율확인불가'
+            driveUsage = 'unconfirmed'
 
         if data.ram_use_size[c].isdigit() and data.ram_total_size[c].isdigit() :
             ramUsage = int(data.ram_use_size[c]) / int(data.ram_total_size[c]) * 100
         else :
-            ramUsage = 'RAM사용율확인불가'
+            ramUsage = 'unconfirmed'
 
         if type(data.cup_consumption[c]) == float :
             cpuUsage = data.cup_consumption[c]
         else :
-            cpuUsage = 'CPU사용율확인불가'
+            cpuUsage = 'unconfirmed'
 
 
 

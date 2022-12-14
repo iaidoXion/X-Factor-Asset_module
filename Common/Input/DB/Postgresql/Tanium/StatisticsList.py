@@ -6,12 +6,12 @@ def plug_in(dataType) :
     try:
         with open("setting.json", encoding="UTF-8") as f:
             SETTING = json.loads(f.read())
-        DBHOST = SETTING['PLUGIN']['Tanium']['INPUT']['DB']['PS']['HOST']
-        DBPORT = SETTING['PLUGIN']['Tanium']['INPUT']['DB']['PS']['PORT']
-        DBNM = SETTING['PLUGIN']['Tanium']['INPUT']['DB']['PS']['NAME']
-        DBUNM = SETTING['PLUGIN']['Tanium']['INPUT']['DB']['PS']['USER']
-        DBPWD = SETTING['PLUGIN']['Tanium']['INPUT']['DB']['PS']['PWD']
-        MSLT = SETTING['PLUGIN']['Tanium']['INPUT']['DB']['PS']['TNM']['MSL']
+        DBHOST = SETTING['CORE']['Tanium']['INPUT']['DB']['PS']['HOST']
+        DBPORT = SETTING['CORE']['Tanium']['INPUT']['DB']['PS']['PORT']
+        DBNM = SETTING['CORE']['Tanium']['INPUT']['DB']['PS']['NAME']
+        DBUNM = SETTING['CORE']['Tanium']['INPUT']['DB']['PS']['USER']
+        DBPWD = SETTING['CORE']['Tanium']['INPUT']['DB']['PS']['PWD']
+        MSLT = SETTING['CORE']['Tanium']['INPUT']['DB']['PS']['TNM']['MSL']
         nowTime = datetime.today().strftime("%Y-%m-%d %H:%M")
         DL = []
         selectConn = psycopg2.connect(

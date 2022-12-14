@@ -8,6 +8,8 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
                        'last_reboot', 'driveUsage', 'ramUsage', 'cpuUsage']
             elif columnsType == 'compare' :
                 DFC = ['computer_id', 'listenPortCountChange','establishedPortCountChange', 'runningProcessesCount', 'online']
+            elif columnsType == 'alarm' :
+                DFC = ['computer_id','ip_group', 'ram', 'cpu', 'listenport_count', 'establishedport_count', 'running_processes_count', 'last_reboot']
         elif dataType == 'minutely_statistics' :
             DFC = ['classification', 'item', 'item_count']
         DFL = []
@@ -31,6 +33,15 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
                     RPC = d[3]
                     OL = d[4]
                     DFL.append([CID, LPC, EPC, RPC, OL])
+                elif columnsType == 'alarm':
+                    IPG = d[1]
+                    RAM = d[2]
+                    CPU = d[3]
+                    LPC = d[4]
+                    EPC = d[5]
+                    RPC = d[6]
+                    LRB = d[7]
+                    DFL.append([CID, IPG, RAM, CPU, LPC, EPC, RPC, LRB])
             elif dataType == 'minutely_statistics' :
                 classification = d[0]
                 item = d[1]

@@ -19,8 +19,7 @@ if __name__ == "__main__":
     LOGFD = SETTING['PROJECT']['LOG']['directory']
     LOGFNM = SETTING['PROJECT']['LOG']['fileName']
     LOGFF = SETTING['PROJECT']['LOG']['fileFormat']
-    TU = SETTING['COREUSE']['Tanium']
-    ZU = SETTING['COREUSE']['Zabbix']
+    TU = SETTING['CORE']['Tanium']['COREUSE']
 
     today = datetime.today().strftime("%Y%m%d")
     logFile = LOGFD + LOGFNM + today + LOGFF

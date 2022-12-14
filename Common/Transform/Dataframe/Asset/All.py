@@ -164,7 +164,7 @@ def plug_in(data, inputPlugin) :
             HCPUP = d[28]
             HMP = d[29]
             HU = d[30]
-            IPA = d[31]
+            IPA = d[31] # 확인
             TCNATIPA = d[32]
             LLIU = d[33]
             LPP = d[34]

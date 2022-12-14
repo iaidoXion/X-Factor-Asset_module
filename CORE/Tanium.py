@@ -21,73 +21,91 @@ from Common.Output.DB.Postgresql.Tanium.Statistics import plug_in as CODBPTAPI
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-def minutely_asset():                                                   # 변수 명 Full Name : Full Name에서 대문자로 명시한 것들을 뽑아서 사용 (괄호 안의 내용은 설명)
+def plug_in():                                                   # 변수 명 Full Name : Full Name에서 대문자로 명시한 것들을 뽑아서 사용 (괄호 안의 내용은 설명)
+    with open("setting.json", encoding="UTF-8") as f:
+        SETTING = json.loads(f.read())
 
-    SK = CIATSPI()['dataList'][0]                                       # Sesstion Key (Tanium Sesstion Key 호출)
-    IPDL = CIATSCPI(SK)['dataList']                                     # InPut Data List (Tanium API Sensor Data 호출)
-    DFT = CTDAAPI(IPDL, 'API')                                          # Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
-    CODBPTAOPI(DFT, 'minutely')                                         # (minutely_asset Table에 수집)
+    SOIPAPIU = SETTING['CORE']['Tanium']['SOURCE']['INPUT']['API']
+    SOTPU = SETTING['CORE']['Tanium']['SOURCE']['Transform']
+    SOOPDBPU = SETTING['CORE']['Tanium']['SOURCE']['OUTPUT']['DB']['PS']
+    STCU = SETTING['CORE']['Tanium']['STATISTICS']['COLLECTIONUSE']
+    STIPDBPU = SETTING['CORE']['Tanium']['STATISTICS']['INPUT']['DB']['PS']
+    STOPDBPU = SETTING['CORE']['Tanium']['STATISTICS']['OUTPUT']['DB']['PS']
 
+    # SOURCE
+    if SOIPAPIU == 'true' :
+        SK = CIATSPI()['dataList'][0]                                       # Sesstion Key (Tanium Sesstion Key 호출)
+        SDIPDL = CIATSCPI(SK)['dataList']                                     # Source Data InPut Data List (Tanium API Sensor Data 호출)
+    SODDFT = CTDAAPI(SDIPDL, 'API')                                          # Source Data Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
+    if SOTPU == 'true' :
+        SOPPT = CTPPI(SODDFT, 'minutely_asset_all')
+        SOODL = CTDAAPI(SOPPT, 'DB')
+    else :
+        SOODL = SODDFT
 
-def daily_asset():
-    # 만약에 minutely 수집이 true면
-    CSMDL = CIDBPTAOPI('minutely_asset_all')                            # Common Sensor Minutely Data List (Module로 DB에 수집한 데이터 호출 : minutely_asset Table )
-    DFT = CTDAAPI(CSMDL, 'DB')                                          # Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
-    CODBPTAOPI(DFT, 'daily')                                            # (daily_asset Table에 수집)
-    # 만약에 minutely 수집이 false
-
-def minutely_statistics_list():
-    # 만약에 minutely 수집이 true면
-    IPDL = CIDBPTAOPI('minutely_daily_asset')                           # InPut Data List (Module로 DB에 수집한 데이터 호출 : minutely_asset, daily_asset Table)
-
-    DFTF = CTDAPPI(IPDL, 'DB', 'minutely_daily_asset')                  # Data Frame Transform First (호출한 데이터를 Data Frame 형태로 변형)
-
-    PPT = CTPPI(DFTF, 'minutely_daily_asset')                           # PreProcession Transform (데이터 전처리)
-    DFTS = CTDAPPI(PPT, 'DB', 'minutely_daily_asset')                   # Data Frame Transform Second (전처리한 데이터를 Data Frame 형태로 변형)
-
-    US = CASUPI(DFTS)                                                   # Usage Statistics (사용량 통계)
-    USDFT = CTDSPPI(US, 'DB', 'minutely_statistics_list', 'usage')      # Usage Statistics DataFrame Transform (사용량 통계를 Data Frame 형태로 변형)
-    CS = CASCPI(DFTS)                                                   # Compare Statistics (비교 통계)
-    CSDFT = CTDSPPI(CS, 'DB', 'minutely_statistics_list', 'compare')    # Compare Statistics DataFrame Transform (비교 통계를 Data Frame 형태로 변형)
-    UCSM = CTMPI(USDFT, CSDFT)                                          # Usage and Compare Statistics Merge (DataFrame 형태의 사용량 통계 & 비교 통계 병합)
-    CODBPTSLPI(UCSM, 'minutely')                                        # (minutely_statistics_list Table에 수집)
+    if SOOPDBPU == 'true' :
+        CODBPTAOPI(SOODL, 'minutely')                                       # (minutely_asset Table에 수집)
+        CSMDL = CIDBPTAOPI('minutely_asset_all')  # Common Sensor Minutely Data List (Module로 DB에 수집한 데이터 호출 : minutely_asset Table )
+        MSDDFT = CTDAAPI(CSMDL, 'DB')  # minutely Source Data Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
+        CODBPTAOPI(MSDDFT, 'daily')  # (daily_asset Table에 수집)
 
 
-def daily_statistics_list():
-    # 만약에 minutely 수집이 true면
-    IPDL = CIDBPTSLPI('minutely')
-    DFT = CTDSAPI(IPDL, 'DB', 'minutely_statistics_list')
-    CODBPTSLPI(DFT, 'daily')
-    # 만약에 minutely 수집이 false
 
-def minutely_statistics():
-    # 만약에 minutely 수집이 true면
-    IPMALSDL = CIDBPTSLPI('minutely')                                   # InPut Minutely Asset List Statistics Data List (Module로 DB에 수집한 데이터 호출 : minutely_statistics_list Table)
-    DFT = CTDSAPI(IPMALSDL, 'DB', 'minutely_statistics_list')           # Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
-    OSGBS = CASGBCPI(DFT, 'os', 'OP')                                   # OS Group By Statistics (OS 통계)
-    IVGBS = CASGBCPI(DFT, 'virtual', 'IV')                              # Is Virtual Group By Statistics (가상, 물리 자산 통계)
-    CTGBS = CASGBCPI(DFT, 'asset', 'CT')                                # Chassis Type Group By Statistics (자산 형태 통계)
-    LPCGBS = CASGBCPI(DFT, 'listen_port_count_change', 'LPC')           # Listen Port Count Group By Statistics (listen port count 변경 여부 통계)
-    EPCGBS = CASGBCPI(DFT, 'established_port_count_change', 'EPC')      # Listen Port Count Group By Statistics (established port count 변경 여부 통계)
+    if STCU == 'true' :
+        # Asset List
+        if STIPDBPU == 'true' :
+            MDSDDIPDL = CIDBPTAOPI('minutely_daily_asset')  # Minutely Daily Source Data InPut Data List (Module로 DB에 수집한 데이터 호출 : minutely_asset, daily_asset Table)
 
-    IPMADL = CIDBPTAOPI('minutely_asset_part')                          # InPut Minutely Asset Data List (Module로 DB에 수집한 데이터 호출 : minutely_asset Table)
-    DFTF = CTDAPPI(IPMADL, 'DB', 'minutely_asset')                      # Data Frame Transform First (호출한 데이터를 Data Frame 형태로 변형)
-    PPT = CTPPI(DFTF, 'minutely_asset')                                 # PreProcession Transform (데이터 전처리)
-    DFTS = CTDAPPI(PPT, 'DB', 'minutely_asset')                         # Data Frame Transform Second (전처리한 데이터를 Data Frame 형태로 변형)
-    IAGBS = CASGBCPI(DFTS, 'installed_applications', 'IANM')            # Installed Applications Group By Statistics (Installed Application 통계)
-    RPGBS = CASGBCPI(DFTS, 'running_processes', 'RPNM')                 # Running Processes Group By Statistics (Running Processes 통계)
+        MDSDDFTF = CTDAPPI(MDSDDIPDL, 'DB', 'minutely_daily_asset')  # Minutely Daily Source Data Data Frame Transform First (호출한 데이터를 Data Frame 형태로 변형)
 
-    MSTD = OSGBS + IVGBS + CTGBS + LPCGBS + EPCGBS + IAGBS + RPGBS      # Minutely Statistics Total Data (minutely_statistics Table에 넣을 모든 통계데이터)
-    SDDFT = CTDSAPI(MSTD, 'DB', 'minutely_statistics')                  # Statistics Data Data Frame Transform (Statistics 데이터를 Data Frame 형태로 변형)
-    CODBPTAPI(SDDFT, 'minutely')                                        # (minutely_statistics Table에 수집)
+        MDSDDPPT = CTPPI(MDSDDFTF, 'minutely_daily_asset')  # Minutely Daily Source Data PreProcession Transform (데이터 전처리)
+        MDSDDFTS = CTDAPPI(MDSDDPPT, 'DB', 'minutely_daily_asset')  # Minutely Daily Source Data Data Frame Transform Second (전처리한 데이터를 Data Frame 형태로 변형)
+
+        US = CASUPI(MDSDDFTS)  # Usage Statistics (사용량 통계)
+        USDFT = CTDSPPI(US, 'DB', 'minutely_statistics_list', 'usage')  # Usage Statistics DataFrame Transform (사용량 통계를 Data Frame 형태로 변형)
+        CS = CASCPI(MDSDDFTS, '')  # Compare Statistics (비교 통계)
+        CSDFT = CTDSPPI(CS, 'DB', 'minutely_statistics_list', 'compare')  # Compare Statistics DataFrame Transform (비교 통계를 Data Frame 형태로 변형)
+        UCSM = CTMPI(USDFT, CSDFT)  # Usage and Compare Statistics Merge (DataFrame 형태의 사용량 통계 & 비교 통계 병합)
+        if STOPDBPU == 'true' :
+            CODBPTSLPI(UCSM, 'minutely')  # (minutely_statistics_list Table에 수집)
+
+            MSLDIPDL = CIDBPTSLPI('minutely')
+            MSLDDFT = CTDSAPI(MSLDIPDL, 'DB', 'minutely_statistics_list')
+            CODBPTSLPI(MSLDDFT, 'daily')
+
+            # statistics
+            IPMALSDL = CIDBPTSLPI('minutely')  # InPut Minutely Asset List Statistics Data List (Module로 DB에 수집한 데이터 호출 : minutely_statistics_list Table)
+            IPMALSDDFT = CTDSAPI(IPMALSDL, 'DB', 'minutely_statistics_list')  # Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
+            OSGBS = CASGBCPI(IPMALSDDFT, 'os', 'OP')  # OS Group By Statistics (OS 통계)
+            IVGBS = CASGBCPI(IPMALSDDFT, 'virtual', 'IV')  # Is Virtual Group By Statistics (가상, 물리 자산 통계)
+            CTGBS = CASGBCPI(IPMALSDDFT, 'asset', 'CT')  # Chassis Type Group By Statistics (자산 형태 통계)
+            LPCGBS = CASGBCPI(IPMALSDDFT, 'listen_port_count_change', 'LPC')  # Listen Port Count Group By Statistics (listen port count 변경 여부 통계)
+            EPCGBS = CASGBCPI(IPMALSDDFT, 'established_port_count_change', 'EPC')  # Listen Port Count Group By Statistics (established port count 변경 여부 통계)
+            AC = CASCPI(IPMALSDDFT, 'alarm')
+            ADT = CTDSPPI(AC, 'DB', 'minutely_statistics_list', 'alarm')
+            GRUGBS = CASGBCPI(ADT, 'group_ram_usage_exceeded', 'ip_group')
+            GCUGBS = CASGBCPI(ADT, 'group_cpu_usage_exceeded', 'ip_group')
+            GLPCGBS = CASGBCPI(ADT, 'group_listen_port_count_change', 'ip_group')
+            GEPCGBS = CASGBCPI(ADT, 'group_established_port_count_change', 'ip_group')
+            GRPCGBS = CASGBCPI(ADT, 'group_running_processes_count_exceeded', 'ip_group')
+            GRPLRGBS = CASGBCPI(ADT, 'group_last_reboot', 'ip_group')
+
+            MAIPDL = CIDBPTAOPI('minutely_asset_part')  # Minutely Asset InPut Data List (Module로 DB에 수집한 데이터 호출 : minutely_asset Table)
+            MADFTF = CTDAPPI(MAIPDL, 'DB', 'minutely_asset')  # Minutely Asset Data Frame Transform First (호출한 데이터를 Data Frame 형태로 변형)
+            MAPPT = CTPPI(MADFTF, 'minutely_asset')  # Minutely Asset PreProcession Transform (데이터 전처리)
+            MADFTS = CTDAPPI(MAPPT, 'DB', 'minutely_asset')  # Minutely Asset Data Frame Transform Second (전처리한 데이터를 Data Frame 형태로 변형)
+            IAGBS = CASGBCPI(MADFTS, 'installed_applications', 'IANM')  # Installed Applications Group By Statistics (Installed Application 통계)
+            RPGBS = CASGBCPI(MADFTS, 'running_processes', 'RPNM')  # Running Processes Group By Statistics (Running Processes 통계)
+
+            MSTD = OSGBS + IVGBS + CTGBS + LPCGBS + EPCGBS + IAGBS + RPGBS + GRUGBS + GCUGBS + GLPCGBS + GEPCGBS + GRPCGBS + GRPLRGBS  # Minutely Statistics Total Data (minutely_statistics Table에 넣을 모든 통계데이터)
+            SDDFT = CTDSAPI(MSTD, 'DB', 'minutely_statistics')  # Statistics Data Data Frame Transform (Statistics 데이터를 Data Frame 형태로 변형)
+            CODBPTAPI(SDDFT, 'minutely')
 
 
-def daily_statistics():
-    # 만약에 minutely 수집이 true면
-    IPDL = CIDBPTSPI('minutely')                                        # InPut Data List (Module로 DB에 수집한 데이터 호출 : minutely_statistics Table)
-    DFT = CTDSPPI(IPDL, 'DB', 'minutely_statistics', '')                # Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
-    CODBPTAPI(DFT, 'daily')                                             # (daily_statistics Table에 수집)
-    # 만약에 minutely 수집이 false
+            MSIPDL = CIDBPTSPI('minutely')                                        # InPut Data List (Module로 DB에 수집한 데이터 호출 : minutely_statistics Table)
+            MSDFT = CTDSPPI(MSIPDL, 'DB', 'minutely_statistics', '')                # Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
+            CODBPTAPI(MSDFT, 'daily')                                             # (daily_statistics Table에 수집)
+            # 만약에 minutely 수집이 false
 
 """
 def preprocessing_minutely() :
@@ -102,11 +120,5 @@ def preprocessing_daily() :
 """
 
 
-def plug_in():
-    # 만약에 minutely 수집이 true면
-    minutely_asset()
-    daily_asset()
-    minutely_statistics_list()
-    daily_statistics_list()
-    minutely_statistics()
-    daily_statistics()
+
+

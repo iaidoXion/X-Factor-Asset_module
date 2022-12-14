@@ -3,10 +3,10 @@ import json
 
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
-APIURL = SETTING['PLUGIN']['Tanium']['INPUT']['API']['URL']
-SKP = SETTING['PLUGIN']['Tanium']['INPUT']['API']['PATH']['SesstionKey']
-APIUNM = SETTING['PLUGIN']['Tanium']['INPUT']['API']['username']
-APIPWD = SETTING['PLUGIN']['Tanium']['INPUT']['API']['password']
+APIURL = SETTING['CORE']['Tanium']['INPUT']['API']['URL']
+SKP = SETTING['CORE']['Tanium']['INPUT']['API']['PATH']['SesstionKey']
+APIUNM = SETTING['CORE']['Tanium']['INPUT']['API']['username']
+APIPWD = SETTING['CORE']['Tanium']['INPUT']['API']['password']
 
 def plug_in() :
     SKH = '{"username": "'+APIUNM+'", "domain": "", "password": "'+APIPWD+'"}'
