@@ -5,9 +5,6 @@ def plug_in(data, classification, itemType) :
     DL = []
     RD = []
     CNM = itemType
-    now = datetime.now()
-    six_month_str = (now - relativedelta(months=6)).strftime("%Y-%m-%d %H:%M:%S")
-    six_month = datetime.strptime(six_month_str, '%Y-%m-%d %H:%M:%S')
     for c in range(len(data.computer_id)):
         if classification == 'os' :
             DL.append(data.os_platform[c])
@@ -25,6 +22,10 @@ def plug_in(data, classification, itemType) :
         elif classification == 'running_processes' :
             for d in data.running_processes[c] :
                 DL.append(d)
+        elif classification == 'drive_usage_size_exceeded' :
+            DL.append(data.drive[c])
+        elif classification == 'last_reboot_exceeded' :
+            DL.append(data.last_reboot[c])
         elif classification == 'group_ram_usage_exceeded' :
             if data.ram[c] == 'Yes' :
                 DL.append(data.ip_group[c])
@@ -41,9 +42,14 @@ def plug_in(data, classification, itemType) :
             if data.running_processes_count[c] == 'Yes':
                 DL.append(data.ip_group[c])
         elif classification == 'group_last_reboot' :
-            if not data.last_reboot[c] == 'unconfirmed' :
-                if datetime.strptime(data.last_reboot[c], '%Y-%m-%d %H:%M:%S') < six_month :
-                    DL.append(data.ip_group[c])
+            if data.last_reboot[c] == 'Yes':
+                DL.append(data.ip_group[c])
+        elif classification == 'group_drive_usage_size_exceeded' :
+            if data.drive[c] == 'Yes':
+                DL.append(data.ip_group[c])
+
+
+
 
         #elif classification == 'alarm_group_ram' :
             #print(data.ramUsage[c])
@@ -73,7 +79,13 @@ def plug_in(data, classification, itemType) :
     elif classification == 'running_processes':
         statistics_unique = classification + '_' + DFGS.RPNM
         item = DFGS.RPNM
-    elif classification == 'group_ram_usage_exceeded' or classification == 'group_cpu_usage_exceeded' or classification == 'group_listen_port_count_change' or classification == 'group_established_port_count_change' or classification  == 'group_running_processes_count_exceeded' or classification == 'group_last_reboot' :
+    elif classification == 'drive_usage_size_exceeded':
+        statistics_unique = classification + '_' + DFGS.DUS
+        item = DFGS.DUS
+    elif classification == 'last_reboot_exceeded':
+        statistics_unique = classification + '_' + DFGS.LRB
+        item = DFGS.LRB
+    elif classification == 'group_ram_usage_exceeded' or classification == 'group_cpu_usage_exceeded' or classification == 'group_listen_port_count_change' or classification == 'group_established_port_count_change' or classification  == 'group_running_processes_count_exceeded' or classification == 'group_last_reboot' or classification == 'group_drive_usage_size_exceeded':
         statistics_unique = classification + '_' + DFGS.ip_group
         item = DFGS.ip_group
     item_count = DFG.counts

@@ -1,4 +1,5 @@
-
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 def plug_in(data, dataType) :
     #print(data)
@@ -35,8 +36,29 @@ def plug_in(data, dataType) :
                 else :
                     RPC = 'No'
 
+            if data.driveUsage[c] == 'unconfirmed' :
+                DUS = data.driveUsage[c]
+            else :
+                if float(data.driveUsage[c]) > 60.0 :
+                    DUS = 'Yes'
+                else:
+                    DUS = 'No'
 
-            DL.append([data.computer_id[c], IPG, RAM, CPU, data.listenPortCountChange[c], data.establishedPortCountChange[c], RPC, data.last_reboot[c]])
+            if data.last_reboot[c] == 'unconfirmed' :
+                LRB = data.last_reboot[c]
+            else :
+                now = datetime.now()
+                six_month_str = (now - relativedelta(months=1)).strftime("%Y-%m-%d %H:%M:%S")
+                six_month = datetime.strptime(six_month_str, '%Y-%m-%d %H:%M:%S')
+                LRBDT = datetime.strptime(data.last_reboot[c], '%Y-%m-%d %H:%M:%S')
+                if LRBDT < six_month :
+                    LRB = 'Yes'
+                else :
+                    LRB = 'No'
+
+
+
+            DL.append([data.computer_id[c], IPG, RAM, CPU, data.listenPortCountChange[c], data.establishedPortCountChange[c], RPC, LRB, DUS])
 
         else :
             if data.today_listen_port_count[c].isdigit() and data.yesterday_listen_port_count[c].isdigit():
@@ -49,7 +71,7 @@ def plug_in(data, dataType) :
 
             if data.today_established_port_count[c].isdigit() and data.yesterday_established_port_count[c].isdigit():
                 if data.today_established_port_count[c] == data.yesterday_established_port_count[c]:
-                    establishedPortCountChange = 'no'
+                    establishedPortCountChange = 'No'
                 else:
                     establishedPortCountChange = 'Yes'
             else:
