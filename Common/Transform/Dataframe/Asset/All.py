@@ -187,8 +187,8 @@ def plug_in(data, inputPlugin) :
             ADQLLIUN = d[51]
             ADQLLIUT = d[52]
             TCS = d[53]
-            SI = d[54]
-            manufacturer = d[55]
+            manufacturer = d[54]
+            SI = d[55]
             nvidiaSmi = d[56]
             OL = d[57]
 
@@ -196,6 +196,6 @@ def plug_in(data, inputPlugin) :
             [CI, CN, LR, DTS, DUS, OP, OS, IV, CT, IP, LPC, EPC, RUS, RTS, IA, IAV, IASUS, IAU, RP, RS, CPUC,
              CPUDST, CPUDCPU, CPUDCPUS, CPUDTPP, CPUDTC, CPUDTLP, DFS, HCPUP, HMP, HU, IPA, TCNATIPA, LLIU,
              LPP, LPN, LPLP, LSC, MACA, MC, openPort, OSDN, OSDPath, OSDS, OSDT, OSDP, PON, Uptime, USBWP,
-             UA, ADQLLIUD, ADQLLIUN, ADQLLIUT, TCS, manufacturer, SI, nvidiaSmi, OL ])
+             UA, ADQLLIUD, ADQLLIUN, ADQLLIUT, TCS, manufacturer, SI, nvidiaSmi, OL])
     DF = pd.DataFrame(DFL, columns=DFC)
     return DF
