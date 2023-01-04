@@ -69,9 +69,9 @@ def plug_in():                                                   # 변수 명 Fu
         if STOPDBPU == 'true' :
             CODBPTSLPI(UCSM, 'minutely')  # (minutely_statistics_list Table에 수집)
 
-            MSLDIPDL = CIDBPTSLPI('minutely')
-            MSLDDFT = CTDSAPI(MSLDIPDL, 'DB', 'minutely_statistics_list')
-            CODBPTSLPI(MSLDDFT, 'daily')
+            MSLDIPDL = CIDBPTSLPI('minutely')                           # Minutely Statistics List Data InPut Data List (Module로 DB에 수집한 데이터 호출 : minutely_statistics_list Table)
+            MSLDDFT = CTDSAPI(MSLDIPDL, 'DB', 'minutely_statistics_list')   # Minutely Statistics List Data Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
+            CODBPTSLPI(MSLDDFT, 'daily')                                       # (daily_statistics_list Table에 수집)
 
             # statistics
             IPMALSDL = CIDBPTSLPI('minutely')  # InPut Minutely Asset List Statistics Data List (Module로 DB에 수집한 데이터 호출 : minutely_statistics_list Table)

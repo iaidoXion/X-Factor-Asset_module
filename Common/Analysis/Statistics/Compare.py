@@ -15,18 +15,26 @@ def plug_in(data, dataType) :
             if data.ramUsage[c] == 'unconfirmed':
                 RAM = data.ramUsage[c]
             else:
-                if float(data.ramUsage[c]) > 60.0 :
-                    RAM = 'Yes'
+                if float(data.ramUsage[c]) > 95.0 :
+                    RAM = '95Risk'
+                elif float(data.ramUsage[c]) > 75.0 :
+                    RAM = '75Risk'
+                elif float(data.ramUsage[c]) > 60.0 :
+                    RAM = '60Risk'
                 else :
-                    RAM = 'No'
+                    RAM = 'safety'
 
             if data.cpuUsage[c] == 'unconfirmed':
                 CPU = data.cpuUsage[c]
             else:
-                if float(data.cpuUsage[c]) > 60.0 :
-                    CPU = 'Yes'
+                if float(data.cpuUsage[c]) > 95.0:
+                    CPU = '95Risk'
+                elif float(data.cpuUsage[c]) > 75.0:
+                    CPU = '75Risk'
+                elif float(data.cpuUsage[c]) > 60.0 :
+                    CPU = '60Risk'
                 else :
-                    CPU = 'No'
+                    CPU = 'safety'
 
             if data.runningProcessesCount[c] == 'unconfirmed' :
                 RPC = data.runningProcessesCount[c]
@@ -39,10 +47,16 @@ def plug_in(data, dataType) :
             if data.driveUsage[c] == 'unconfirmed' :
                 DUS = data.driveUsage[c]
             else :
-                if float(data.driveUsage[c]) > 60.0 :
-                    DUS = 'Yes'
+                if float(data.driveUsage[c]) > 99.0:
+                    DUS = '99Risk'
+                elif float(data.driveUsage[c]) > 95.0:
+                    DUS = '95Risk'
+                elif float(data.driveUsage[c]) > 75.0:
+                    DUS = '75Risk'
+                elif float(data.driveUsage[c]) > 60.0 :
+                    DUS = '60Risk'
                 else:
-                    DUS = 'No'
+                    DUS = 'Safety'
 
             if data.last_reboot[c] == 'unconfirmed' :
                 LRB = data.last_reboot[c]
