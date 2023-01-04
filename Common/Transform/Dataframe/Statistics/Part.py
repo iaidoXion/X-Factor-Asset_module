@@ -7,9 +7,9 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
                 DFC = ['computer_id', 'computer_name', 'ipv_address', 'chassis_type', 'os_platform', 'is_virtual',
                        'last_reboot', 'driveUsage', 'ramUsage', 'cpuUsage']
             elif columnsType == 'compare' :
-                DFC = ['computer_id', 'listenPortCountChange','establishedPortCountChange', 'runningProcessesCount', 'online']
+                DFC = ['computer_id', 'listenPortCountChange','establishedPortCountChange', 'running_service_count', 'online']
             elif columnsType == 'alarm' :
-                DFC = ['computer_id','ip_group', 'ram', 'cpu', 'listenport_count', 'establishedport_count', 'running_processes_count', 'last_reboot', 'drive']
+                DFC = ['computer_id','ip_group', 'ram', 'cpu', 'listenport_count', 'establishedport_count', 'running_service_count', 'last_reboot', 'drive']
         elif dataType == 'minutely_statistics' :
             DFC = ['classification', 'item', 'item_count']
         DFL = []
@@ -30,19 +30,19 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
                 elif columnsType == 'compare' :
                     LPC = d[1]
                     EPC = d[2]
-                    RPC = d[3]
+                    RSC = d[3]
                     OL = d[4]
-                    DFL.append([CID, LPC, EPC, RPC, OL])
+                    DFL.append([CID, LPC, EPC, RSC, OL])
                 elif columnsType == 'alarm':
                     IPG = d[1]
                     RAM = d[2]
                     CPU = d[3]
                     LPC = d[4]
                     EPC = d[5]
-                    RPC = d[6]
+                    RSC = d[6]
                     LRB = d[7]
                     DUS = d[8]
-                    DFL.append([CID, IPG, RAM, CPU, LPC, EPC, RPC, LRB, DUS])
+                    DFL.append([CID, IPG, RAM, CPU, LPC, EPC, RSC, LRB, DUS])
             elif dataType == 'minutely_statistics' :
                 classification = d[0]
                 item = d[1]

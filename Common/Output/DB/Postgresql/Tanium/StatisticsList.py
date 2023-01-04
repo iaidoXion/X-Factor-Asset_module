@@ -28,7 +28,7 @@ def plug_in(data, cycle) :
                 INSERT INTO """ + TNM + """ (
                     computer_id, computer_name, ipv_address, chassis_type, os_platform, is_virtual, last_reboot,
                     driveUsage, ramUsage, cpuUsage, listenPortCountChange, establishedPortCountChange,
-                    runningProcessesCount, online, asset_list_statistics_collection_date
+                    running_service_count, online, asset_list_statistics_collection_date
                 ) VALUES (
                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
                     %s, %s, %s, %s, '""" + insertDate + """'
@@ -46,7 +46,7 @@ def plug_in(data, cycle) :
                     cpuUsage = excluded.cpuUsage,
                     listenPortCountChange = excluded.listenPortCountChange,
                     establishedPortCountChange = excluded.establishedPortCountChange,
-                    runningProcessesCount = excluded.runningProcessesCount,
+                    running_service_count = excluded.running_service_count,
                     online = excluded.online,
                     asset_list_statistics_collection_date = '""" + insertDate + """'                                                                
             """
@@ -55,7 +55,7 @@ def plug_in(data, cycle) :
                 INSERT INTO """ + TNM + """ (
                     computer_id, computer_name, ipv_address, chassis_type, os_platform, is_virtual, last_reboot,
                     driveUsage, ramUsage, cpuUsage, listenPortCountChange, establishedPortCountChange,
-                    runningProcessesCount, online, asset_list_statistics_collection_date
+                    running_service_count, online, asset_list_statistics_collection_date
                 ) VALUES (
                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
                     %s, %s, %s, %s, '""" + insertDate + """'
@@ -75,9 +75,9 @@ def plug_in(data, cycle) :
             CPUUS = data.cpuUsage[i]
             LPC = data.listenPortCountChange[i]
             EPC = data.establishedPortCountChange[i]
-            RPC = data.runningProcessesCount[i]
+            RSC = data.running_service_count[i]
             OL = data.online[i]
-            dataList = CI, CN, IP, CT, OP, IV, LR, DUS, RUS, CPUUS, LPC, EPC, RPC, OL
+            dataList = CI, CN, IP, CT, OP, IV, LR, DUS, RUS, CPUUS, LPC, EPC, RSC, OL
             insertCur.execute(IQ, (dataList))
         insertConn.commit()
         insertConn.close()

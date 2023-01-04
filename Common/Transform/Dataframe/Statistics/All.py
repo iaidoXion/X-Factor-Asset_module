@@ -5,7 +5,7 @@ def plug_in(data, inputPlugin, dataType) :
         if dataType == 'minutely_statistics_list' :
             DFC = ['computer_id', 'computer_name', 'ipv_address', 'chassis_type', 'os_platform', 'is_virtual',
                    'last_reboot', 'driveUsage', 'ramUsage', 'cpuUsage', 'listenPortCountChange',
-                   'establishedPortCountChange', 'runningProcessesCount', 'online']
+                   'establishedPortCountChange', 'running_service_count', 'online']
         elif dataType == 'minutely_statistics' :
             DFC = ['minutely_statistics_unique', 'classification', 'item', 'item_count']
         DFL = []
@@ -23,9 +23,9 @@ def plug_in(data, inputPlugin, dataType) :
                 CPUUS = d[9]
                 LPC = d[10]
                 EPC = d[11]
-                RPC = d[12]
+                RSC = d[12]
                 OL = d[13]
-                DFL.append([CID, CNM, IP, CT, OSP, IV, LR, DUS, RUS, CPUUS, LPC, EPC, RPC, OL])
+                DFL.append([CID, CNM, IP, CT, OSP, IV, LR, DUS, RUS, CPUUS, LPC, EPC, RSC, OL])
             elif dataType == 'minutely_statistics':
                 MSU = d[0]
                 classification = d[1]

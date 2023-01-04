@@ -19,8 +19,8 @@ def plug_in(data, classification, itemType) :
             DL.append(data.listenPortCountChange[c])
         elif classification == 'established_port_count_change' :
             DL.append(data.establishedPortCountChange[c])
-        elif classification == 'running_processes' :
-            for d in data.running_processes[c] :
+        elif classification == 'running_service' :
+            for d in data.running_service[c] :
                 DL.append(d)
         elif classification == 'drive_usage_size_exceeded' :
             DL.append(data.drive[c])
@@ -38,8 +38,8 @@ def plug_in(data, classification, itemType) :
         elif classification == 'group_established_port_count_change' :
             if data.establishedport_count[c] == 'Yes':
                 DL.append(data.ip_group[c])
-        elif classification == 'group_running_processes_count_exceeded' :
-            if data.running_processes_count[c] == 'Yes':
+        elif classification == 'group_running_service_count_exceeded' :
+            if data.running_service_count[c] == 'Yes':
                 DL.append(data.ip_group[c])
         elif classification == 'group_last_reboot' :
             if data.last_reboot[c] == 'Yes':
@@ -76,16 +76,16 @@ def plug_in(data, classification, itemType) :
     elif classification == 'established_port_count_change':
         statistics_unique = classification + '_' + DFGS.EPC
         item = DFGS.EPC
-    elif classification == 'running_processes':
-        statistics_unique = classification + '_' + DFGS.RPNM
-        item = DFGS.RPNM
+    elif classification == 'running_service':
+        statistics_unique = classification + '_' + DFGS.RSNM
+        item = DFGS.RSNM
     elif classification == 'drive_usage_size_exceeded':
         statistics_unique = classification + '_' + DFGS.DUS
         item = DFGS.DUS
     elif classification == 'last_reboot_exceeded':
         statistics_unique = classification + '_' + DFGS.LRB
         item = DFGS.LRB
-    elif classification == 'group_ram_usage_exceeded' or classification == 'group_cpu_usage_exceeded' or classification == 'group_listen_port_count_change' or classification == 'group_established_port_count_change' or classification  == 'group_running_processes_count_exceeded' or classification == 'group_last_reboot' or classification == 'group_drive_usage_size_exceeded':
+    elif classification == 'group_ram_usage_exceeded' or classification == 'group_cpu_usage_exceeded' or classification == 'group_listen_port_count_change' or classification == 'group_established_port_count_change' or classification  == 'group_running_service_count_exceeded' or classification == 'group_last_reboot' or classification == 'group_drive_usage_size_exceeded':
         statistics_unique = classification + '_' + DFGS.ip_group
         item = DFGS.ip_group
     item_count = DFG.counts

@@ -89,7 +89,7 @@ def plug_in():                                                   # 변수 명 Fu
             GCUGBS = CASGBCPI(ADT, 'group_cpu_usage_exceeded', 'ip_group')
             GLPCGBS = CASGBCPI(ADT, 'group_listen_port_count_change', 'ip_group')
             GEPCGBS = CASGBCPI(ADT, 'group_established_port_count_change', 'ip_group')
-            GRPCGBS = CASGBCPI(ADT, 'group_running_processes_count_exceeded', 'ip_group')
+            GRSCGBS = CASGBCPI(ADT, 'group_running_service_count_exceeded', 'ip_group')
             GRPLRGBS = CASGBCPI(ADT, 'group_last_reboot', 'ip_group')
             GDUSGBS = CASGBCPI(ADT, 'group_drive_usage_size_exceeded', 'ip_group')
 
@@ -98,9 +98,9 @@ def plug_in():                                                   # 변수 명 Fu
             MAPPT = CTPPI(MADFTF, 'minutely_asset')  # Minutely Asset PreProcession Transform (데이터 전처리)
             MADFTS = CTDAPPI(MAPPT, 'DB', 'minutely_asset')  # Minutely Asset Data Frame Transform Second (전처리한 데이터를 Data Frame 형태로 변형)
             IAGBS = CASGBCPI(MADFTS, 'installed_applications', 'IANM')  # Installed Applications Group By Statistics (Installed Application 통계)
-            RPGBS = CASGBCPI(MADFTS, 'running_processes', 'RPNM')  # Running Processes Group By Statistics (Running Processes 통계)
+            RSGBS = CASGBCPI(MADFTS, 'running_service', 'RSNM')  # Running Service Group By Statistics (Running Service 통계)
 
-            MSTD = OSGBS + IVGBS + CTGBS + LPCGBS + EPCGBS + IAGBS + RPGBS + LRBGBS + DUSGBS + GRUGBS + GCUGBS + GLPCGBS + GEPCGBS + GRPCGBS + GRPLRGBS + GDUSGBS  # Minutely Statistics Total Data (minutely_statistics Table에 넣을 모든 통계데이터)
+            MSTD = OSGBS + IVGBS + CTGBS + LPCGBS + EPCGBS + IAGBS + RSGBS + LRBGBS + DUSGBS + GRUGBS + GCUGBS + GLPCGBS + GEPCGBS + GRSCGBS + GRPLRGBS + GDUSGBS  # Minutely Statistics Total Data (minutely_statistics Table에 넣을 모든 통계데이터)
             SDDFT = CTDSAPI(MSTD, 'DB', 'minutely_statistics')  # Statistics Data Data Frame Transform (Statistics 데이터를 Data Frame 형태로 변형)
             CODBPTAPI(SDDFT, 'minutely')
 

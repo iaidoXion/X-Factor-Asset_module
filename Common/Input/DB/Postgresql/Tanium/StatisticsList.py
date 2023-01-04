@@ -32,7 +32,7 @@ def plug_in(dataType) :
                     cpuUsage,
                     listenPortCountChange,
                     establishedPortCountChange,
-                    runningProcessesCount,
+                    running_service_count,
                     online,
                     asset_list_statistics_collection_date
                 from  

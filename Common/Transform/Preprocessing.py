@@ -9,7 +9,7 @@ def plug_in(data, dataType):
     for c in range(len(data['computer_id'])) :
         CID = data['computer_id'][c]
         IANM = data['installed_applications_name'][c]
-        RP = data['running_processes'][c].replace('{', '').replace('}', '').replace('"', '').split(',')
+        RS = data['running_service'][c].replace('{', '').replace('}', '').replace('"', '').split(',')
         if dataType == 'minutely_daily_asset':
             CNM = data['computer_name'][c]
             if not data['last_reboot'][c].startswith('[current') and not data['last_reboot'][c].startswith('TSE-Error') and not data['last_reboot'][c].startswith('Unknown'):
@@ -158,10 +158,10 @@ def plug_in(data, dataType):
                 CPUC = data['cup_consumption'][c]
 
             OL = data['online'][c]
-            DL.append([CID, CNM, LR, DTS, DUS, OP, IV, CT, IPV, LPC, YLPC, EPC, YEPC, RUS, RTS, IANM, RP, CPUC, OL])
+            DL.append([CID, CNM, LR, DTS, DUS, OP, IV, CT, IPV, LPC, YLPC, EPC, YEPC, RUS, RTS, IANM, RS, CPUC, OL])
         elif dataType == 'minutely_asset':
             manufacturer = data['manufacturer'][c]
-            DL.append([CID, IANM, manufacturer, RP])
+            DL.append([CID, IANM, manufacturer, RS])
 
     return DL
 

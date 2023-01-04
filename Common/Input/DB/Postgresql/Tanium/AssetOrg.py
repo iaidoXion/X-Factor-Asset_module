@@ -76,7 +76,7 @@ def plug_in(dataType) :
                         computer_id, 
                         installed_applications_name, 
                         manufacturer,
-                        running_processes
+                        running_service
                     from 
                         """ + MAT + """
                     where 
@@ -87,7 +87,7 @@ def plug_in(dataType) :
                         computer_id, 
                         installed_applications_name, 
                         manufacturer,
-                        running_processes
+                        running_service
                     from 
                         """ + MAT
         elif dataType == 'minutely_daily_asset':
@@ -110,7 +110,7 @@ def plug_in(dataType) :
                         ma.ram_use_size as ram_use_size,
                         ma.ram_total_size as ram_total_size, 
                         ma.installed_applications_name as installed_applications_name, 
-                        ma.running_processes as running_processes, 
+                        ma.running_service as running_service, 
                         ma.cup_consumption as cup_consumption,
                         ma.online as online
                     from
@@ -129,7 +129,7 @@ def plug_in(dataType) :
                             ram_use_size, 
                             ram_total_size, 
                             installed_applications_name, 
-                            running_processes, 
+                            running_service, 
                             cup_consumption,
                             online  
                         from 
@@ -167,7 +167,7 @@ def plug_in(dataType) :
                         ma.ram_use_size as ram_use_size,
                         ma.ram_total_size as ram_total_size, 
                         ma.installed_applications_name as installed_applications_name, 
-                        ma.running_processes as running_processes, 
+                        ma.running_service as running_service, 
                         ma.cup_consumption as cup_consumption,
                         ma.online as online
                     from
@@ -186,7 +186,7 @@ def plug_in(dataType) :
                             ram_use_size, 
                             ram_total_size, 
                             installed_applications_name, 
-                            running_processes, 
+                            running_service, 
                             cup_consumption,
                             online  
                         from 
