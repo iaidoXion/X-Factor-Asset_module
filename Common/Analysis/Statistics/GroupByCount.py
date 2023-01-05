@@ -24,13 +24,17 @@ def plug_in(data, classification, itemType) :
                 DL.append(d)
         elif classification == 'drive_usage_size_exceeded' :
             DL.append(data.drive[c])
+        elif classification == 'ram_usage_size_exceeded' :
+            DL.append(data.ram[c])
+        elif classification == 'cpu_usage_size_exceeded' :
+            DL.append(data.cpu[c])
         elif classification == 'last_reboot_exceeded' :
             DL.append(data.last_reboot[c])
         elif classification == 'group_ram_usage_exceeded' :
-            if data.ram[c] == 'Yes' :
+            if data.ram[c] == '95Risk' :
                 DL.append(data.ip_group[c])
         elif classification == 'group_cpu_usage_exceeded' :
-            if data.cpu[c] == 'Yes':
+            if data.cpu[c] == '95Risk':
                 DL.append(data.ip_group[c])
         elif classification == 'group_listen_port_count_change' :
             if data.listenport_count[c] == 'Yes':
@@ -45,14 +49,8 @@ def plug_in(data, classification, itemType) :
             if data.last_reboot[c] == 'Yes':
                 DL.append(data.ip_group[c])
         elif classification == 'group_drive_usage_size_exceeded' :
-            if data.drive[c] == 'Yes':
+            if data.drive[c] == '99Risk':
                 DL.append(data.ip_group[c])
-
-
-
-
-        #elif classification == 'alarm_group_ram' :
-            #print(data.ramUsage[c])
 
     DF = pd.DataFrame(DL, columns=[CNM])
     DFG = DF.groupby([CNM]).size().reset_index(name='counts')
@@ -82,6 +80,12 @@ def plug_in(data, classification, itemType) :
     elif classification == 'drive_usage_size_exceeded':
         statistics_unique = classification + '_' + DFGS.DUS
         item = DFGS.DUS
+    elif classification == 'ram_usage_size_exceeded':
+        statistics_unique = classification + '_' + DFGS.RUS
+        item = DFGS.RUS
+    elif classification == 'cpu_usage_size_exceeded':
+        statistics_unique = classification + '_' + DFGS.CPU
+        item = DFGS.CPU
     elif classification == 'last_reboot_exceeded':
         statistics_unique = classification + '_' + DFGS.LRB
         item = DFGS.LRB

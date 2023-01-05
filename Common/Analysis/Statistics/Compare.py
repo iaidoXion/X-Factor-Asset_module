@@ -2,7 +2,6 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 def plug_in(data, dataType) :
-    #print(data)
     DL = []
     for c in range(len(data.computer_id)):
         if dataType == 'alarm' :
