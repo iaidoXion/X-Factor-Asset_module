@@ -48,6 +48,8 @@ def plug_in(data, classification, itemType) :
             if data.drive[c] == 'Yes':
                 DL.append(data.ip_group[c])
 
+        elif classification == 'group_server_count' :
+            DL.append(data.ip_group[c])
 
 
 
@@ -88,6 +90,13 @@ def plug_in(data, classification, itemType) :
     elif classification == 'group_ram_usage_exceeded' or classification == 'group_cpu_usage_exceeded' or classification == 'group_listen_port_count_change' or classification == 'group_established_port_count_change' or classification  == 'group_running_service_count_exceeded' or classification == 'group_last_reboot' or classification == 'group_drive_usage_size_exceeded':
         statistics_unique = classification + '_' + DFGS.ip_group
         item = DFGS.ip_group
+
+
+    elif classification == 'group_server_count':
+        statistics_unique = classification + '_' + DFGS.ip_group
+        item = DFGS.ip_group
+
+
     item_count = DFG.counts
 
     for DFC in range(len(DFGS)) :
