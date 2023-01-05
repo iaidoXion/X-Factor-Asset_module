@@ -8,6 +8,8 @@ def plug_in(data, classification, itemType) :
     for c in range(len(data.computer_id)):
         if classification == 'os' :
             DL.append(data.os_platform[c])
+        elif classification == 'operating_system' :
+            DL.append(data.operating_system[c])
         elif classification == 'virtual' :
             DL.append(data.is_virtual[c])
         elif classification == 'asset' :
@@ -61,6 +63,9 @@ def plug_in(data, classification, itemType) :
     if classification == 'os' :
         statistics_unique = classification + '_' + DFGS.OP
         item = DFGS.OP
+    if classification == 'operating_system' :
+        statistics_unique = classification + '_' + DFGS.OS
+        item = DFGS.OS
     elif classification == 'virtual':
         statistics_unique = classification + '_' + DFG.IV
         item = DFGS.IV

@@ -6,7 +6,7 @@ def plug_in(data, inputPlugin, dataType) :
             DFC = ['computer_id', 'installed_applications_name', 'manufacturer', 'running_service']
         elif dataType == 'minutely_daily_asset' :
             DFC = ['computer_id', 'computer_name', 'last_reboot', 'disk_total_space', 'disk_used_space',
-                   'os_platform', 'is_virtual', 'chassis_type',
+                   'os_platform', 'operating_system', 'is_virtual', 'chassis_type',
                    'ipv_address', 'today_listen_port_count', 'yesterday_listen_port_count',
                    'today_established_port_count', 'yesterday_established_port_count',
                    'ram_use_size', 'ram_total_size', 'installed_applications_name',
@@ -26,20 +26,21 @@ def plug_in(data, inputPlugin, dataType) :
                 DTS = d[3]
                 DUS = d[4]
                 OSP = d[5]
-                IV = d[6]
-                CT = d[7]
-                IP = d[8]
-                TLPC = d[9]
-                YLPC = d[10]
-                TEPC = d[11]
-                YEPC = d[12]
-                RUS = d[13]
-                RTS = d[14]
-                IAN = d[15]
-                RS = d[16]
-                CC = d[17]
-                OL = d[18]
-                DFL.append([CID, CNM, LR, DTS, DUS, OSP, IV, CT, IP, TLPC, YLPC, TEPC, YEPC, RUS, RTS, IAN, RS, CC, OL])
+                OS = d[6]
+                IV = d[7]
+                CT = d[8]
+                IP = d[9]
+                TLPC = d[10]
+                YLPC = d[11]
+                TEPC = d[12]
+                YEPC = d[13]
+                RUS = d[14]
+                RTS = d[15]
+                IAN = d[16]
+                RS = d[17]
+                CC = d[18]
+                OL = d[19]
+                DFL.append([CID, CNM, LR, DTS, DUS, OSP, OS, IV, CT, IP, TLPC, YLPC, TEPC, YEPC, RUS, RTS, IAN, RS, CC, OL])
 
     DF = pd.DataFrame(DFL, columns=DFC)
     return DF

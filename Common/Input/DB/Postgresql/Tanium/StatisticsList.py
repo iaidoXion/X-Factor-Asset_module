@@ -25,6 +25,7 @@ def plug_in(dataType) :
                     ipv_address,
                     chassis_type,
                     os_platform,
+                    operating_system,
                     is_virtual,
                     last_reboot,
                     driveUsage,

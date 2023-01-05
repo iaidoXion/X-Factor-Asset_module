@@ -4,7 +4,7 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
     if inputPlugin == 'DB':
         if dataType == 'minutely_statistics_list' :
             if columnsType == 'usage':
-                DFC = ['computer_id', 'computer_name', 'ipv_address', 'chassis_type', 'os_platform', 'is_virtual',
+                DFC = ['computer_id', 'computer_name', 'ipv_address', 'chassis_type', 'os_platform', 'operating_system', 'is_virtual',
                        'last_reboot', 'driveUsage', 'ramUsage', 'cpuUsage']
             elif columnsType == 'compare' :
                 DFC = ['computer_id', 'listenPortCountChange','establishedPortCountChange', 'running_service_count', 'online']
@@ -21,12 +21,13 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
                     IP = d[2]
                     CT = d[3]
                     OSP = d[4]
-                    IV = d[5]
-                    LR = d[6]
-                    DUS = d[7]
-                    RUS = d[8]
-                    CPUUS = d[9]
-                    DFL.append([CID, CNM, IP, CT, OSP, IV, LR, DUS, RUS, CPUUS])
+                    OS = d[5]
+                    IV = d[6]
+                    LR = d[7]
+                    DUS = d[8]
+                    RUS = d[9]
+                    CPUUS = d[10]
+                    DFL.append([CID, CNM, IP, CT, OSP, OS, IV, LR, DUS, RUS, CPUUS])
                 elif columnsType == 'compare' :
                     LPC = d[1]
                     EPC = d[2]

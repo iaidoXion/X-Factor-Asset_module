@@ -109,7 +109,10 @@ def plug_in(data, dataType):
                 OP = data['os_platform'][c]
             else:
                 OP = 'unconfirmed'
-
+            if not data['operating_system'][c].startswith('[current') and not data['operating_system'][c].startswith('TSE-Error') and not data['operating_system'][c].startswith('Unknown'):
+                OS = data['operating_system'][c]
+            else:
+                OS = 'unconfirmed'
             if not data['is_virtual'][c].startswith('[current') and not data['is_virtual'][c].startswith('TSE-Error') and not data['is_virtual'][c].startswith('Unknown'):
                 IV = data['is_virtual'][c]
             else:
@@ -158,7 +161,7 @@ def plug_in(data, dataType):
                 CPUC = data['cup_consumption'][c]
 
             OL = data['online'][c]
-            DL.append([CID, CNM, LR, DTS, DUS, OP, IV, CT, IPV, LPC, YLPC, EPC, YEPC, RUS, RTS, IANM, RS, CPUC, OL])
+            DL.append([CID, CNM, LR, DTS, DUS, OP, OS, IV, CT, IPV, LPC, YLPC, EPC, YEPC, RUS, RTS, IANM, RS, CPUC, OL])
         elif dataType == 'minutely_asset':
             manufacturer = data['manufacturer'][c]
             DL.append([CID, IANM, manufacturer, RS])

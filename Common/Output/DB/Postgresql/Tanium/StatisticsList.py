@@ -26,12 +26,12 @@ def plug_in(data, cycle) :
         if cycle == 'minutely':
             IQ = """
                 INSERT INTO """ + TNM + """ (
-                    computer_id, computer_name, ipv_address, chassis_type, os_platform, is_virtual, last_reboot,
+                    computer_id, computer_name, ipv_address, chassis_type, os_platform, operating_system, is_virtual, last_reboot,
                     driveUsage, ramUsage, cpuUsage, listenPortCountChange, establishedPortCountChange,
                     running_service_count, online, asset_list_statistics_collection_date
                 ) VALUES (
                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
-                    %s, %s, %s, %s, '""" + insertDate + """'
+                    %s, %s, %s, %s, %s, '""" + insertDate + """'
                 )
                 ON CONFLICT (computer_id)
                 DO UPDATE SET
@@ -39,6 +39,7 @@ def plug_in(data, cycle) :
                     ipv_address = excluded.ipv_address, 
                     chassis_type = excluded.chassis_type, 
                     os_platform = excluded.os_platform,
+                    operating_system = excluded.operating_system,
                     is_virtual = excluded.is_virtual, 
                     last_reboot = excluded.last_reboot, 
                     driveUsage = excluded.driveUsage,
@@ -53,12 +54,12 @@ def plug_in(data, cycle) :
         elif cycle == 'daily':
             IQ = """
                 INSERT INTO """ + TNM + """ (
-                    computer_id, computer_name, ipv_address, chassis_type, os_platform, is_virtual, last_reboot,
+                    computer_id, computer_name, ipv_address, chassis_type, os_platform, operating_system, is_virtual, last_reboot,
                     driveUsage, ramUsage, cpuUsage, listenPortCountChange, establishedPortCountChange,
                     running_service_count, online, asset_list_statistics_collection_date
                 ) VALUES (
                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
-                    %s, %s, %s, %s, '""" + insertDate + """'
+                    %s, %s, %s, %s, %s, '""" + insertDate + """'
                 )
             """
         datalen = len(data.computer_id)
@@ -68,6 +69,7 @@ def plug_in(data, cycle) :
             IP = data.ipv_address[i]
             CT = data.chassis_type[i]
             OP = data.os_platform[i]
+            OS = data.operating_system[i]
             IV = data.is_virtual[i]
             LR = data.last_reboot[i]
             DUS = data.driveUsage[i]
@@ -77,7 +79,7 @@ def plug_in(data, cycle) :
             EPC = data.establishedPortCountChange[i]
             RSC = data.running_service_count[i]
             OL = data.online[i]
-            dataList = CI, CN, IP, CT, OP, IV, LR, DUS, RUS, CPUUS, LPC, EPC, RSC, OL
+            dataList = CI, CN, IP, CT, OP, OS, IV, LR, DUS, RUS, CPUUS, LPC, EPC, RSC, OL
             insertCur.execute(IQ, (dataList))
         insertConn.commit()
         insertConn.close()

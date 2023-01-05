@@ -18,7 +18,7 @@ def plug_in(data, cycle) :
         if cycle == 'minutely':
             IQ = """
                 INSERT INTO """ + TNM + """ (
-                    computer_id, last_reboot, disk_total_space, disk_used_space, os_platform, is_virtual, chassis_type, ipv_address, 
+                    computer_id, last_reboot, disk_total_space, disk_used_space, os_platform, operating_system, is_virtual, chassis_type, ipv_address, 
                     listen_port_count, established_port_count, ram_use_size, ram_total_size, 
                     installed_applications_name, running_service, cup_consumption, collection_date
                 ) VALUES (
@@ -31,6 +31,7 @@ def plug_in(data, cycle) :
                     disk_total_space = excluded.disk_total_space, 
                     disk_used_space = excluded.disk_used_space, 
                     os_platform = excluded.os_platform,
+                    operating_system = excluded.operating_system,
                     is_virtual = excluded.is_virtual, 
                     chassis_type = excluded.chassis_type, 
                     ipv_address = excluded.ipv_address, 
@@ -50,6 +51,7 @@ def plug_in(data, cycle) :
             DTS = str(data.disk_total_space[i][0])
             DUS = str(data.disk_used_space[i][0])
             OP = data.os_platform[i]
+            OS = data.operating_system[i]
             IV = data.is_virtual[i]
             CT = data.chassis_type[i]
             IP = data.ipv_address[i]
@@ -60,7 +62,7 @@ def plug_in(data, cycle) :
             IA = data.installed_applications_name[i]
             RS = data.running_service[i]
             CPUC = data.cup_consumption[i]
-            dataList = CI, LR, DTS, DUS, OP, IV, CT, IP, LPC, EPC, RUS, RTS, IA, RS, CPUC
+            dataList = CI, LR, DTS, DUS, OP, OS, IV, CT, IP, LPC, EPC, RUS, RTS, IA, RS, CPUC
             insertCur.execute(IQ, (dataList))
         insertConn.commit()
         insertConn.close()

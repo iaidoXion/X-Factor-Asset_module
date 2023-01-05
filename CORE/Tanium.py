@@ -47,7 +47,7 @@ def plug_in():                                                   # 변수 명 Fu
         CODBPTAOPI(SOODL, 'minutely')                                       # (minutely_asset Table에 수집)
         CSMDL = CIDBPTAOPI('minutely_asset_all')  # Common Sensor Minutely Data List (Module로 DB에 수집한 데이터 호출 : minutely_asset Table )
         MSDDFT = CTDAAPI(CSMDL, 'DB')  # minutely Source Data Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
-        CODBPTAOPI(MSDDFT, 'daily')  # (daily_asset Table에 수집)
+        #CODBPTAOPI(MSDDFT, 'daily')  # (daily_asset Table에 수집)
 
 
 
@@ -71,12 +71,13 @@ def plug_in():                                                   # 변수 명 Fu
 
             MSLDIPDL = CIDBPTSLPI('minutely')                           # Minutely Statistics List Data InPut Data List (Module로 DB에 수집한 데이터 호출 : minutely_statistics_list Table)
             MSLDDFT = CTDSAPI(MSLDIPDL, 'DB', 'minutely_statistics_list')   # Minutely Statistics List Data Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
-            CODBPTSLPI(MSLDDFT, 'daily')                                       # (daily_statistics_list Table에 수집)
+            #CODBPTSLPI(MSLDDFT, 'daily')                                       # (daily_statistics_list Table에 수집)
 
             # statistics
             IPMALSDL = CIDBPTSLPI('minutely')  # InPut Minutely Asset List Statistics Data List (Module로 DB에 수집한 데이터 호출 : minutely_statistics_list Table)
             IPMALSDDFT = CTDSAPI(IPMALSDL, 'DB', 'minutely_statistics_list')  # Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
             OSGBS = CASGBCPI(IPMALSDDFT, 'os', 'OP')  # OS Group By Statistics (OS 통계)
+            OSVGBS = CASGBCPI(IPMALSDDFT, 'operating_system', 'OS') # OS Version Group By Statistics (OS 버전 포함 통계)
             IVGBS = CASGBCPI(IPMALSDDFT, 'virtual', 'IV')  # Is Virtual Group By Statistics (가상, 물리 자산 통계)
             CTGBS = CASGBCPI(IPMALSDDFT, 'asset', 'CT')  # Chassis Type Group By Statistics (자산 형태 통계)
             LPCGBS = CASGBCPI(IPMALSDDFT, 'listen_port_count_change', 'LPC')  # Listen Port Count Group By Statistics (listen port count 변경 여부 통계)
@@ -108,7 +109,9 @@ def plug_in():                                                   # 변수 명 Fu
             IAGBS = CASGBCPI(MADFTS, 'installed_applications', 'IANM')  # Installed Applications Group By Statistics (Installed Application 통계)
             RSGBS = CASGBCPI(MADFTS, 'running_service', 'RSNM')  # Running Service Group By Statistics (Running Service 통계)
 
-            MSTD = OSGBS + IVGBS + CTGBS + LPCGBS + EPCGBS + IAGBS + RSGBS + LRBGBS + DUSGBS + RUSGBS + CPUGBS + GRUGBS + GCUGBS + GLPCGBS + GEPCGBS + GRSCGBS + GRPLRGBS + GDUSGBS  # Minutely Statistics Total Data (minutely_statistics Table에 넣을 모든 통계데이터)
+
+            MSTD = OSGBS + OSVGBS + IVGBS + CTGBS + LPCGBS + EPCGBS + IAGBS + RSGBS + LRBGBS + DUSGBS + RUSGBS + CPUGBS + GRUGBS + GCUGBS + GLPCGBS + GEPCGBS + GRSCGBS + GRPLRGBS + GDUSGBS + GSCGBS # Minutely Statistics Total Data (minutely_statistics Table에 넣을 모든 통계데이터)
+
 
             SDDFT = CTDSAPI(MSTD, 'DB', 'minutely_statistics')  # Statistics Data Data Frame Transform (Statistics 데이터를 Data Frame 형태로 변형)
             CODBPTAPI(SDDFT, 'minutely')
@@ -116,7 +119,7 @@ def plug_in():                                                   # 변수 명 Fu
 
             MSIPDL = CIDBPTSPI('minutely')                                        # InPut Data List (Module로 DB에 수집한 데이터 호출 : minutely_statistics Table)
             MSDFT = CTDSPPI(MSIPDL, 'DB', 'minutely_statistics', '')                # Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
-            CODBPTAPI(MSDFT, 'daily')                                             # (daily_statistics Table에 수집)
+            #CODBPTAPI(MSDFT, 'daily')                                             # (daily_statistics Table에 수집)
             # 만약에 minutely 수집이 false
 
 """
