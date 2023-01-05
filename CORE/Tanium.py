@@ -94,6 +94,13 @@ def plug_in():                                                   # 변수 명 Fu
             GRSCGBS = CASGBCPI(ADT, 'group_running_service_count_exceeded', 'ip_group')
             GRPLRGBS = CASGBCPI(ADT, 'group_last_reboot', 'ip_group')
             GDUSGBS = CASGBCPI(ADT, 'group_drive_usage_size_exceeded', 'ip_group')
+
+            #대역별 서버수량 상위5개
+            GSCGBS = CASGBCPI(ADT, 'group_server_count', 'ip_group')
+
+            #서버 총 수량 추이 그래프
+            #print(IVGBS)
+
             MAIPDL = CIDBPTAOPI('minutely_asset_part')  # Minutely Asset InPut Data List (Module로 DB에 수집한 데이터 호출 : minutely_asset Table)
             MADFTF = CTDAPPI(MAIPDL, 'DB', 'minutely_asset')  # Minutely Asset Data Frame Transform First (호출한 데이터를 Data Frame 형태로 변형)
             MAPPT = CTPPI(MADFTF, 'minutely_asset')  # Minutely Asset PreProcession Transform (데이터 전처리)
@@ -102,6 +109,7 @@ def plug_in():                                                   # 변수 명 Fu
             RSGBS = CASGBCPI(MADFTS, 'running_service', 'RSNM')  # Running Service Group By Statistics (Running Service 통계)
 
             MSTD = OSGBS + IVGBS + CTGBS + LPCGBS + EPCGBS + IAGBS + RSGBS + LRBGBS + DUSGBS + RUSGBS + CPUGBS + GRUGBS + GCUGBS + GLPCGBS + GEPCGBS + GRSCGBS + GRPLRGBS + GDUSGBS  # Minutely Statistics Total Data (minutely_statistics Table에 넣을 모든 통계데이터)
+
             SDDFT = CTDSAPI(MSTD, 'DB', 'minutely_statistics')  # Statistics Data Data Frame Transform (Statistics 데이터를 Data Frame 형태로 변형)
             CODBPTAPI(SDDFT, 'minutely')
 
