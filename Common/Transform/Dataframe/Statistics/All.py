@@ -3,7 +3,7 @@ import pandas as pd
 def plug_in(data, inputPlugin, dataType) :
     if inputPlugin == 'DB':
         if dataType == 'minutely_statistics_list' :
-            DFC = ['computer_id', 'computer_name', 'ipv_address', 'chassis_type', 'os_platform', 'is_virtual',
+            DFC = ['computer_id', 'computer_name', 'ipv_address', 'chassis_type', 'os_platform', 'operating_system', 'is_virtual',
                    'last_reboot', 'driveUsage', 'ramUsage', 'cpuUsage', 'listenPortCountChange',
                    'establishedPortCountChange', 'running_service_count', 'online']
         elif dataType == 'minutely_statistics' :
@@ -16,16 +16,17 @@ def plug_in(data, inputPlugin, dataType) :
                 IP = d[2]
                 CT = d[3]
                 OSP = d[4]
-                IV = d[5]
-                LR = d[6]
-                DUS = d[7]
-                RUS = d[8]
-                CPUUS = d[9]
-                LPC = d[10]
-                EPC = d[11]
-                RSC = d[12]
-                OL = d[13]
-                DFL.append([CID, CNM, IP, CT, OSP, IV, LR, DUS, RUS, CPUUS, LPC, EPC, RSC, OL])
+                OP = d[5]
+                IV = d[6]
+                LR = d[7]
+                DUS = d[8]
+                RUS = d[9]
+                CPUUS = d[10]
+                LPC = d[11]
+                EPC = d[12]
+                RSC = d[13]
+                OL = d[14]
+                DFL.append([CID, CNM, IP, CT, OSP, OP, IV, LR, DUS, RUS, CPUUS, LPC, EPC, RSC, OL])
             elif dataType == 'minutely_statistics':
                 MSU = d[0]
                 classification = d[1]
