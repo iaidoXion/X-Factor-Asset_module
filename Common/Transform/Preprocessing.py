@@ -9,7 +9,11 @@ def plug_in(data, dataType):
     for c in range(len(data['computer_id'])) :
         CID = data['computer_id'][c]
         IANM = data['installed_applications_name'][c]
+        ## IANM 전처리 해야함. 그리고 나서 통계낼때 통계에서 전처리 한게 있는지 확인!! Common>Analysis>Statistics>Compare.py
         RS = data['running_service'][c].replace('{', '').replace('}', '').replace('"', '').split(',')
+        ## RS 전처리 해야함. 그리고 나서 통계낼때 통계에서 전처리 한게 있는지 확인!! Common>Analysis>Statistics>Compare.py
+        manufacturer = data['manufacturer'][c]
+        ## manufacturer 전처리 해야함.
         if dataType == 'minutely_daily_asset':
             CNM = data['computer_name'][c]
             if not data['last_reboot'][c].startswith('[current') and not data['last_reboot'][c].startswith('TSE-Error') and not data['last_reboot'][c].startswith('Unknown'):
@@ -161,9 +165,26 @@ def plug_in(data, dataType):
                 CPUC = data['cup_consumption'][c]
 
             OL = data['online'][c]
-            DL.append([CID, CNM, LR, DTS, DUS, OP, OS, IV, CT, IPV, LPC, YLPC, EPC, YEPC, RUS, RTS, IANM, RS, CPUC, OL])
+            ## OL 전처리 해야함. 그리고 나서 통계낼때 통계에서 전처리 한게 있는지 확인!! Common>Analysis>Statistics>Compare.py
+
+            TCS = data['tanium_client_subnet'][c]
+            ## TCS 전처리 해야함.
+
+            SIP = []
+            for d in data['session_ip'][c] :
+                if len(d.replace('{"', '').replace('"}', '').split('","')) > 1 :
+                    SIP.append(d.replace('{"', '').replace('"}', '').split('","'))
+                else:
+                    if not d.replace('{"', '').replace('"}', '').startswith('[current') and not d.replace('{"', '').replace('"}', '').startswith('[no') and not d.replace('{"', '').replace('"}', '').startswith('TSE-Error') :
+                        SIP.append(d.replace('{"', '').replace('"}', ''))
+                    else :
+                        SIP.append(['unconfirmed'])
+
+            NS = data['nvidia_smi'][c]
+            ## NS 전처리 해야함.
+
+            DL.append([CID, CNM, LR, DTS, DUS, OP, OS, IV, CT, IPV, LPC, YLPC, EPC, YEPC, RUS, RTS, IANM, RS, CPUC, OL, TCS, manufacturer, SIP[0], NS])
         elif dataType == 'minutely_asset':
-            manufacturer = data['manufacturer'][c]
             DL.append([CID, IANM, manufacturer, RS])
 
     return DL

@@ -113,7 +113,11 @@ def plug_in(dataType) :
                         ma.installed_applications_name as installed_applications_name, 
                         ma.running_service as running_service, 
                         ma.cup_consumption as cup_consumption,
-                        ma.online as online
+                        ma.online as online,
+                        ma.tanium_client_subnet,
+                        ma.manufacturer,
+                        ma.session_ip,
+                        ma.nvidia_smi
                     from
                         (select 
                             computer_id, 
@@ -133,7 +137,11 @@ def plug_in(dataType) :
                             installed_applications_name, 
                             running_service, 
                             cup_consumption,
-                            online  
+                            online,
+                            tanium_client_subnet,
+                            manufacturer,
+                            session_ip,
+                            nvidia_smi
                         from 
                             """+MAT+"""
                         where
@@ -172,7 +180,11 @@ def plug_in(dataType) :
                         ma.installed_applications_name as installed_applications_name, 
                         ma.running_service as running_service, 
                         ma.cup_consumption as cup_consumption,
-                        ma.online as online
+                        ma.online as online,
+                        ma.tanium_client_subnet,
+                        ma.manufacturer,
+                        ma.session_ip,
+                        ma.nvidia_smi
                     from
                         (select 
                             computer_id, 
@@ -192,7 +204,11 @@ def plug_in(dataType) :
                             installed_applications_name, 
                             running_service, 
                             cup_consumption,
-                            online  
+                            online,
+                            tanium_client_subnet,
+                            manufacturer,
+                            session_ip,
+                            nvidia_smi  
                         from 
                             """ + MAT + """
                         ) as ma
