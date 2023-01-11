@@ -15,41 +15,54 @@
   "CORE" : {
     "Tanium" : {
       "COREUSE" : "true",
+      "ONOFFTYPE" : "online",
+      "CYCLEUSE" : {
+        "MINUTELY" : "true",
+        "DAILY" : "false"
+      },
       "SOURCE" : {
-        "INPUT" : {
-          "API" : "true",
-          "DB" : {
-          "PS" : "false",
-          "MY" : "false"
+        "MINUTELY" : {
+          "INPUT" : {
+            "API" : "true",
+            "DB" : {
+              "PS" : "false",
+              "MY" : "false"
+            }
+          },
+          "Transform" : "false",
+          "OUTPUT": {
+            "API" : "false",
+            "DB" : {
+              "PS" : "true",
+              "MY" : "false"
+            }
           }
         },
-        "Transform" : "false",
-        "OUTPUT": {
-          "API" : "false",
-          "DB" : {
-            "PS" : "true",
-            "MY" : "false"
-          }
+        "DAILY" : {
         }
       },
       "STATISTICS" : {
         "COLLECTIONUSE" : "true",
-        "INPUT" : {
-          "API" : "false",
-          "DB" : {
-          "PS" : "true",
-          "MY" : "false"
+        "MINUTELY" : {
+          "INPUT" : {
+            "API" : "false",
+            "DB" : {
+              "PS" : "true",
+              "MY" : "false"
+            }
+          },
+          "Transform": "true",
+          "OUTPUT": {
+            "API" : "false",
+            "DB" : {
+              "PS" : "true",
+              "MY" : "false"
+            }
           }
         },
-        "OUTPUT": {
-          "API" : "false",
-          "DB" : {
-            "PS" : "true",
-            "MY" : "false"
-          }
+        "DAILY" : {
         }
       },
-
 
       "PLUGIN" : {
         "VUL": {
@@ -68,8 +81,7 @@
               "MY" : "false"
             }
           }
-        },
-        "ONOFFTYPE" : "online"
+        }
       },
       "INPUT" : {
         "API" : {
@@ -103,7 +115,6 @@
           }
         }
       },
-      "Transform" : "true",
       "OUTPUT" : {
         "DB" : {
           "PS" : {
