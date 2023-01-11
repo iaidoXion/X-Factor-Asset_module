@@ -43,6 +43,13 @@ def plug_in(dataType) :
                 from  
                     """ + MSLT + """
                 where to_char(asset_list_statistics_collection_date , 'YYYY-MM-DD HH24:MI') = '"""+nowTime+"""'"""
+        elif dataType == 'minutely_statistics_list_online':
+            SQ = """
+                select
+                    computer_id,
+                    asset_list_statistics_collection_date
+                from
+                    """ + MSLT
         selectCur.execute(SQ)
         selectRS = selectCur.fetchall()
         for RS in selectRS:
