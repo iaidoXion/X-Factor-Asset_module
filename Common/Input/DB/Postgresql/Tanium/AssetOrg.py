@@ -14,8 +14,7 @@ def plug_in(dataType) :
         DBPWD = SETTING['CORE']['Tanium']['INPUT']['DB']['PS']['PWD']
         MAT = SETTING['CORE']['Tanium']['INPUT']['DB']['PS']['TNM']['MA']
         DAT = SETTING['CORE']['Tanium']['INPUT']['DB']['PS']['TNM']['DA']
-        COLLECTIONTYPE = SETTING['CORE']['Tanium']['PLUGIN']['ONOFFTYPE']
-        #COLLECTIONTYPE = SETTING['CORE']['Tanium']['ONOFFTYPE']
+        COLLECTIONTYPE = SETTING['CORE']['Tanium']['ONOFFTYPE']
         yesterday = (datetime.today() - timedelta(1)).strftime("%Y-%m-%d")
         nowTime = datetime.today().strftime("%Y-%m-%d %H:%M")
         DL = []
