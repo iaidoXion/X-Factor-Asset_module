@@ -55,6 +55,9 @@ def plug_in(data, classification, itemType) :
                 DL.append(data.ip_group[c])
         elif classification == 'group_server_count' :
             DL.append(data.ip_group[c])
+        elif classification == 'last_online_time_exceeded' :
+            DL.append(data.asset_list_statistics_collection_date[c])
+
 
     DF = pd.DataFrame(DL, columns=[CNM])
     DFG = DF.groupby([CNM]).size().reset_index(name='counts')
@@ -104,7 +107,9 @@ def plug_in(data, classification, itemType) :
     elif classification == 'group_server_count':
         statistics_unique = classification + '_' + DFGS.ip_group
         item = DFGS.ip_group
-
+    elif classification == 'last_online_time_exceeded':
+        statistics_unique = classification + '_' + DFGS.LOTE
+        item = DFGS.LOTE
 
     item_count = DFG.counts
 
