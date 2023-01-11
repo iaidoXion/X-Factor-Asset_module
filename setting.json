@@ -18,7 +18,7 @@
       "ONOFFTYPE" : "online",
       "CYCLEUSE" : {
         "MINUTELY" : "true",
-        "DAILY" : "false"
+        "DAILY" : "true"
       },
       "SOURCE" : {
         "MINUTELY" : {
