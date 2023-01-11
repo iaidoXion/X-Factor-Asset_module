@@ -103,17 +103,9 @@ def plug_in(data, dataType) :
             else:
                 establishedPortCountChange = 'unconfirmed'
 
-            if len(data['running_service'][c]) > 1:
-                running_service_count = len(data['running_service'][c])
-            else:
-                if not data['running_service'][c][0].startswith('[current') and not data['running_service'][c][0].startswith('TSE-Error') and not data['running_service'][c][0].startswith('Unknown'):
-                    running_service_count = 'unconfirmed'
-                else:
-                    running_service_count = 1
-
             if data['online'][c] == 'True':
                 online = 'Yes'
             else:
                 online = 'unconfirmed'
-            DL.append([data.computer_id[c], listenPortCountChange, establishedPortCountChange, str(running_service_count), str(online)])
+            DL.append([data.computer_id[c], listenPortCountChange, establishedPortCountChange,  str(online)])
     return DL

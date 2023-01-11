@@ -35,6 +35,10 @@ def plug_in(dataType) :
                     establishedPortCountChange,
                     running_service_count,
                     online,
+                    tanium_client_subnet, 
+                    manufacturer, 
+                    session_ip_count, 
+                    nvidia_smi,
                     asset_list_statistics_collection_date
                 from  
                     """ + MSLT + """

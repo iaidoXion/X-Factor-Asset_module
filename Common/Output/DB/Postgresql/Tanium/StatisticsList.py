@@ -28,10 +28,10 @@ def plug_in(data, cycle) :
                 INSERT INTO """ + TNM + """ (
                     computer_id, computer_name, ipv_address, chassis_type, os_platform, operating_system, is_virtual, last_reboot,
                     driveUsage, ramUsage, cpuUsage, listenPortCountChange, establishedPortCountChange,
-                    running_service_count, online, asset_list_statistics_collection_date
+                    running_service_count, online, tanium_client_subnet, manufacturer, session_ip_count, nvidia_smi, asset_list_statistics_collection_date
                 ) VALUES (
                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
-                    %s, %s, %s, %s, %s, '""" + insertDate + """'
+                    %s, %s, %s, %s, %s, %s, %s, %s, %s, '""" + insertDate + """'
                 )
                 ON CONFLICT (computer_id)
                 DO UPDATE SET
@@ -49,6 +49,10 @@ def plug_in(data, cycle) :
                     establishedPortCountChange = excluded.establishedPortCountChange,
                     running_service_count = excluded.running_service_count,
                     online = excluded.online,
+                    tanium_client_subnet = excluded.tanium_client_subnet,
+                    manufacturer = excluded.manufacturer, 
+                    session_ip_count = excluded.session_ip_count, 
+                    nvidia_smi = excluded.nvidia_smi,
                     asset_list_statistics_collection_date = '""" + insertDate + """'                                                                
             """
         elif cycle == 'daily':
@@ -56,10 +60,10 @@ def plug_in(data, cycle) :
                 INSERT INTO """ + TNM + """ (
                     computer_id, computer_name, ipv_address, chassis_type, os_platform, operating_system, is_virtual, last_reboot,
                     driveUsage, ramUsage, cpuUsage, listenPortCountChange, establishedPortCountChange,
-                    running_service_count, online, asset_list_statistics_collection_date
+                    running_service_count, online, tanium_client_subnet, manufacturer, session_ip_count, nvidia_smi, asset_list_statistics_collection_date
                 ) VALUES (
                     %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
-                    %s, %s, %s, %s, %s, '""" + insertDate + """'
+                    %s, %s, %s, %s, %s, %s, %s, %s, %s, '""" + insertDate + """'
                 )
             """
         datalen = len(data.computer_id)
@@ -79,7 +83,11 @@ def plug_in(data, cycle) :
             EPC = data.establishedPortCountChange[i]
             RSC = data.running_service_count[i]
             OL = data.online[i]
-            dataList = CI, CN, IP, CT, OP, OS, IV, LR, DUS, RUS, CPUUS, LPC, EPC, RSC, OL
+            TCS = data.tanium_client_subnet[i]
+            MF = data.manufacturer[i]
+            SIC = data.session_ip_count[i]
+            NS = data.nvidia_smi[i]
+            dataList = CI, CN, IP, CT, OP, OS, IV, LR, DUS, RUS, CPUUS, LPC, EPC, RSC, OL, TCS, MF, SIC, NS
             insertCur.execute(IQ, (dataList))
         insertConn.commit()
         insertConn.close()

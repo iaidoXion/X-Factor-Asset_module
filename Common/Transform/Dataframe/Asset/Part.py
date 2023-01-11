@@ -3,7 +3,7 @@ import pandas as pd
 def plug_in(data, inputPlugin, dataType) :
     if inputPlugin == 'DB':
         if dataType == 'minutely_asset' :
-            DFC = ['computer_id', 'installed_applications_name', 'manufacturer', 'running_service']
+            DFC = ['computer_id', 'installed_applications_name', 'manufacturer', 'running_service', 'session_ip']
         elif dataType == 'minutely_daily_asset' :
             DFC = ['computer_id', 'computer_name', 'last_reboot', 'disk_total_space', 'disk_used_space',
                    'os_platform', 'operating_system', 'is_virtual', 'chassis_type',
@@ -19,7 +19,8 @@ def plug_in(data, inputPlugin, dataType) :
                 IAN= d[1]
                 manufacturer = d[2]
                 RS= d[3]
-                DFL.append([CID, IAN, manufacturer, RS])
+                SIP = d[4]
+                DFL.append([CID, IAN, manufacturer, RS, SIP])
             elif dataType == 'minutely_daily_asset' :
                 CID = d[0]
                 CNM = d[1]
@@ -41,11 +42,11 @@ def plug_in(data, inputPlugin, dataType) :
                 RS = d[17]
                 CC = d[18]
                 OL = d[19]
-                TCS = d[20],
-                manufacturer = d[21],
-                SIP = d[22],
+                TCS = d[20]
+                MF = d[21]
+                SIP = d[22]
                 NS = d[23]
-                DFL.append([CID, CNM, LR, DTS, DUS, OSP, OS, IV, CT, IP, TLPC, YLPC, TEPC, YEPC, RUS, RTS, IAN, RS, CC, OL, TCS, manufacturer, SIP, NS])
+                DFL.append([CID, CNM, LR, DTS, DUS, OSP, OS, IV, CT, IP, TLPC, YLPC, TEPC, YEPC, RUS, RTS, IAN, RS, CC, OL, TCS, MF, SIP, NS])
 
     DF = pd.DataFrame(DFL, columns=DFC)
     return DF

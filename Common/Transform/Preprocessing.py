@@ -8,12 +8,45 @@ def plug_in(data, dataType):
     #print(len(data))
     for c in range(len(data['computer_id'])) :
         CID = data['computer_id'][c]
-        IANM = data['installed_applications_name'][c]
-        ## IANM 전처리 해야함. 그리고 나서 통계낼때 통계에서 전처리 한게 있는지 확인!! Common>Analysis>Statistics>Compare.py
-        RS = data['running_service'][c].replace('{', '').replace('}', '').replace('"', '').split(',')
-        ## RS 전처리 해야함. 그리고 나서 통계낼때 통계에서 전처리 한게 있는지 확인!! Common>Analysis>Statistics>Compare.py
-        manufacturer = data['manufacturer'][c]
-        ## manufacturer 전처리 해야함.
+        if not data['installed_applications_name'][c].startswith('{"[current') and not data['installed_applications_name'][c].startswith(
+                '{"TSE-Error') and not data['installed_applications_name'][c].startswith('{"Unknown') and not data['installed_applications_name'][c]== ' ':
+            if data['installed_applications_name'][c][1] == '"':
+                IANM = data['installed_applications_name'][c].replace('{"','').replace('"}','')
+            else:
+                IANM = data['installed_applications_name'][c].replace('{', '').replace('}', '')
+        else:
+            IANM = 'unconfirmed'
+
+
+        if not data['running_service'][c].startswith('{"[current') and not data['running_service'][c].startswith('{"TSE-Error') and not data['running_service'][c].startswith('Unknown') and not data['running_service'][c] == ' ':
+            if data['running_service'][c][1] == '"':
+                RS = data['running_service'][c].replace('"','').replace('{','').replace('}','').split(',')
+            else:
+                RS = data['running_service'][c].replace('{','').replace('}','').split(',')
+        else:
+            RS= 'unconfirmed'
+
+
+        if not data['manufacturer'][c].startswith('[current') and not data['manufacturer'][c].startswith(
+                'TSE-Error') and not data['manufacturer'][c].startswith('Unknown') and not data['manufacturer'][c]== ' ':
+            MF = data['manufacturer'][c]
+        else:
+            MF = 'unconfirmed'
+
+        #세션ip 전처리 추가 예정(server별 session상위5개)
+        if data['session_ip'][c].startswith('{"[current') or data['session_ip'][c].startswith(
+                '{"TSE-Error') or data['session_ip'][c].startswith('{"[Unknown') or data['session_ip'][c] == ' ':
+            SIP = 'unconfirmed'
+        elif data['session_ip'][c].startswith('{"[no result'):
+            SIP = 'no results'
+        else:
+            if data['session_ip'][c][2] == '(':
+                SIP = data['session_ip'][c].replace(', ', ' ').replace('"', '').replace('\'', '').replace('(','').replace(')', '').replace('{', '').replace('}', '').split(',')
+
+            else:
+                SIP = data['session_ip'][c].replace('"', '').replace('{', '').replace('}', '').split(',')
+
+
         if dataType == 'minutely_daily_asset':
             CNM = data['computer_name'][c]
             if not data['last_reboot'][c].startswith('[current') and not data['last_reboot'][c].startswith('TSE-Error') and not data['last_reboot'][c].startswith('Unknown'):
@@ -164,29 +197,31 @@ def plug_in(data, dataType):
             else:
                 CPUC = data['cup_consumption'][c]
 
-            OL = data['online'][c]
-            ## OL 전처리 해야함. 그리고 나서 통계낼때 통계에서 전처리 한게 있는지 확인!! Common>Analysis>Statistics>Compare.py
 
-            TCS = data['tanium_client_subnet'][c]
-            ## TCS 전처리 해야함.
+            if not data['online'][c].startswith('[current') and not data['online'][c].startswith(
+                    'TSE-Error') and not data['online'][c].startswith('Unknown'):
+                OL = data['online'][c]
+            else:
+                OL = 'unconfirmed'
 
-            SIP = []
-            for d in data['session_ip'][c] :
-                if len(d.replace('{"', '').replace('"}', '').split('","')) > 1 :
-                    SIP.append(d.replace('{"', '').replace('"}', '').split('","'))
-                else:
-                    if not d.replace('{"', '').replace('"}', '').startswith('[current') and not d.replace('{"', '').replace('"}', '').startswith('[no') and not d.replace('{"', '').replace('"}', '').startswith('TSE-Error') :
-                        SIP.append(d.replace('{"', '').replace('"}', ''))
-                    else :
-                        SIP.append(['unconfirmed'])
 
-            NS = data['nvidia_smi'][c]
-            ## NS 전처리 해야함.
+            if not data['tanium_client_subnet'][c].startswith('[current') and not data['tanium_client_subnet'][c].startswith(
+                    'TSE-Error') and not data['tanium_client_subnet'][c].startswith('Unknown'):
+                TCS = data['tanium_client_subnet'][c]
+            else:
+                TCS = 'unconfirmed'
 
-            DL.append([CID, CNM, LR, DTS, DUS, OP, OS, IV, CT, IPV, LPC, YLPC, EPC, YEPC, RUS, RTS, IANM, RS, CPUC, OL, TCS, manufacturer, SIP[0], NS])
+
+
+            if not data['nvidia_smi'][c].startswith('[current') and not data['nvidia_smi'][c].startswith(
+                    'TSE-Error') and not data['nvidia_smi'][c].startswith('Unknown') and not data['nvidia_smi'][c]== ' ':
+                NS = data['nvidia_smi'][c].replace('[','').replace(']','')
+            else:
+                NS = 'unconfirmed'
+
+            DL.append([CID, CNM, LR, DTS, DUS, OP, OS, IV, CT, IPV, LPC, YLPC, EPC, YEPC, RUS, RTS, IANM, RS, CPUC, OL, TCS, MF, SIP, NS])
         elif dataType == 'minutely_asset':
-            DL.append([CID, IANM, manufacturer, RS])
-
+            DL.append([CID, IANM, MF, RS, SIP])
     return DL
 
 
