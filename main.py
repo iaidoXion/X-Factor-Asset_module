@@ -1,5 +1,6 @@
 from datetime import datetime
-from CORE.Tanium import plug_in as CTPI
+from CORE.Tanium import minutely_plug_in as CTMPI
+from CORE.Tanium import daily_plug_in as CTDPI
 import urllib3
 import logging
 import json
@@ -8,7 +9,15 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def main() :
     if TU == 'true' :
-        CTPI()
+        if CMU == 'true' :
+            CTMPI()
+        else:
+            logging.info('Tanium Minutely cycle 사용여부  : ' + CMU)
+
+        if CDU == 'true' :
+            CTDPI()
+        else:
+            logging.info('Tanium Daily cycle 사용여부  : ' + CDU)
     else:
         logging.info('Tanium 사용여부 : '+TU)
 
@@ -20,6 +29,8 @@ if __name__ == "__main__":
     LOGFNM = SETTING['PROJECT']['LOG']['fileName']
     LOGFF = SETTING['PROJECT']['LOG']['fileFormat']
     TU = SETTING['CORE']['Tanium']['COREUSE']
+    CMU = SETTING['CORE']['Tanium']['CYCLEUSE']['MINUTELY']
+    CDU = SETTING['CORE']['Tanium']['CYCLEUSE']['DAILY']
 
     today = datetime.today().strftime("%Y%m%d")
     logFile = LOGFD + LOGFNM + today + LOGFF
