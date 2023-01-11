@@ -17,13 +17,7 @@ def plug_in(data) :
         else :
             cpuUsage = 'unconfirmed'
 
-
-
-
-
-        DL.append([data.computer_id[c], data.computer_name[c], data.ipv_address[c], data.chassis_type[c],
-                   data.os_platform[c], data.operating_system[c], data.is_virtual[c], str(data.last_reboot[c]), str(driveUsage),
-                   str(ramUsage), str(cpuUsage)])
+        DL.append([data.computer_id[c], str(driveUsage), str(ramUsage), str(cpuUsage)])
     return DL
 
 

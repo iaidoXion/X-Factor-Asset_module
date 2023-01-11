@@ -14,6 +14,8 @@ from Common.Transform.Merge import plug_in as CTMPI
 from Common.Analysis.Statistics.Usage import plug_in as CASUPI
 from Common.Analysis.Statistics.GroupByCount import plug_in as CASGBCPI
 from Common.Analysis.Statistics.Compare import plug_in as CASCPI
+from Common.Analysis.Statistics.Normal import plug_in as CASNPI
+from Common.Analysis.Statistics.Count import plug_in as CASCOPI
 from Common.Output.DB.Postgresql.Tanium.AssetOrg import plug_in as CODBPTAOPI
 from Common.Output.DB.Postgresql.Tanium.StatisticsList import plug_in as CODBPTSLPI
 from Common.Output.DB.Postgresql.Tanium.Statistics import plug_in as CODBPTAPI
@@ -55,19 +57,31 @@ def plug_in():                                                   # 변수 명 Fu
         # Asset List
         if STIPDBPU == 'true' :
             MDSDDIPDL = CIDBPTAOPI('minutely_daily_asset')  # Minutely Daily Source Data InPut Data List (Module로 DB에 수집한 데이터 호출 : minutely_asset, daily_asset Table)
-
+            MDSDDIPDLON = CIDBPTSLPI('minutely_statistics_list_online')
         MDSDDFTF = CTDAPPI(MDSDDIPDL, 'DB', 'minutely_daily_asset')  # Minutely Daily Source Data Data Frame Transform First (호출한 데이터를 Data Frame 형태로 변형)
 
         MDSDDPPT = CTPPI(MDSDDFTF, 'minutely_daily_asset')  # Minutely Daily Source Data PreProcession Transform (데이터 전처리)
         MDSDDFTS = CTDAPPI(MDSDDPPT, 'DB', 'minutely_daily_asset')  # Minutely Daily Source Data Data Frame Transform Second (전처리한 데이터를 Data Frame 형태로 변형)
+        MDSDDFTFON = CTDSPPI(MDSDDIPDLON, 'DB', 'minutely_statistics_list_online', '')  # list테이블의 asset_list_statistics_collection_date를 Data Frame 변형
 
         US = CASUPI(MDSDDFTS)  # Usage Statistics (사용량 통계)
         USDFT = CTDSPPI(US, 'DB', 'minutely_statistics_list', 'usage')  # Usage Statistics DataFrame Transform (사용량 통계를 Data Frame 형태로 변형)
         CS = CASCPI(MDSDDFTS, '')  # Compare Statistics (비교 통계)
         CSDFT = CTDSPPI(CS, 'DB', 'minutely_statistics_list', 'compare')  # Compare Statistics DataFrame Transform (비교 통계를 Data Frame 형태로 변형)
+        NS=CASNPI(MDSDDFTS)   # Normal Statistics (일반 값)
+        NSDFT = CTDSPPI(NS, 'DB', 'minutely_statistics_list', 'normal')   #Normal Statistics DataFrame Transform ( 일반 값을 Data Frame 형태로 변형)
+        COS=CASCOPI(MDSDDFTS) # Count Statistics (일반 값)
+        COSDFT = CTDSPPI(COS, 'DB', 'minutely_statistics_list', 'count')   #Count Statistics DataFrame Transform ( 카운트 값을 Data Frame 형태로 변형)
+        CSO = CASCPI(MDSDDFTFON, 'online')  # Compare Statistic Online - online data를 비교 통계
+        CSODFT = CTDSPPI(CSO, 'DB', 'minutely_statistics_list_online', '')
+
+
         UCSM = CTMPI(USDFT, CSDFT)  # Usage and Compare Statistics Merge (DataFrame 형태의 사용량 통계 & 비교 통계 병합)
+        UCNSM = CTMPI(UCSM, NSDFT)  # UCSM and Normal Statistics Merge (DataFrame 형태의 상위 통계 & 일반 통계 병합)
+        UCNCOSM = CTMPI(UCNSM, COSDFT)  # UCNSM and Count Statistics Merge (DataFrame 형태의 상위 통계 & 카운트 통계 병합)
+
         if STOPDBPU == 'true' :
-            CODBPTSLPI(UCSM, 'minutely')  # (minutely_statistics_list Table에 수집)
+            CODBPTSLPI(UCNCOSM, 'minutely')  # (minutely_statistics_list Table에 수집)
 
             MSLDIPDL = CIDBPTSLPI('minutely')                           # Minutely Statistics List Data InPut Data List (Module로 DB에 수집한 데이터 호출 : minutely_statistics_list Table)
             MSLDDFT = CTDSAPI(MSLDIPDL, 'DB', 'minutely_statistics_list')   # Minutely Statistics List Data Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
@@ -79,6 +93,7 @@ def plug_in():                                                   # 변수 명 Fu
             OSGBS = CASGBCPI(IPMALSDDFT, 'os', 'OP')  # OS Group By Statistics (OS 통계)
             OSVGBS = CASGBCPI(IPMALSDDFT, 'operating_system', 'OS') # OS Version Group By Statistics (OS 버전 포함 통계)
             IVGBS = CASGBCPI(IPMALSDDFT, 'virtual', 'IV')  # Is Virtual Group By Statistics (가상, 물리 자산 통계)
+            ONGBS = CASGBCPI(CSODFT, 'last_online_time_exceeded', 'LOTE')  # Last Online Group By Statistics (최근 30분 이내 오프라인 여부 통계)
             CTGBS = CASGBCPI(IPMALSDDFT, 'asset', 'CT')  # Chassis Type Group By Statistics (자산 형태 통계)
             LPCGBS = CASGBCPI(IPMALSDDFT, 'listen_port_count_change', 'LPC')  # Listen Port Count Group By Statistics (listen port count 변경 여부 통계)
             EPCGBS = CASGBCPI(IPMALSDDFT, 'established_port_count_change', 'EPC')  # Listen Port Count Group By Statistics (established port count 변경 여부 통계)
@@ -99,8 +114,12 @@ def plug_in():                                                   # 변수 명 Fu
             #대역별 서버수량 상위5개
             GSCGBS = CASGBCPI(ADT, 'group_server_count', 'ip_group')
 
-            #서버 총 수량 추이 그래프
-            #print(IVGBS)
+            #물리서버 벤더별 수량 상위5개
+            MFGBS = CASGBCPI(IPMALSDDFT, 'manufacturer', 'MF')
+
+            #GPU 서버수량
+            GPUCGBS = CASGBCPI(IPMALSDDFT, 'nvidia_smi', 'NS')
+
 
             MAIPDL = CIDBPTAOPI('minutely_asset_part')  # Minutely Asset InPut Data List (Module로 DB에 수집한 데이터 호출 : minutely_asset Table)
             MADFTF = CTDAPPI(MAIPDL, 'DB', 'minutely_asset')  # Minutely Asset Data Frame Transform First (호출한 데이터를 Data Frame 형태로 변형)
@@ -108,9 +127,12 @@ def plug_in():                                                   # 변수 명 Fu
             MADFTS = CTDAPPI(MAPPT, 'DB', 'minutely_asset')  # Minutely Asset Data Frame Transform Second (전처리한 데이터를 Data Frame 형태로 변형)
             IAGBS = CASGBCPI(MADFTS, 'installed_applications', 'IANM')  # Installed Applications Group By Statistics (Installed Application 통계)
             RSGBS = CASGBCPI(MADFTS, 'running_service', 'RSNM')  # Running Service Group By Statistics (Running Service 통계)
+            # 프로그램에 붙어있는 최다 서버 TOP5
+            SIPGBS = CASGBCPI(MADFTS, 'session_ip', 'SIP') # Session_Ip Group By Statistics (Session_ip 통계)
+            #print(MADFTS)
 
 
-            MSTD = OSGBS + OSVGBS + IVGBS + CTGBS + LPCGBS + EPCGBS + IAGBS + RSGBS + LRBGBS + DUSGBS + RUSGBS + CPUGBS + GRUGBS + GCUGBS + GLPCGBS + GEPCGBS + GRSCGBS + GRPLRGBS + GDUSGBS + GSCGBS # Minutely Statistics Total Data (minutely_statistics Table에 넣을 모든 통계데이터)
+            MSTD = OSGBS + OSVGBS + IVGBS + CTGBS + LPCGBS + EPCGBS + IAGBS + RSGBS + LRBGBS + DUSGBS + RUSGBS + CPUGBS + GRUGBS + GCUGBS + GLPCGBS + GEPCGBS + GRSCGBS + GRPLRGBS + GDUSGBS + GSCGBS + ONGBS + MFGBS + GPUCGBS # Minutely Statistics Total Data (minutely_statistics Table에 넣을 모든 통계데이터)
 
 
             SDDFT = CTDSAPI(MSTD, 'DB', 'minutely_statistics')  # Statistics Data Data Frame Transform (Statistics 데이터를 Data Frame 형태로 변형)

@@ -76,7 +76,8 @@ def plug_in(dataType) :
                         computer_id, 
                         installed_applications_name, 
                         manufacturer,
-                        running_service
+                        running_service,
+                        session_ip
                     from 
                         """ + MAT + """
                     where 
@@ -87,7 +88,8 @@ def plug_in(dataType) :
                         computer_id, 
                         installed_applications_name, 
                         manufacturer,
-                        running_service
+                        running_service,
+                        session_ip
                     from 
                         """ + MAT
         elif dataType == 'minutely_daily_asset':

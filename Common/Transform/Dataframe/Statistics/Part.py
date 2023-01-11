@@ -4,10 +4,15 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
     if inputPlugin == 'DB':
         if dataType == 'minutely_statistics_list' :
             if columnsType == 'usage':
-                DFC = ['computer_id', 'computer_name', 'ipv_address', 'chassis_type', 'os_platform', 'operating_system', 'is_virtual',
-                       'last_reboot', 'driveUsage', 'ramUsage', 'cpuUsage']
+                DFC = ['computer_id',  'driveUsage', 'ramUsage', 'cpuUsage']
             elif columnsType == 'compare' :
-                DFC = ['computer_id', 'listenPortCountChange','establishedPortCountChange', 'running_service_count', 'online']
+                DFC = ['computer_id', 'listenPortCountChange','establishedPortCountChange', 'online']
+            elif columnsType == 'normal':
+                DFC = ['computer_id', 'computer_name', 'ipv_address', 'chassis_type', 'os_platform', 'operating_system', 'is_virtual', 'last_reboot', 'tanium_client_subnet', 'manufacturer', 'nvidia_smi']
+            elif columnsType == 'count':
+                DFC = ['computer_id', 'running_service_count', 'session_ip_count']
+
+
             elif columnsType == 'alarm' :
                 DFC = ['computer_id','ip_group', 'ram', 'cpu', 'listenport_count', 'establishedport_count', 'running_service_count', 'last_reboot', 'drive']
         elif dataType == 'minutely_statistics' :
@@ -17,6 +22,17 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
             if dataType == 'minutely_statistics_list' :
                 CID = d[0]
                 if columnsType == 'usage' :
+                    DUS = d[1]
+                    RUS = d[2]
+                    CPUUS = d[3]
+                    DFL.append([CID, DUS, RUS, CPUUS])
+                elif columnsType == 'compare' :
+                    LPC = d[1]
+                    EPC = d[2]
+                    OL = d[3]
+                    DFL.append([CID, LPC, EPC, OL])
+
+                elif columnsType == 'normal':
                     CNM = d[1]
                     IP = d[2]
                     CT = d[3]
@@ -24,16 +40,16 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
                     OS = d[5]
                     IV = d[6]
                     LR = d[7]
-                    DUS = d[8]
-                    RUS = d[9]
-                    CPUUS = d[10]
-                    DFL.append([CID, CNM, IP, CT, OSP, OS, IV, LR, DUS, RUS, CPUUS])
-                elif columnsType == 'compare' :
-                    LPC = d[1]
-                    EPC = d[2]
-                    RSC = d[3]
-                    OL = d[4]
-                    DFL.append([CID, LPC, EPC, RSC, OL])
+                    TCS = d[8]
+                    MF = d[9]
+                    NS = d[10]
+                    DFL.append([CID, CNM, IP, CT, OSP, OS, IV, LR, TCS, MF, NS])
+
+                elif columnsType == 'count':
+                    RSC = d[1]
+                    SIP = d[2]
+                    DFL.append([CID, RSC, SIP])
+
                 elif columnsType == 'alarm':
                     IPG = d[1]
                     RAM = d[2]

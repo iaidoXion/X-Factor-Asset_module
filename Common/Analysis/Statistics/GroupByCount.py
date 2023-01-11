@@ -55,6 +55,13 @@ def plug_in(data, classification, itemType) :
                 DL.append(data.ip_group[c])
         elif classification == 'group_server_count' :
             DL.append(data.ip_group[c])
+        elif classification == 'manufacturer' :
+            if not data.is_virtual[c] == 'Yes' :
+                DL.append(data.manufacturer[c])
+        elif classification == 'nvidia_smi' :
+            DL.append(data.nvidia_smi[c])
+
+
 
     DF = pd.DataFrame(DL, columns=[CNM])
     DFG = DF.groupby([CNM]).size().reset_index(name='counts')
@@ -105,6 +112,13 @@ def plug_in(data, classification, itemType) :
         statistics_unique = classification + '_' + DFGS.ip_group
         item = DFGS.ip_group
 
+    elif classification == 'manufacturer':
+        statistics_unique = classification + '_' + DFGS.MF
+        item = DFGS.MF
+
+    elif classification == 'nvidia_smi':
+        statistics_unique = classification + '_' + DFGS.NS
+        item = DFGS.NS
 
     item_count = DFG.counts
 
