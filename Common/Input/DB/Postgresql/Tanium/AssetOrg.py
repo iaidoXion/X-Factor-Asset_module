@@ -119,7 +119,8 @@ def plug_in(dataType) :
                         ma.tanium_client_subnet,
                         ma.manufacturer,
                         ma.session_ip,
-                        ma.nvidia_smi
+                        ma.nvidia_smi,
+                        ma.cup_details_cup_speed
                     from
                         (select 
                             computer_id, 
@@ -143,7 +144,8 @@ def plug_in(dataType) :
                             tanium_client_subnet,
                             manufacturer,
                             session_ip,
-                            nvidia_smi
+                            nvidia_smi,
+                            cup_details_cup_speed
                         from 
                             """+MAT+"""
                         where
@@ -186,7 +188,8 @@ def plug_in(dataType) :
                         ma.tanium_client_subnet,
                         ma.manufacturer,
                         ma.session_ip,
-                        ma.nvidia_smi
+                        ma.nvidia_smi,
+                        ma.cup_details_cup_speed
                     from
                         (select 
                             computer_id, 
@@ -210,7 +213,8 @@ def plug_in(dataType) :
                             tanium_client_subnet,
                             manufacturer,
                             session_ip,
-                            nvidia_smi  
+                            nvidia_smi,
+                            cup_details_cup_speed
                         from 
                             """ + MAT + """
                         ) as ma
