@@ -58,12 +58,8 @@ def minutely_plug_in():                                                         
         # statistics List
         if STMIPIDBPU == 'true' :                                                           # (통계 Data MINUTELY Input plug in postgresql DB 사용 여부 확인 - 사용함.)
             MDSDDIPDL = CIDBPTAOPI('minutely_daily_asset')                                  # Minutely Daily Source Data InPut Data List (Module로 DB에 수집한 데이터 호출 : minutely_asset, daily_asset Table)
-            MDSDDIPDLON = CIDBPTSLPI('minutely_statistics_list_online')
         # input plug in 이 postgresql DB 외의 것들 구현 예정
-
         MDSDDFTF = CTDAPPI(MDSDDIPDL, 'DB', 'minutely_daily_asset')                         # Minutely Daily Source Data Data Frame Transform First (호출한 데이터를 Data Frame 형태로 변형)
-        MDSDDFTFON = CTDSPPI(MDSDDIPDLON, 'DB', 'minutely_statistics_list_online', '')      # list테이블의 asset_list_statistics_collection_date를 Data Frame 변형
-
         if STMTPIU == 'true':                                                               # (통계 Data MINUTELY Transform(preprocessing) plug in 사용 여부 확인 - 사용함.)
             MDSDDPPT = CTPPI(MDSDDFTF, 'minutely_daily_asset')                              # Minutely Daily Source Data PreProcession Transform (데이터 전처리)
             MDSDDFTS = CTDAPPI(MDSDDPPT, 'DB', 'minutely_daily_asset')                      # Minutely Daily Source Data Data Frame Transform Second (전처리한 데이터를 Data Frame 형태로 변형)
@@ -82,8 +78,6 @@ def minutely_plug_in():                                                         
         NSDFT = CTDSPPI(NS, 'DB', 'minutely_statistics_list', 'normal')   #Normal Statistics DataFrame Transform ( 일반 값을 Data Frame 형태로 변형)
         COS=CASCOPI(MDSDDFTS) # Count Statistics (일반 값)
         COSDFT = CTDSPPI(COS, 'DB', 'minutely_statistics_list', 'count')   #Count Statistics DataFrame Transform ( 카운트 값을 Data Frame 형태로 변형)
-        CSO = CASCPI(MDSDDFTFON, 'online')  # Compare Statistic Online - online data를 비교 통계
-        CSODFT = CTDSPPI(CSO, 'DB', 'minutely_statistics_list_online', '')
 
         UCSM = CTMPI(USDFT, CSDFT)  # Usage and Compare Statistics Merge (DataFrame 형태의 사용량 통계 & 비교 통계 병합)
         UCNSM = CTMPI(UCSM, NSDFT)  # UCSM and Normal Statistics Merge (DataFrame 형태의 상위 통계 & 일반 통계 병합)
@@ -96,13 +90,14 @@ def minutely_plug_in():                                                         
         # statistics
         if STMIPIDBPU == 'true':                                                            # (통계 Data MINUTELY Input plug in postgresql DB 사용 여부 확인 - 사용함.)
             IPMALSDL = CIDBPTSLPI('minutely')                                               # InPut Minutely Asset List Statistics Data List (Module로 DB에 수집한 데이터 호출 : minutely_statistics_list Table)
+            IPMSLOALSDL= CIDBPTSLPI('minutely_statistics_list_online')
         # input plug in 이 postgresql DB 외의 것들 구현 예정
 
         IPMALSDDFT = CTDSAPI(IPMALSDL, 'DB', 'minutely_statistics_list')                    # Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
+        MDSDDFTFON = CTDSPPI(IPMSLOALSDL, 'DB', 'minutely_statistics_list_online', 'normal')  # list테이블의 asset_list_statistics_collection_date를 Data Frame 변형
         OSGBS = CASGBCPI(IPMALSDDFT, 'os', 'OP')                                            # OS Group By Statistics (OS 통계)
         OSVGBS = CASGBCPI(IPMALSDDFT, 'operating_system', 'OS')                            # OS Version Group By Statistics (OS 버전 포함 통계)
         IVGBS = CASGBCPI(IPMALSDDFT, 'virtual', 'IV')                                       # Is Virtual Group By Statistics (가상, 물리 자산 통계)
-        ONGBS = CASGBCPI(CSODFT, 'last_online_time_exceeded', 'LOTE')  # Last Online Group By Statistics (최근 30분 이내 오프라인 여부 통계)
         CTGBS = CASGBCPI(IPMALSDDFT, 'asset', 'CT')                                         # Chassis Type Group By Statistics (자산 형태 통계)
         LPCGBS = CASGBCPI(IPMALSDDFT, 'listen_port_count_change', 'LPC')                    # Listen Port Count Group By Statistics (listen port count 변경 여부 통계)
         EPCGBS = CASGBCPI(IPMALSDDFT, 'established_port_count_change', 'EPC')               # Listen Port Count Group By Statistics (established port count 변경 여부 통계)
@@ -120,8 +115,14 @@ def minutely_plug_in():                                                         
         GRPLRGBS = CASGBCPI(ADT, 'group_last_reboot', 'ip_group')                           #
         GDUSGBS = CASGBCPI(ADT, 'group_drive_usage_size_exceeded', 'ip_group')              #
 
-        #대역별 서버수량 상위5개
-        GSCGBS = CASGBCPI(ADT, 'group_server_count', 'ip_group')                            #
+        CSO = CASCPI(MDSDDFTFON, 'online')  # Compare Statistic Online - online data를 비교 통계
+        CSODFT = CTDSPPI(CSO, 'DB', 'minutely_statistics_list_online', 'count')
+
+        # 대역별 최근 30분 이내 오프라인 여부
+        GLOTGBS = CASGBCPI(CSODFT, 'group_last_online_time_exceeded', 'ip_group')
+        # 대역별 서버수량 상위5개
+        GSCGBS = CASGBCPI(ADT, 'group_server_count', 'ip_group')  #
+        ONGBS = CASGBCPI(CSODFT, 'last_online_time_exceeded', 'LOTE')  # Last Online Group By Statistics (최근 30분 이내 오프라인 여부 통계)
 
         #물리서버 벤더별 수량 상위5개
         MFGBS = CASGBCPI(IPMALSDDFT, 'manufacturer', 'MF')
@@ -139,7 +140,7 @@ def minutely_plug_in():                                                         
         # 프로그램에 붙어있는 최다 서버 TOP5
         SIPGBS = CASGBCPI(MADFTS, 'session_ip', 'SIP') # Session_Ip Group By Statistics (Session_ip 통계)
 
-        MSTD = OSGBS + OSVGBS + IVGBS + CTGBS + LPCGBS + EPCGBS + IAGBS + RSGBS + LRBGBS + DUSGBS + RUSGBS + CPUGBS + GRUGBS + GCUGBS + GLPCGBS + GEPCGBS + GRSCGBS + GRPLRGBS + GDUSGBS + GSCGBS + ONGBS + MFGBS + GPUCGBS # Minutely Statistics Total Data (minutely_statistics Table에 넣을 모든 통계데이터)
+        MSTD = OSGBS + OSVGBS + IVGBS + CTGBS + LPCGBS + EPCGBS + IAGBS + RSGBS + LRBGBS + DUSGBS + RUSGBS + CPUGBS + GRUGBS + GCUGBS + GLPCGBS + GEPCGBS + GRSCGBS + GRPLRGBS + GDUSGBS + GLOTGBS + GSCGBS + ONGBS + MFGBS + GPUCGBS # Minutely Statistics Total Data (minutely_statistics Table에 넣을 모든 통계데이터)
 
         SDDFT = CTDSAPI(MSTD, 'DB', 'minutely_statistics')                                  # Statistics Data Data Frame Transform (Statistics 데이터를 Data Frame 형태로 변형)
 

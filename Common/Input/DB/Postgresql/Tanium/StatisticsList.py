@@ -47,6 +47,8 @@ def plug_in(dataType) :
             SQ = """
                 select
                     computer_id,
+                    computer_name,
+                    ipv_address,
                     asset_list_statistics_collection_date
                 from
                     """ + MSLT
