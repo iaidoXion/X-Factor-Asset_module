@@ -11,7 +11,7 @@ def plug_in(data, inputPlugin, dataType) :
                    'today_established_port_count', 'yesterday_established_port_count',
                    'ram_use_size', 'ram_total_size', 'installed_applications_name',
                    'running_service', 'cup_consumption', 'online', 'tanium_client_subnet', 'manufacturer',
-                   'session_ip', 'nvidia_smi']
+                   'session_ip', 'nvidia_smi', 'cup_details_cup_speed']
         DFL = []
         for d in data:
             if dataType == 'minutely_asset':
@@ -46,7 +46,8 @@ def plug_in(data, inputPlugin, dataType) :
                 MF = d[21]
                 SIP = d[22]
                 NS = d[23]
-                DFL.append([CID, CNM, LR, DTS, DUS, OSP, OS, IV, CT, IP, TLPC, YLPC, TEPC, YEPC, RUS, RTS, IAN, RS, CC, OL, TCS, MF, SIP, NS])
+                CDS = d[24]
+                DFL.append([CID, CNM, LR, DTS, DUS, OSP, OS, IV, CT, IP, TLPC, YLPC, TEPC, YEPC, RUS, RTS, IAN, RS, CC, OL, TCS, MF, SIP, NS, CDS])
 
     DF = pd.DataFrame(DFL, columns=DFC)
     return DF

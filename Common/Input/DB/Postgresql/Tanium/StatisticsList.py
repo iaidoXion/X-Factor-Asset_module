@@ -39,6 +39,11 @@ def plug_in(dataType) :
                     manufacturer, 
                     session_ip_count, 
                     nvidia_smi,
+                    ram_use_size,
+                    ram_total_size,
+                    cup_details_cup_speed,
+                    disk_used_space,
+                    disk_total_space,
                     asset_list_statistics_collection_date
                 from  
                     """ + MSLT + """

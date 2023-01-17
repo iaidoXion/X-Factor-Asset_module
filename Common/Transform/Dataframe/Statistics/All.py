@@ -5,7 +5,8 @@ def plug_in(data, inputPlugin, dataType) :
         if dataType == 'minutely_statistics_list' :
             DFC = ['computer_id', 'computer_name', 'ipv_address', 'chassis_type', 'os_platform', 'operating_system', 'is_virtual',
                    'last_reboot', 'driveUsage', 'ramUsage', 'cpuUsage', 'listenPortCountChange',
-                   'establishedPortCountChange', 'running_service_count', 'online', 'tanium_client_subnet', 'manufacturer', 'session_ip_count', 'nvidia_smi']
+                   'establishedPortCountChange', 'running_service_count', 'online', 'tanium_client_subnet', 'manufacturer', 'session_ip_count', 'nvidia_smi',
+                   'ram_use_size', 'ram_total_size', 'cup_details_cup_speed', 'disk_used_space', 'disk_total_space']
         elif dataType == 'minutely_statistics' :
             DFC = ['minutely_statistics_unique', 'classification', 'item', 'item_count']
         DFL = []
@@ -30,7 +31,12 @@ def plug_in(data, inputPlugin, dataType) :
                 MF = d[16]
                 SIP = d[17]
                 NS = d[18]
-                DFL.append([CID, CNM, IP, CT, OSP, OP, IV, LR, DUS, RUS, CPUUS, LPC, EPC, RSC, OL, TCS, MF, SIP, NS])
+                RSZ = d[19]
+                RTZ = d[20]
+                CDS = d[21]
+                DSZ = d[22]
+                DTS = d[23]
+                DFL.append([CID, CNM, IP, CT, OSP, OP, IV, LR, DUS, RUS, CPUUS, LPC, EPC, RSC, OL, TCS, MF, SIP, NS, RSZ, RTZ, CDS, DSZ, DTS])
             elif dataType == 'minutely_statistics':
                 MSU = d[0]
                 classification = d[1]
