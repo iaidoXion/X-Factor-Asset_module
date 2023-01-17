@@ -62,9 +62,23 @@ def plug_in(data, classification, itemType) :
             if not data.is_virtual[c] == 'Yes' :
                 DL.append(data.manufacturer[c])
         elif classification == 'nvidia_smi' :
-            DL.append(data.nvidia_smi[c])
+            if data.nvidia_smi[c] =='no results' or data.nvidia_smi[c] == 'unconfirmed':
+                DL.append('NO')
+            else :
+                DL.append('YES')
+        elif classification == 'session_ip' :
+            for d in data.session_ip[c]:
+                if data.session_ip[c] == ['no results'] or data.session_ip[c] == ['unconfirmed']:
+                    DL.append('NO')
+                else:
+                    for x in d:
+                        DL.append(x)
         elif classification == 'last_online_time_exceeded' :
             DL.append(data.asset_list_statistics_collection_date[c])
+
+        elif classification == 'online_asset' :
+            DL.append(len(data.computer_id))
+
 
 
     DF = pd.DataFrame(DL, columns=[CNM])
@@ -122,9 +136,16 @@ def plug_in(data, classification, itemType) :
     elif classification == 'nvidia_smi':
         statistics_unique = classification + '_' + DFGS.NS
         item = DFGS.NS
+    elif classification == 'session_ip':
+        statistics_unique = classification + '_' + DFGS.SIP
+        item = DFGS.SIP
     elif classification == 'last_online_time_exceeded':
         statistics_unique = classification + '_' + DFGS.LOTE
         item = DFGS.LOTE
+
+    elif classification == 'online_asset':
+        statistics_unique = ['online_asset']
+        item = ['online_asset']
 
     item_count = DFG.counts
 

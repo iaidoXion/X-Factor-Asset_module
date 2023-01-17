@@ -128,7 +128,9 @@ def plug_in(data, inputPlugin) :
             SI =[]
             for SID in d[55] :
                 SI.append(SID['text'])
-            nvidiaSmi = d[56][0]['text']
+            nvidiaSmi = []
+            for NS in d[56] :
+                nvidiaSmi.append(NS['text'])
             OL = d[57][0]['text']
 
 

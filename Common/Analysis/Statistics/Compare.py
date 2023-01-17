@@ -28,11 +28,11 @@ def plug_in(data, dataType) :
             else:
                 if float(data.cpuUsage[c]) >= 95.0:
                     CPU = '95Risk'
-                if float(data.cpuUsage[c]) >= 75.0:
+                elif float(data.cpuUsage[c]) >= 75.0:
                     CPU = '75Risk'
-                if float(data.cpuUsage[c]) >= 60.0 :
+                elif float(data.cpuUsage[c]) >= 60.0 :
                     CPU = '60Risk'
-                if float(data.cpuUsage[c]) < 60.0 :
+                elif float(data.cpuUsage[c]) < 60.0 :
                     CPU = 'safety'
 
             if data.running_service_count[c] == 'unconfirmed' :
@@ -48,13 +48,13 @@ def plug_in(data, dataType) :
             else :
                 if float(data.driveUsage[c]) >= 99.0:
                     DUS = '99Risk'
-                if float(data.driveUsage[c]) >= 95.0:
+                elif float(data.driveUsage[c]) >= 95.0:
                     DUS = '95Risk'
-                if float(data.driveUsage[c]) >= 75.0:
+                elif float(data.driveUsage[c]) >= 75.0:
                     DUS = '75Risk'
-                if float(data.driveUsage[c]) >= 60.0 :
+                elif float(data.driveUsage[c]) >= 60.0 :
                     DUS = '60Risk'
-                if float(data.driveUsage[c]) < 60.0 :
+                elif float(data.driveUsage[c]) < 60.0 :
                     DUS = 'Safety'
 
             if data.last_reboot[c] == 'unconfirmed' :
