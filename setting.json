@@ -15,7 +15,7 @@
       "CYCLE" : {
         "MINUTELY" : {
           "USE" : "true",
-          "TIME" : 5
+          "TIME" : 180
         },
         "DAILY" : {
           "USE" : "true",
@@ -104,11 +104,11 @@
         },
         "DB" : {
           "PS" : {
-            "HOST": "1.223.168.93",
-            "PORT": "40011",
+            "HOST": "localhost",
+            "PORT": "5432",
             "NAME": "postgres",
-            "USER": "postgres",
-            "PWD": "psql",
+            "USER": "aidoi",
+            "PWD": "iaido8906#",
             "TNM": {
               "MA" : "minutely_asset",
               "DA": "daily_asset",
@@ -123,11 +123,11 @@
       "OUTPUT" : {
         "DB" : {
           "PS" : {
-            "HOST": "1.223.168.93",
-            "PORT": "40011",
+            "HOST": "localhost",
+            "PORT": "5432",
             "NAME": "postgres",
-            "USER": "postgres",
-            "PWD": "psql",
+            "USER": "aidoi",
+            "PWD": "iaido8906#",
             "TNM": {
               "MA" : "minutely_asset",
               "DA": "daily_asset",
