@@ -2,10 +2,6 @@
   "PROJECT" : {
     "CUSTOMER" : "NC",
     "TYPE" : "System",
-    "WAITING" : {
-      "USE" : "true",
-      "DATE" : "2022-08-24"
-    },
     "LOG" : {
       "directory" : "log/",
       "fileName" : "log_",
@@ -16,9 +12,18 @@
     "Tanium" : {
       "COREUSE" : "true",
       "ONOFFTYPE" : "online",
-      "CYCLEUSE" : {
-        "MINUTELY" : "true",
-        "DAILY" : "true"
+      "CYCLE" : {
+        "MINUTELY" : {
+          "USE" : "true",
+          "TIME" : 5
+        },
+        "DAILY" : {
+          "USE" : "true",
+          "TIME" : {
+            "hour" : "00",
+            "minute" : "00"
+          }
+        }
       },
       "SOURCE" : {
         "MINUTELY" : {
@@ -93,7 +98,7 @@
           "username": "administrator",
           "password": "xion123!",
           "SensorID": {
-            "COMMON" : "4080",
+            "COMMON" : "4839",
             "VUL" : "3754"
           }
         },
