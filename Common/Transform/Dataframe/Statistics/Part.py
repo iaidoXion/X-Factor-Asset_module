@@ -1,3 +1,5 @@
+from pprint import pprint
+
 import pandas as pd
 
 def plug_in(data, inputPlugin, dataType, columnsType) :
@@ -8,7 +10,8 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
             elif columnsType == 'compare' :
                 DFC = ['computer_id', 'listenPortCountChange','establishedPortCountChange', 'online']
             elif columnsType == 'normal':
-                DFC = ['computer_id', 'computer_name', 'ipv_address', 'chassis_type', 'os_platform', 'operating_system', 'is_virtual', 'last_reboot', 'tanium_client_subnet', 'manufacturer', 'nvidia_smi']
+                DFC = ['computer_id', 'computer_name', 'ipv_address', 'chassis_type', 'os_platform', 'operating_system', 'is_virtual', 'last_reboot', 'tanium_client_subnet', 'manufacturer',
+                        'nvidia_smi', 'ram_use_size', 'ram_total_size', 'cup_details_cup_speed', 'disk_used_space', 'disk_total_space']
             elif columnsType == 'count':
                 DFC = ['computer_id', 'running_service_count', 'session_ip_count']
 
@@ -18,7 +21,10 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
         elif dataType == 'minutely_statistics' :
             DFC = ['classification', 'item', 'item_count']
         elif dataType == 'minutely_statistics_list_online' :
-            DFC = ['computer_id', 'asset_list_statistics_collection_date']
+            if columnsType == 'normal':
+                DFC = ['computer_id', 'computer_name', 'ipv_address', 'asset_list_statistics_collection_date']
+            elif columnsType == 'count':
+                DFC = ['computer_id', 'ipv_address', 'asset_list_statistics_collection_date']
         DFL = []
         for d in data:
             if dataType == 'minutely_statistics_list' :
@@ -45,7 +51,12 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
                     TCS = d[8]
                     MF = d[9]
                     NS = d[10]
-                    DFL.append([CID, CNM, IP, CT, OSP, OS, IV, LR, TCS, MF, NS])
+                    RSZ = d[11]
+                    RTZ = d[12]
+                    CDS = d[13]
+                    DSZ = d[14]
+                    DTS = d[15]
+                    DFL.append([CID, CNM, IP, CT, OSP, OS, IV, LR, TCS, MF, NS, RSZ, RTZ, CDS, DSZ, DTS])
 
                 elif columnsType == 'count':
                     RSC = d[1]
@@ -69,8 +80,13 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
                 DFL.append([classification, item, IC])
             elif dataType == 'minutely_statistics_list_online' :
                 CID = d[0]
-                ALSCD = d[1]
-                DFL.append([CID, ALSCD])
+                IP = d[1]
+                ALSCD = d[2]
+                if columnsType == 'normal' :
+                    CNM = d[3]
+                    DFL.append([CID, IP, ALSCD, CNM])
+                elif columnsType == 'count' :
+                    DFL.append([CID, IP, ALSCD])
     DF = pd.DataFrame(DFL, columns=DFC)
     return DF
 

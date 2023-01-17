@@ -1,9 +1,9 @@
 import psycopg2
 from datetime import datetime, timedelta
 import json
+import logging
 
 def plug_in(dataType) :
-#def plug_in(period, dataType) :
     try :
         with open("setting.json", encoding="UTF-8") as f:
             SETTING = json.loads(f.read())
@@ -16,11 +16,10 @@ def plug_in(dataType) :
         DAT = SETTING['CORE']['Tanium']['INPUT']['DB']['PS']['TNM']['DA']
         COLLECTIONTYPE = SETTING['CORE']['Tanium']['ONOFFTYPE']
         yesterday = (datetime.today() - timedelta(1)).strftime("%Y-%m-%d")
-        nowTime = datetime.today().strftime("%Y-%m-%d %H:%M")
+        five_minutes_ago = (datetime.today() - timedelta(minutes=5)).strftime("%Y-%m-%d %H:%M:%S")
         DL = []
         selectConn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHOST, DBPORT, DBNM, DBUNM, DBPWD))
         selectCur = selectConn.cursor()
-        #if period == 'minutely' :
         if dataType == 'minutely_asset_all':
             if COLLECTIONTYPE == 'online' :
                 SQ = """
@@ -45,7 +44,7 @@ def plug_in(dataType) :
                     from  
                         """ + MAT + """ 
                     where 
-                        to_char(asset_collection_date , 'YYYY-MM-DD HH24:MI') = '"""+nowTime+"""'"""
+                        to_char(asset_collection_date , 'YYYY-MM-DD HH24:MI:SS') >= '"""+five_minutes_ago+"""'"""
             else :
                 SQ = """
                     select 
@@ -81,7 +80,7 @@ def plug_in(dataType) :
                     from 
                         """ + MAT + """
                     where 
-                        to_char(asset_collection_date , 'YYYY-MM-DD HH24:MI') = '"""+nowTime+"""'"""
+                        to_char(asset_collection_date , 'YYYY-MM-DD HH24:MI:SS') >= '"""+five_minutes_ago+"""'"""
             else :
                 SQ = """
                     select 
@@ -119,7 +118,8 @@ def plug_in(dataType) :
                         ma.tanium_client_subnet,
                         ma.manufacturer,
                         ma.session_ip,
-                        ma.nvidia_smi
+                        ma.nvidia_smi,
+                        ma.cup_details_cup_speed
                     from
                         (select 
                             computer_id, 
@@ -143,11 +143,12 @@ def plug_in(dataType) :
                             tanium_client_subnet,
                             manufacturer,
                             session_ip,
-                            nvidia_smi
+                            nvidia_smi,
+                            cup_details_cup_speed
                         from 
                             """+MAT+"""
                         where
-                            to_char(asset_collection_date, 'YYYY-MM-DD HH24:MI') = '"""+nowTime+"""'
+                            to_char(asset_collection_date , 'YYYY-MM-DD HH24:MI:SS') >= '"""+five_minutes_ago+"""'
                         ) as ma
                     LEFT JOIN 
                         (select 
@@ -186,7 +187,8 @@ def plug_in(dataType) :
                         ma.tanium_client_subnet,
                         ma.manufacturer,
                         ma.session_ip,
-                        ma.nvidia_smi
+                        ma.nvidia_smi,
+                        ma.cup_details_cup_speed
                     from
                         (select 
                             computer_id, 
@@ -210,7 +212,8 @@ def plug_in(dataType) :
                             tanium_client_subnet,
                             manufacturer,
                             session_ip,
-                            nvidia_smi  
+                            nvidia_smi,
+                            cup_details_cup_speed
                         from 
                             """ + MAT + """
                         ) as ma
@@ -232,6 +235,5 @@ def plug_in(dataType) :
             DL.append(RS)
         return DL
     except ConnectionError as e:
-        print(e)
-        #
-
+        logging.warning('Asset Table Select connection 실패')
+        logging.warning('Error : ' + e)

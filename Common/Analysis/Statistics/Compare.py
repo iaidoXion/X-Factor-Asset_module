@@ -7,7 +7,7 @@ def plug_in(data, dataType) :
         if dataType == 'alarm' :
             IPS = data.ipv_address[c].split('.')
             if len(IPS) > 1 :
-                IPG = IPS[0]+'.'+IPS[0]+'.'+IPS[2]
+                IPG = IPS[0]+'.'+IPS[1]+'.'+IPS[2]
             else:
                 IPG = IPS[0]
 
@@ -73,9 +73,13 @@ def plug_in(data, dataType) :
 
             DL.append([data.computer_id[c], IPG, RAM, CPU, data.listenPortCountChange[c], data.establishedPortCountChange[c], RPC, LRB, DUS])
         elif dataType == 'online' :
+            IPS = data.ipv_address[c].split('.')
+            if len(IPS) > 1:
+                IPG = IPS[0] + '.' + IPS[1] + '.' + IPS[2]
+            else:
+                IPG = IPS[0]
             if data.asset_list_statistics_collection_date[c] == 'unconfirmed' :
                 ALSCD = data.asset_list_statistics_collection_date[c]
-                #print(ALSCD)
             else :
                 now = datetime.now()
                 thirty_minutes_str = (now - relativedelta(minutes=30)).strftime("%Y-%m-%d %H:%M:%S")
@@ -85,7 +89,7 @@ def plug_in(data, dataType) :
                     ALSCD = 'Yes'
                 else :
                     ALSCD = 'No'
-            DL.append([data.computer_id[c], ALSCD])
+            DL.append([data.computer_id[c], IPG, ALSCD])
         else :
             if data.today_listen_port_count[c].isdigit() and data.yesterday_listen_port_count[c].isdigit():
                 if data.today_listen_port_count[c] == data.yesterday_listen_port_count[c]:

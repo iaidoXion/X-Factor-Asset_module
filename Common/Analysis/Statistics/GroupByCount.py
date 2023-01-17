@@ -55,7 +55,9 @@ def plug_in(data, classification, itemType) :
                 DL.append(data.ip_group[c])
         elif classification == 'group_server_count' :
             DL.append(data.ip_group[c])
-
+        elif classification == 'group_last_online_time_exceeded' :
+            if data.asset_list_statistics_collection_date[c] == 'Yes':
+                DL.append(data.ipv_address[c])
         elif classification == 'manufacturer' :
             if not data.is_virtual[c] == 'Yes' :
                 DL.append(data.manufacturer[c])
@@ -120,6 +122,9 @@ def plug_in(data, classification, itemType) :
         statistics_unique = classification + '_' + DFGS.LRB
         item = DFGS.LRB
     elif classification == 'group_ram_usage_exceeded' or classification == 'group_cpu_usage_exceeded' or classification == 'group_listen_port_count_change' or classification == 'group_established_port_count_change' or classification  == 'group_running_service_count_exceeded' or classification == 'group_last_reboot' or classification == 'group_drive_usage_size_exceeded':
+        statistics_unique = classification + '_' + DFGS.ip_group
+        item = DFGS.ip_group
+    elif classification == 'group_last_online_time_exceeded':
         statistics_unique = classification + '_' + DFGS.ip_group
         item = DFGS.ip_group
     elif classification == 'group_server_count':

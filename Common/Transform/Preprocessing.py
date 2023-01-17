@@ -65,6 +65,7 @@ def plug_in(data, dataType):
 
         if dataType == 'minutely_daily_asset':
             CNM = data['computer_name'][c]
+            CDS = data['cup_details_cup_speed'][c]
             if not data['last_reboot'][c].startswith('[current') and not data['last_reboot'][c].startswith('TSE-Error') and not data['last_reboot'][c].startswith('Unknown'):
                 LR = datetime.strptime(data['last_reboot'][c].replace('-', '+').split(' +')[0], "%a, %d %b %Y %H:%M:%S")
             else:
@@ -154,9 +155,9 @@ def plug_in(data, dataType):
                                 DUS_result = float(i[1][:item]) * 1024 * 1024
                         DUS_sum += DUS_result
                     items = round(DUS_sum / 1024 / 1024)
-                DUS.append(str(items))
+                DUS.append(str(items).replace('{', '').replace('}', '').replace('[', '').replace(']', ''))
             else:
-                DUS.append(data['disk_used_space'][c].replace('{"', '').replace('"}', ''))
+                DUS.append(data['disk_used_space'][c].replace('{"', '').replace('"}', '').replace('{', '').replace('}', ''))
 
             if not data['os_platform'][c].startswith('[current') and not data['os_platform'][c].startswith('TSE-Error') and not data['os_platform'][c].startswith('Unknown'):
                 OP = data['os_platform'][c]
@@ -244,7 +245,8 @@ def plug_in(data, dataType):
 
                 NS = [NS_count, NS_item]
 
-            DL.append([CID, CNM, LR, DTS, DUS, OP, OS, IV, CT, IPV, LPC, YLPC, EPC, YEPC, RUS, RTS, IANM, RS, CPUC, OL, TCS, MF, SIP, NS])
+
+            DL.append([CID, CNM, LR, DTS, DUS, OP, OS, IV, CT, IPV, LPC, YLPC, EPC, YEPC, RUS, RTS, IANM, RS, CPUC, OL, TCS, MF, SIP, NS, CDS])
         elif dataType == 'minutely_asset':
             DL.append([CID, IANM, MF, RS, SIP])
     return DL
