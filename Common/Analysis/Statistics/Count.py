@@ -11,8 +11,9 @@ def plug_in(data):
             else:
                 running_service_count = 1
 
-        if len(data['session_ip'][c]) > 1:
-            session_ip_count = len(data['session_ip'][c])
+        if len(data['session_ip'][c][0]) > 1:
+            session_ip_count = len(data['session_ip'][c][0])
+
         else:
             session_ip_count = 1
 

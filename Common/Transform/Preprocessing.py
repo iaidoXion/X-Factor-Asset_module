@@ -36,16 +36,32 @@ def plug_in(data, dataType):
         #세션ip 전처리 추가 예정(server별 session상위5개)
         if data['session_ip'][c].startswith('{"[current') or data['session_ip'][c].startswith(
                 '{"TSE-Error') or data['session_ip'][c].startswith('{"[Unknown') or data['session_ip'][c] == ' ':
-            SIP = 'unconfirmed'
+            SIP = ['unconfirmed']
         elif data['session_ip'][c].startswith('{"[no result'):
-            SIP = 'no results'
+            SIP = ['no results']
         else:
             if data['session_ip'][c][2] == '(':
-                SIP = data['session_ip'][c].replace(', ', ' ').replace('"', '').replace('\'', '').replace('(','').replace(')', '').replace('{', '').replace('}', '').split(',')
+                SIP = data['session_ip'][c].replace('{', '[').replace('}', ']')
+                SIP = eval(SIP)
+                SIPL = []
+                for a in range(len(SIP)):
+                    if SIP[a].startswith('[hash'):
+                        SIPL.append('hash collision')
+                    else:
+                        b = eval(SIP[a])
+                        SIPL.append(b[1])
+                SIP = []
+                SIP.append(SIPL)
 
             else:
-                SIP = data['session_ip'][c].replace('"', '').replace('{', '').replace('}', '').split(',')
-
+                SIP = data['session_ip'][c].replace('{', '[').replace('}', ']')
+                SIP = eval(SIP)
+                SIPL = []
+                for a in range(len(SIP)) :
+                    abc = SIP[a].split(' ')
+                    SIPL.append(abc[1])
+                SIP = []
+                SIP.append(SIPL)
 
         if dataType == 'minutely_daily_asset':
             CNM = data['computer_name'][c]
@@ -73,15 +89,15 @@ def plug_in(data, dataType):
                     for i in DTS_item:
                         if len(i) == 3:
                             if ('KB' in i[2]):
-                                DTS_result = int(i[1])
+                                DTS_result = float(i[1])
                             elif ('MB' in i[2]):
-                                DTS_result = int(i[1]) * 1024
+                                DTS_result = float(i[1]) * 1024
                             elif ('GB' in i[2]):  # 기준
-                                DTS_result = int(i[1]) * 1024 * 1024
+                                DTS_result = float(i[1]) * 1024 * 1024
                             elif ('TB' in i[2]):
-                                DTS_result = int(i[1]) * 1024 * 1024 * 1024
+                                DTS_result = float(i[1]) * 1024 * 1024 * 1024
                             elif ('PB' in i[2]):
-                                DTS_result = int(i[1]) * 1024 * 1024 * 1024 * 1024
+                                DTS_result = float(i[1]) * 1024 * 1024 * 1024 * 1024
                         elif len(i) == 2:
                             if ("K" in i[1].upper()):
                                 item = i[1].upper().find("K")
@@ -117,15 +133,15 @@ def plug_in(data, dataType):
                     for i in DUS_item:
                         if len(i) == 3:
                             if ('KB' in i[2]):
-                                DUS_result = int(i[1])
+                                DUS_result = float(i[1])
                             elif ('MB' in i[2]):
-                                DUS_result = int(i[1]) * 1024
+                                DUS_result = float(i[1]) * 1024
                             elif ('GB' in i[2]):  # 기준
-                                DUS_result = int(i[1]) * 1024 * 1024
+                                DUS_result = float(i[1]) * 1024 * 1024
                             elif ('TB' in i[2]):
-                                DUS_result = int(i[1]) * 1024 * 1024 * 1024
+                                DUS_result = float(i[1]) * 1024 * 1024 * 1024
                             elif ('PB' in i[2]):
-                                DUS_result = int(i[1]) * 1024 * 1024 * 1024 * 1024
+                                DUS_result = float(i[1]) * 1024 * 1024 * 1024 * 1024
                         elif len(i) == 2:
                             if ("K" in i[1].upper()):
                                 item = i[1].upper().find("K")
@@ -213,11 +229,20 @@ def plug_in(data, dataType):
 
 
 
-            if not data['nvidia_smi'][c].startswith('[current') and not data['nvidia_smi'][c].startswith(
-                    'TSE-Error') and not data['nvidia_smi'][c].startswith('Unknown') and not data['nvidia_smi'][c]== ' ':
-                NS = data['nvidia_smi'][c].replace('[','').replace(']','')
-            else:
+            NS= []
+            if data['nvidia_smi'][c].startswith('{"[current') or data['nvidia_smi'][c].startswith(
+                    '{"TSE-Error') or data['nvidia_smi'][c].startswith('{"[Unknown') or data['nvidia_smi'][c] == ' ':
                 NS = 'unconfirmed'
+            elif data['nvidia_smi'][c].startswith('{"[no result'):
+                NS = 'no results'
+            else:
+                NS_item = []
+                NS_count = 0
+                NS_list = data['nvidia_smi'][c].split(',')
+                NS_count = NS_list[0].split(': ')[1].replace('"', '')
+                NS_item = NS_list[1].split(': ')[1].replace('"}', '')
+
+                NS = [NS_count, NS_item]
 
             DL.append([CID, CNM, LR, DTS, DUS, OP, OS, IV, CT, IPV, LPC, YLPC, EPC, YEPC, RUS, RTS, IANM, RS, CPUC, OL, TCS, MF, SIP, NS])
         elif dataType == 'minutely_asset':

@@ -78,16 +78,16 @@ def minutely_plug_in():                                                         
 
 
 
-        NS = CASNPI(MDSDDFTS)   # Normal Statistics (일반 값)
-        NSDFT = CTDSPPI(NS, 'DB', 'minutely_statistics_list', 'normal')   #Normal Statistics DataFrame Transform ( 일반 값을 Data Frame 형태로 변형)
-        COS=CASCOPI(MDSDDFTS) # Count Statistics (일반 값)
-        COSDFT = CTDSPPI(COS, 'DB', 'minutely_statistics_list', 'count')   #Count Statistics DataFrame Transform ( 카운트 값을 Data Frame 형태로 변형)
-        CSO = CASCPI(MDSDDFTFON, 'online')  # Compare Statistic Online - online data를 비교 통계
+        NS = CASNPI(MDSDDFTS)                                                               # Normal Statistics (일반 값)
+        NSDFT = CTDSPPI(NS, 'DB', 'minutely_statistics_list', 'normal')                     # Normal Statistics DataFrame Transform ( 일반 값을 Data Frame 형태로 변형)
+        COS=CASCOPI(MDSDDFTS)                                                               # Count Statistics (일반 값)
+        COSDFT = CTDSPPI(COS, 'DB', 'minutely_statistics_list', 'count')                    # Count Statistics DataFrame Transform ( 카운트 값을 Data Frame 형태로 변형)
+        CSO = CASCPI(MDSDDFTFON, 'online')                                                  # Compare Statistic Online - online data를 비교 통계
         CSODFT = CTDSPPI(CSO, 'DB', 'minutely_statistics_list_online', '')
 
-        UCSM = CTMPI(USDFT, CSDFT)  # Usage and Compare Statistics Merge (DataFrame 형태의 사용량 통계 & 비교 통계 병합)
-        UCNSM = CTMPI(UCSM, NSDFT)  # UCSM and Normal Statistics Merge (DataFrame 형태의 상위 통계 & 일반 통계 병합)
-        UCNCOSM = CTMPI(UCNSM, COSDFT)  # UCNSM and Count Statistics Merge (DataFrame 형태의 상위 통계 & 카운트 통계 병합)
+        UCSM = CTMPI(USDFT, CSDFT)                                                          # Usage and Compare Statistics Merge (DataFrame 형태의 사용량 통계 & 비교 통계 병합)
+        UCNSM = CTMPI(UCSM, NSDFT)                                                          # UCSM and Normal Statistics Merge (DataFrame 형태의 상위 통계 & 일반 통계 병합)
+        UCNCOSM = CTMPI(UCNSM, COSDFT)                                                      # UCNSM and Count Statistics Merge (DataFrame 형태의 상위 통계 & 카운트 통계 병합)
 
         if STMOPODBPU == 'true' :                                                           # (통계 Data MINUTELY Output plug in postgresql DB 사용 여부 확인 - 사용함.)
             CODBPTSLPI(UCNCOSM, 'minutely')                                                 # (minutely_statistics_list Table에 수집)
@@ -119,15 +119,9 @@ def minutely_plug_in():                                                         
         GRSCGBS = CASGBCPI(ADT, 'group_running_service_count_exceeded', 'ip_group')         #
         GRPLRGBS = CASGBCPI(ADT, 'group_last_reboot', 'ip_group')                           #
         GDUSGBS = CASGBCPI(ADT, 'group_drive_usage_size_exceeded', 'ip_group')              #
-
-        #대역별 서버수량 상위5개
-        GSCGBS = CASGBCPI(ADT, 'group_server_count', 'ip_group')                            #
-
-        #물리서버 벤더별 수량 상위5개
-        MFGBS = CASGBCPI(IPMALSDDFT, 'manufacturer', 'MF')
-
-        #GPU 서버수량
-        GPUCGBS = CASGBCPI(IPMALSDDFT, 'nvidia_smi', 'NS')
+        GSCGBS = CASGBCPI(ADT, 'group_server_count', 'ip_group')                            # group_server Group By Statistics (Session_ip 통계)
+        MFGBS = CASGBCPI(IPMALSDDFT, 'manufacturer', 'MF')                                  # Manufacturer Group By Statistics (Session_ip 통계)
+        GPUCGBS = CASGBCPI(IPMALSDDFT, 'nvidia_smi', 'NS')                                  # Nvidia_smi Group By Statistics (Nvidia_smi 통계)
 
 
         MAIPDL = CIDBPTAOPI('minutely_asset_part')                                          # Minutely Asset InPut Data List (Module로 DB에 수집한 데이터 호출 : minutely_asset Table)
@@ -136,11 +130,11 @@ def minutely_plug_in():                                                         
         MADFTS = CTDAPPI(MAPPT, 'DB', 'minutely_asset')                                     # Minutely Asset Data Frame Transform Second (전처리한 데이터를 Data Frame 형태로 변형)
         IAGBS = CASGBCPI(MADFTS, 'installed_applications', 'IANM')                          # Installed Applications Group By Statistics (Installed Application 통계)
         RSGBS = CASGBCPI(MADFTS, 'running_service', 'RSNM')                                 # Running Service Group By Statistics (Running Service 통계)
-        # 프로그램에 붙어있는 최다 서버 TOP5
-        SIPGBS = CASGBCPI(MADFTS, 'session_ip', 'SIP') # Session_Ip Group By Statistics (Session_ip 통계)
+        SIPGBS = CASGBCPI(MADFTS, 'session_ip', 'SIP')                                      # Session_Ip Group By Statistics (Session_ip 통계)
+        ONAGBC = CASGBCPI(IPMALSDDFT, 'online_asset','')                                    # 서버전체수량 Statistic Table 적재
 
-        MSTD = OSGBS + OSVGBS + IVGBS + CTGBS + LPCGBS + EPCGBS + IAGBS + RSGBS + LRBGBS + DUSGBS + RUSGBS + CPUGBS + GRUGBS + GCUGBS + GLPCGBS + GEPCGBS + GRSCGBS + GRPLRGBS + GDUSGBS + GSCGBS + ONGBS + MFGBS + GPUCGBS # Minutely Statistics Total Data (minutely_statistics Table에 넣을 모든 통계데이터)
 
+        MSTD = OSGBS + OSVGBS + IVGBS + CTGBS + LPCGBS + EPCGBS + IAGBS + RSGBS + LRBGBS + DUSGBS + RUSGBS + CPUGBS + GRUGBS + GCUGBS + GLPCGBS + GEPCGBS + GRSCGBS + GRPLRGBS + GDUSGBS + GSCGBS + ONGBS + MFGBS + GPUCGBS + SIPGBS + ONAGBC # Minutely Statistics Total Data (minutely_statistics Table에 넣을 모든 통계데이터)
         SDDFT = CTDSAPI(MSTD, 'DB', 'minutely_statistics')                                  # Statistics Data Data Frame Transform (Statistics 데이터를 Data Frame 형태로 변형)
 
         if STMOPODBPU == 'true':                                                            # (통계 Data MINUTELY Output plug in postgresql DB 사용 여부 확인 - 사용함.)
