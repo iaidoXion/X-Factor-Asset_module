@@ -15,7 +15,7 @@
       "CYCLE" : {
         "MINUTELY" : {
           "USE" : "true",
-          "TIME" : 180
+          "TIME" : 300
         },
         "DAILY" : {
           "USE" : "true",
@@ -98,17 +98,17 @@
           "username": "administrator",
           "password": "xion123!",
           "SensorID": {
-            "COMMON" : "4839",
+            "COMMON" : "4872",
             "VUL" : "3754"
           }
         },
         "DB" : {
           "PS" : {
-            "HOST": "localhost",
-            "PORT": "5432",
+            "HOST": "1.223.168.93",
+            "PORT": "40011",
             "NAME": "postgres",
-            "USER": "aidoi",
-            "PWD": "iaido8906#",
+            "USER": "postgres",
+            "PWD": "psql",
             "TNM": {
               "MA" : "minutely_asset",
               "DA": "daily_asset",
@@ -123,11 +123,11 @@
       "OUTPUT" : {
         "DB" : {
           "PS" : {
-            "HOST": "localhost",
-            "PORT": "5432",
+            "HOST": "1.223.168.93",
+            "PORT": "40011",
             "NAME": "postgres",
-            "USER": "aidoi",
-            "PWD": "iaido8906#",
+            "USER": "postgres",
+            "PWD": "psql",
             "TNM": {
               "MA" : "minutely_asset",
               "DA": "daily_asset",

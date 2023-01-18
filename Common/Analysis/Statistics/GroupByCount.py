@@ -15,15 +15,18 @@ def plug_in(data, classification, itemType) :
         elif classification == 'asset' :
             DL.append(data.chassis_type[c])
         elif classification == 'installed_applications' :
-            for d in data.installed_applications_name[c].replace('"', '').replace('{', '').replace('}', '').split(',') :
-                DL.append(d)
+            for d in range(len(data.installed_applications_name[c])):
+                DL.append(data.installed_applications_name[c][d])
         elif classification == 'listen_port_count_change' :
             DL.append(data.listenPortCountChange[c])
         elif classification == 'established_port_count_change' :
             DL.append(data.establishedPortCountChange[c])
         elif classification == 'running_service' :
-            for d in data.running_service[c] :
-                DL.append(d)
+            if data.running_service[c] == 'unconfirmed':
+                DL.append('unconfirmed')
+            else :
+                for d in data.running_service[c] :
+                    DL.append(d)
         elif classification == 'drive_usage_size_exceeded' :
             DL.append(data.drive[c])
         elif classification == 'ram_usage_size_exceeded' :

@@ -8,34 +8,35 @@ def plug_in(data, dataType):
     #print(len(data))
     for c in range(len(data['computer_id'])) :
         CID = data['computer_id'][c]
-        if not data['installed_applications_name'][c].startswith('{"[current') and not data['installed_applications_name'][c].startswith(
-                '{"TSE-Error') and not data['installed_applications_name'][c].startswith('{"Unknown') and not data['installed_applications_name'][c]== ' ':
-            if data['installed_applications_name'][c][1] == '"':
-                IANM = data['installed_applications_name'][c].replace('{"','').replace('"}','')
-            else:
-                IANM = data['installed_applications_name'][c].replace('{', '').replace('}', '')
+        IANM = []
+        if not data['installed_applications_name'][c].startswith('{"[current') and not data['installed_applications_name'][c].startswith('{"TSE-Error') and not data['installed_applications_name'][c].startswith('{"Unknown') and not data['installed_applications_name'][c]== ' ':
+            for d in data.installed_applications_name[c].replace('"', '').replace('{', '').replace('}', '').split('!'):
+                if d.startswith(','):
+                    d = d.lstrip(',').replace('"','')
+                else :
+                    d = d.replace('"','')
+                IANM.append(d)
+            IANM.pop(-1)
         else:
-            IANM = 'unconfirmed'
+            IANM.append('unconfirmed')
 
 
         if not data['running_service'][c].startswith('{"[current') and not data['running_service'][c].startswith('{"TSE-Error') and not data['running_service'][c].startswith('Unknown') and not data['running_service'][c] == ' ':
             if data['running_service'][c][1] == '"':
                 RS = data['running_service'][c].replace('"','').replace('{','').replace('}','').split(',')
             else:
-                RS = data['running_service'][c].replace('{','').replace('}','').split(',')
+                RS = data['running_service'][c].replace('"','').replace('{','').replace('}','').split(',')
         else:
             RS= 'unconfirmed'
 
 
-        if not data['manufacturer'][c].startswith('[current') and not data['manufacturer'][c].startswith(
-                'TSE-Error') and not data['manufacturer'][c].startswith('Unknown') and not data['manufacturer'][c]== ' ':
+        if not data['manufacturer'][c].startswith('[current') and not data['manufacturer'][c].startswith('TSE-Error') and not data['manufacturer'][c].startswith('Unknown') and not data['manufacturer'][c]== ' ':
             MF = data['manufacturer'][c]
         else:
             MF = 'unconfirmed'
 
         #세션ip 전처리 추가 예정(server별 session상위5개)
-        if data['session_ip'][c].startswith('{"[current') or data['session_ip'][c].startswith(
-                '{"TSE-Error') or data['session_ip'][c].startswith('{"[Unknown') or data['session_ip'][c] == ' ':
+        if data['session_ip'][c].startswith('{"[current') or data['session_ip'][c].startswith('{"TSE-Error') or data['session_ip'][c].startswith('{"[Unknown') or data['session_ip'][c] == ' ':
             SIP = ['unconfirmed']
         elif data['session_ip'][c].startswith('{"[no result'):
             SIP = ['no results']
