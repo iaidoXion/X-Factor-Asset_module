@@ -37,30 +37,30 @@ def plug_in(data, classification, itemType) :
             DL.append(data.last_reboot[c])
         elif classification == 'group_ram_usage_exceeded' :
             if data.ram[c] == '95Risk' :
-                DL.append(data.ip_group[c])
+                DL.append(data.tanium_client_subnet[c])
         elif classification == 'group_cpu_usage_exceeded' :
             if data.cpu[c] == '95Risk':
-                DL.append(data.ip_group[c])
+                DL.append(data.tanium_client_subnet[c])
         elif classification == 'group_listen_port_count_change' :
             if data.listenport_count[c] == 'Yes':
-                DL.append(data.ip_group[c])
+                DL.append(data.tanium_client_subnet[c])
         elif classification == 'group_established_port_count_change' :
             if data.establishedport_count[c] == 'Yes':
-                DL.append(data.ip_group[c])
+                DL.append(data.tanium_client_subnet[c])
         elif classification == 'group_running_service_count_exceeded' :
             if data.running_service_count[c] == 'Yes':
-                DL.append(data.ip_group[c])
+                DL.append(data.tanium_client_subnet[c])
         elif classification == 'group_last_reboot' :
             if data.last_reboot[c] == 'Yes':
-                DL.append(data.ip_group[c])
+                DL.append(data.tanium_client_subnet[c])
         elif classification == 'group_drive_usage_size_exceeded' :
             if data.drive[c] == '99Risk':
-                DL.append(data.ip_group[c])
+                DL.append(data.tanium_client_subnet[c])
         elif classification == 'group_server_count' :
-            DL.append(data.ip_group[c])
+            DL.append(data.tanium_client_subnet[c])
         elif classification == 'group_last_online_time_exceeded' :
             if data.asset_list_statistics_collection_date[c] == 'Yes':
-                DL.append(data.ipv_address[c])
+                DL.append(data.tanium_client_subnet[c])
         elif classification == 'manufacturer' :
             if not data.is_virtual[c] == 'Yes' :
                 DL.append(data.manufacturer[c])
@@ -125,14 +125,14 @@ def plug_in(data, classification, itemType) :
         statistics_unique = classification + '_' + DFGS.LRB
         item = DFGS.LRB
     elif classification == 'group_ram_usage_exceeded' or classification == 'group_cpu_usage_exceeded' or classification == 'group_listen_port_count_change' or classification == 'group_established_port_count_change' or classification  == 'group_running_service_count_exceeded' or classification == 'group_last_reboot' or classification == 'group_drive_usage_size_exceeded':
-        statistics_unique = classification + '_' + DFGS.ip_group
-        item = DFGS.ip_group
+        statistics_unique = classification + '_' + DFGS.tanium_client_subnet
+        item = DFGS.tanium_client_subnet
     elif classification == 'group_last_online_time_exceeded':
-        statistics_unique = classification + '_' + DFGS.ip_group
-        item = DFGS.ip_group
+        statistics_unique = classification + '_' + DFGS.tanium_client_subnet
+        item = DFGS.tanium_client_subnet
     elif classification == 'group_server_count':
-        statistics_unique = classification + '_' + DFGS.ip_group
-        item = DFGS.ip_group
+        statistics_unique = classification + '_' + DFGS.tanium_client_subnet
+        item = DFGS.tanium_client_subnet
     elif classification == 'manufacturer':
         statistics_unique = classification + '_' + DFGS.MF
         item = DFGS.MF
