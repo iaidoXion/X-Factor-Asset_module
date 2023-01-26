@@ -28,10 +28,10 @@ if __name__ == "__main__":
     LOGFD = SETTING['PROJECT']['LOG']['directory']
     LOGFNM = SETTING['PROJECT']['LOG']['fileName']
     LOGFF = SETTING['PROJECT']['LOG']['fileFormat']
-    TU = SETTING['CORE']['Tanium']['COREUSE']
-    CMU = SETTING['CORE']['Tanium']['CYCLE']['MINUTELY']['USE']
+    TU = SETTING['CORE']['Tanium']['COREUSE'].lower()
+    CMU = SETTING['CORE']['Tanium']['CYCLE']['MINUTELY']['USE'].lower()
     CMT = SETTING['CORE']['Tanium']['CYCLE']['MINUTELY']['TIME']
-    CDU = SETTING['CORE']['Tanium']['CYCLE']['DAILY']['USE']
+    CDU = SETTING['CORE']['Tanium']['CYCLE']['DAILY']['USE'].lower()
 
     today = datetime.today().strftime("%Y%m%d")
     logFile = LOGFD + LOGFNM + today + LOGFF

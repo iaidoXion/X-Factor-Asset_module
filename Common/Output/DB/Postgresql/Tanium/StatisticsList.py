@@ -3,9 +3,8 @@ from pprint import pprint
 
 import psycopg2
 import json
-
+from tqdm import tqdm
 def plug_in(data, cycle) :
-    # pprint(data)
     try :
         with open("setting.json", encoding="UTF-8") as f:
             SETTING = json.loads(f.read())
@@ -16,6 +15,7 @@ def plug_in(data, cycle) :
         DBPWD = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['PWD']
         MSLT = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['TNM']['MSL']
         DSLT = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['TNM']['DSL']
+        PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
         if cycle == 'minutely' :
             TNM = MSLT
             insertDate = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
@@ -77,7 +77,15 @@ def plug_in(data, cycle) :
                 )
             """
         datalen = len(data.computer_id)
-        for i in range(datalen):
+        
+        if PROGRESS == 'true' :
+            DATA_list = tqdm(range(datalen),
+                            total=datalen,
+                            desc='CM_OP_DB_STL_{}'.format(cycle))
+        else :
+            DATA_list = range(datalen)
+
+        for i in DATA_list:
             CI = data.computer_id[i]
             CN = data.computer_name[i]
             IP = data.ipv_address[i]

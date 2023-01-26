@@ -1,6 +1,12 @@
 import pandas as pd
+from tqdm import tqdm
+import json
 
 def plug_in(data, inputPlugin, dataType) :
+    with open("setting.json", encoding="UTF-8") as f:
+        SETTING = json.loads(f.read())
+    PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
+    
     if inputPlugin == 'DB':
         if dataType == 'minutely_asset' :
             DFC = ['computer_id', 'installed_applications_name', 'manufacturer', 'running_service', 'session_ip']
@@ -13,7 +19,16 @@ def plug_in(data, inputPlugin, dataType) :
                    'running_service', 'cup_consumption', 'online', 'tanium_client_subnet', 'manufacturer',
                    'session_ip', 'nvidia_smi', 'cup_details_cup_speed']
         DFL = []
-        for d in data:
+        
+        if PROGRESS == 'true' :
+            DATA_list = tqdm(enumerate(data),
+                            total=len(data),
+                            desc='CM_TRF_DF_AS_Part_{}_{}'.format(inputPlugin, dataType))
+        else :
+            DATA_list = enumerate(data)
+        
+        for index, d in DATA_list:
+        # for d in data:
             if dataType == 'minutely_asset':
                 CID = d[0]
                 IAN= d[1]

@@ -1,11 +1,26 @@
 import pandas as pd
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from tqdm import tqdm
+import json
 def plug_in(data, classification, itemType) :
+    with open("setting.json", encoding="UTF-8") as f:
+        SETTING = json.loads(f.read())
+    PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
     DL = []
     RD = []
     CNM = itemType
-    for c in range(len(data.computer_id)):
+    
+    if PROGRESS == 'true' :
+        DATA_list = tqdm( range(len(data.computer_id)),
+                            total=len(data.computer_id),
+                            desc='GroupByCount : {}_{}'.format(classification, itemType))
+    else :
+        DATA_list = range(len(data.computer_id))
+            
+            
+    for c in DATA_list:
+    # for c in range(len(data.computer_id)):
         if classification == 'os' :
             DL.append(data.os_platform[c])
         elif classification == 'operating_system' :

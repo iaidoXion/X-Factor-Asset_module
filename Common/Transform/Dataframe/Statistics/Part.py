@@ -1,8 +1,12 @@
 from pprint import pprint
-
+from tqdm import tqdm
 import pandas as pd
-
+import json
 def plug_in(data, inputPlugin, dataType, columnsType) :
+    with open("setting.json", encoding="UTF-8") as f:
+        SETTING = json.loads(f.read())
+    PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
+    
     if inputPlugin == 'DB':
         if dataType == 'minutely_statistics_list' :
             if columnsType == 'usage':
@@ -26,7 +30,15 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
             elif columnsType == 'count':
                 DFC = ['computer_id', 'ipv_address', 'tanium_client_subnet', 'asset_list_statistics_collection_date']
         DFL = []
-        for d in data:
+        
+        if PROGRESS == 'true' :
+            DATA_list = tqdm(enumerate(data),
+                            total=len(data),
+                            desc='CM_TRF_DF_ST_Part_{}_{}_{}'.format(inputPlugin, dataType, columnsType))
+        else :
+            DATA_list = enumerate(data)
+            
+        for index, d in DATA_list:
             if dataType == 'minutely_statistics_list' :
                 CID = d[0]
                 if columnsType == 'usage' :

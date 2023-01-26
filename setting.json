@@ -6,7 +6,10 @@
       "directory" : "log/",
       "fileName" : "log_",
       "fileFormat" : ".log"
-    }
+    },
+    "PROGRESSBAR" : "TRUE",
+    "DASHBOARD" : "TRUE",
+    "VUL" : "False"
   },
   "CORE" : {
     "Tanium" : {
@@ -66,26 +69,6 @@
           }
         },
         "DAILY" : {
-        }
-      },
-
-      "PLUGIN" : {
-        "VUL": {
-          "USE" : "true",
-          "INPUT" : {
-            "API" : "true",
-            "DB" : {
-              "PS" : "false",
-              "MY" : "false"
-            }
-          },
-          "OUTPUT": {
-            "API" : "false",
-            "DB" : {
-              "PS" : "true",
-              "MY" : "false"
-            }
-          }
         }
       },
       "INPUT" : {

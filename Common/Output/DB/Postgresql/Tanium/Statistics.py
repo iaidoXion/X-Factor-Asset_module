@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import psycopg2
 import json
-
+from tqdm import tqdm
 def plug_in(data, cycle):
     try:
         with open("setting.json", encoding="UTF-8") as f:
@@ -13,6 +13,7 @@ def plug_in(data, cycle):
         DBPWD = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['PWD']
         MST = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['TNM']['MS']
         DST = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['TNM']['DS']
+        PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
         if cycle == 'minutely':
             TNM = MST
             insertDate = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
@@ -45,7 +46,14 @@ def plug_in(data, cycle):
                 ) VALUES (
                     %s, %s, %s, '""" + insertDate + """')"""
         datalen = len(data.classification)
-        for i in range(datalen):
+        
+        if PROGRESS == 'true' :
+            DATA_list = tqdm(range(datalen),
+                            total=datalen,
+                            desc='OP_DB_ST_{}'.format(cycle))
+        else :
+            DATA_list = range(datalen)
+        for i in DATA_list:
             classification = data.classification[i]
             item = data.item[i]
             IC = str(data.item_count[i])

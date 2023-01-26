@@ -1,8 +1,20 @@
-
-
+from tqdm import tqdm
+import json
 def plug_in(data):
+    with open("setting.json", encoding="UTF-8") as f:
+        SETTING = json.loads(f.read())
+    PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
     DL = []
-    for c in range(len(data.computer_id)):
+    
+    if PROGRESS == 'true' :
+        DATA_list = tqdm(range(len(data.computer_id)),
+                            total=len(data.computer_id),
+                            desc='Count')
+    else :
+        DATA_list = range(len(data.computer_id))
+            
+    for c in DATA_list:
+    # for c in range(len(data.computer_id)):
         if len(data['running_service'][c]) > 1:
             running_service_count = len(data['running_service'][c])
         else:

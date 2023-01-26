@@ -1,9 +1,22 @@
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-
+from tqdm import tqdm
+import json
 def plug_in(data, dataType) :
+    with open("setting.json", encoding="UTF-8") as f:
+        SETTING = json.loads(f.read())
+    PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
     DL = []
-    for c in range(len(data.computer_id)):
+    
+    if PROGRESS == 'true' :
+        DATA_list = tqdm(range(len(data.computer_id)),
+                            total=len(data.computer_id),
+                            desc='Compare : {}'.format(dataType))
+    else :
+        DATA_list = range(len(data.computer_id))
+            
+    for c in DATA_list:
+    # for c in range(len(data.computer_id)):
         if dataType == 'alarm' :
             IPS = data.ipv_address[c].split('.')
             if len(IPS) > 1 :

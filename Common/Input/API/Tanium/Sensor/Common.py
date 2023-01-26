@@ -1,15 +1,24 @@
 import requests
 import json
 import logging
+from tqdm import tqdm
+
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
+    
 
 APIURL = SETTING['CORE']['Tanium']['INPUT']['API']['URL']
 CSP = SETTING['CORE']['Tanium']['INPUT']['API']['PATH']['Sensor']
-CSID = SETTING['CORE']['Tanium']['INPUT']['API']['SensorID']['COMMON']
 
-def plug_in(sessionKey) :
+PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
+
+
+def plug_in(sessionKey, projectType) :
     try:
+        if projectType == 'DSB' :
+            CSID = SETTING['CORE']['Tanium']['INPUT']['API']['SensorID']['COMMON']
+        elif projectType == 'VUL' :
+            CSID = SETTING['CORE']['Tanium']['INPUT']['API']['SensorID']['VUL']
         CSH = {'session': sessionKey}
         CSU = APIURL + CSP + CSID
         CSR = requests.post(CSU, headers=CSH, verify=False)
@@ -17,8 +26,17 @@ def plug_in(sessionKey) :
         CSRT = CSR.content.decode('utf-8')
         CSRJ = json.loads(CSRT)
         CSRJD = CSRJ['data']
+        
         dataList = []
-        for d in CSRJD['result_sets'][0]['rows']:
+        
+        if PROGRESS == 'true' :
+            DATA_list = tqdm(enumerate(CSRJD['result_sets'][0]['rows']), 
+                            total=len(CSRJD['result_sets'][0]['rows']),
+                            desc='CALL_API : {}'.format(CSP))
+        else :
+            DATA_list = enumerate(CSRJD['result_sets'][0]['rows'])
+            
+        for index, d in DATA_list :
             DL = []
             for i in d['data'] :
                 DL.append(i)
@@ -26,6 +44,7 @@ def plug_in(sessionKey) :
         RD = {'resCode': CSRC, 'dataList': dataList}
         logging.info('Tanium API Sensor 호출 성공')
         logging.info('Sensor ID : ' + str(CSID))
+        
         return RD
     except :
         logging.warning('Tanium API Sensor 호출 Error 발생')

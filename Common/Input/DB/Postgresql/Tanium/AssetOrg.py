@@ -2,7 +2,7 @@ import psycopg2
 from datetime import datetime, timedelta
 import json
 import logging
-
+from tqdm import tqdm
 def plug_in(dataType) :
     try :
         with open("setting.json", encoding="UTF-8") as f:
@@ -15,6 +15,8 @@ def plug_in(dataType) :
         MAT = SETTING['CORE']['Tanium']['INPUT']['DB']['PS']['TNM']['MA']
         DAT = SETTING['CORE']['Tanium']['INPUT']['DB']['PS']['TNM']['DA']
         COLLECTIONTYPE = SETTING['CORE']['Tanium']['ONOFFTYPE']
+        PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
+        
         yesterday = (datetime.today() - timedelta(1)).strftime("%Y-%m-%d")
         five_minutes_ago = (datetime.today() - timedelta(minutes=5)).strftime("%Y-%m-%d %H:%M:%S")
         DL = []
@@ -231,7 +233,16 @@ def plug_in(dataType) :
 
         selectCur.execute(SQ)
         selectRS = selectCur.fetchall()
-        for RS in selectRS:
+        
+        if PROGRESS == 'true' :
+            DATA_list = tqdm(enumerate(selectRS), 
+                            total=len(selectRS),
+                            desc='IP_DB_AOG_{}'.format(dataType))
+        else :
+            DATA_list = enumerate(selectRS)
+            
+        for index, RS in DATA_list:
+        # for RS in selectRS:
             DL.append(RS)
         return DL
     except ConnectionError as e:
