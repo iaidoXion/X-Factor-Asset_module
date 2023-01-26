@@ -1,6 +1,11 @@
 import pandas as pd
-
+from tqdm import tqdm
+import json
 def plug_in(data, inputPlugin, dataType) :
+    with open("setting.json", encoding="UTF-8") as f:
+        SETTING = json.loads(f.read())
+    PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
+    
     if inputPlugin == 'DB':
         if dataType == 'minutely_statistics_list' :
             DFC = ['computer_id', 'computer_name', 'ipv_address', 'chassis_type', 'os_platform', 'operating_system', 'is_virtual',
@@ -10,7 +15,15 @@ def plug_in(data, inputPlugin, dataType) :
         elif dataType == 'minutely_statistics' :
             DFC = ['minutely_statistics_unique', 'classification', 'item', 'item_count']
         DFL = []
-        for d in data:
+        
+        if PROGRESS == 'true' :
+            DATA_list = tqdm(enumerate(data),
+                            total=len(data),
+                            desc='CM_TRF_ST_ALL_{}_{}'.format(inputPlugin, dataType))
+        else :
+            DATA_list = enumerate(data)
+            
+        for index, d in DATA_list:
             if dataType == 'minutely_statistics_list' :
                 CID = d[0]
                 CNM = d[1]

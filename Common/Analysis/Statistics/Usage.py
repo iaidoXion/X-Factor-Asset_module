@@ -1,7 +1,21 @@
-
+from tqdm import tqdm
+import json
+    
 def plug_in(data) :
+    with open("setting.json", encoding="UTF-8") as f:
+        SETTING = json.loads(f.read())
+    PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
     DL = []
-    for c in range(len(data.computer_id)):
+    
+    if PROGRESS == 'true' :
+        DATA_list = tqdm( range(len(data.computer_id)),
+                            total=len(data.computer_id),
+                            desc='Usage')
+    else :
+        DATA_list = range(len(data.computer_id))
+            
+    for c in DATA_list:
+    # for c in range(len(data.computer_id)):
         if data.disk_used_space[c][0].isdigit() and data.disk_total_space[c][0].isdigit() :
             driveUsage = int(data.disk_used_space[c][0]) / int(data.disk_total_space[c][0]) * 100
         else :

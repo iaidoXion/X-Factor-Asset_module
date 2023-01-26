@@ -1,12 +1,24 @@
 from datetime import datetime, timedelta
 import pandas as pd
-
+from tqdm import tqdm
+import json
 
 
 def plug_in(data, dataType):
+    with open("setting.json", encoding="UTF-8") as f:
+        SETTING = json.loads(f.read())
+    PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
+    if PROGRESS == 'true' :
+        DATA_list = tqdm(range(len(data['computer_id'])), 
+                            total=len(data['computer_id']),
+                            desc='Common_TransForm_PrePro_{}'.format(dataType),
+                            )
+    else :
+        DATA_list = range(len(data['computer_id']))
+    
     DL = []
-    #print(len(data))
-    for c in range(len(data['computer_id'])) :
+    for c in DATA_list :
+        
         CID = data['computer_id'][c]
         IANM = []
         if not data['installed_applications_name'][c].startswith('{"[current') and not data['installed_applications_name'][c].startswith('{"TSE-Error') and not data['installed_applications_name'][c].startswith('{"Unknown') and not data['installed_applications_name'][c]== ' ':
