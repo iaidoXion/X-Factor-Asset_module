@@ -21,14 +21,14 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
 
 
             elif columnsType == 'alarm' :
-                DFC = ['computer_id','ip_group', 'ram', 'cpu', 'listenport_count', 'establishedport_count', 'running_service_count', 'last_reboot', 'drive']
+                DFC = ['computer_id','group_ip','tanium_client_subnet', 'ram', 'cpu', 'listenport_count', 'establishedport_count', 'running_service_count', 'last_reboot', 'drive']
         elif dataType == 'minutely_statistics' :
             DFC = ['classification', 'item', 'item_count']
         elif dataType == 'minutely_statistics_list_online' :
             if columnsType == 'normal':
-                DFC = ['computer_id', 'computer_name', 'ipv_address', 'asset_list_statistics_collection_date']
+                DFC = ['computer_id', 'computer_name', 'ipv_address', 'tanium_client_subnet', 'asset_list_statistics_collection_date']
             elif columnsType == 'count':
-                DFC = ['computer_id', 'ipv_address', 'asset_list_statistics_collection_date']
+                DFC = ['computer_id', 'ipv_address', 'tanium_client_subnet', 'asset_list_statistics_collection_date']
         DFL = []
         
         if PROGRESS == 'true' :
@@ -77,14 +77,15 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
 
                 elif columnsType == 'alarm':
                     IPG = d[1]
-                    RAM = d[2]
-                    CPU = d[3]
-                    LPC = d[4]
-                    EPC = d[5]
-                    RSC = d[6]
-                    LRB = d[7]
-                    DUS = d[8]
-                    DFL.append([CID, IPG, RAM, CPU, LPC, EPC, RSC, LRB, DUS])
+                    TCS = d[2]
+                    RAM = d[3]
+                    CPU = d[4]
+                    LPC = d[5]
+                    EPC = d[6]
+                    RSC = d[7]
+                    LRB = d[8]
+                    DUS = d[9]
+                    DFL.append([CID,IPG, TCS, RAM, CPU, LPC, EPC, RSC, LRB, DUS])
             elif dataType == 'minutely_statistics' :
                 classification = d[0]
                 item = d[1]
@@ -93,12 +94,13 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
             elif dataType == 'minutely_statistics_list_online' :
                 CID = d[0]
                 IP = d[1]
-                ALSCD = d[2]
+                TCS = d[2]
+                ALSCD = d[3]
                 if columnsType == 'normal' :
-                    CNM = d[3]
-                    DFL.append([CID, IP, ALSCD, CNM])
+                    CNM = d[4]
+                    DFL.append([CID, IP,TCS, ALSCD, CNM])
                 elif columnsType == 'count' :
-                    DFL.append([CID, IP, ALSCD])
+                    DFL.append([CID, IP, TCS, ALSCD])
     DF = pd.DataFrame(DFL, columns=DFC)
     return DF
 

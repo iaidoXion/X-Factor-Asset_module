@@ -116,19 +116,19 @@ def minutely_plug_in():                                                         
             RUSGBS = CASGBCPI(ADT, 'ram_usage_size_exceeded', 'RUS')                            #
             CPUGBS = CASGBCPI(ADT, 'cpu_usage_size_exceeded', 'CPU')                            #
             LRBGBS = CASGBCPI(ADT, 'last_reboot_exceeded', 'LRB')                               #
-            GRUGBS = CASGBCPI(ADT, 'group_ram_usage_exceeded', 'ip_group')                      #
-            GCUGBS = CASGBCPI(ADT, 'group_cpu_usage_exceeded', 'ip_group')                      #
-            GLPCGBS = CASGBCPI(ADT, 'group_listen_port_count_change', 'ip_group')               #
-            GEPCGBS = CASGBCPI(ADT, 'group_established_port_count_change', 'ip_group')          #
-            GRSCGBS = CASGBCPI(ADT, 'group_running_service_count_exceeded', 'ip_group')         #
-            GRPLRGBS = CASGBCPI(ADT, 'group_last_reboot', 'ip_group')                           #
-            GDUSGBS = CASGBCPI(ADT, 'group_drive_usage_size_exceeded', 'ip_group')              #
-            GSCGBS = CASGBCPI(ADT, 'group_server_count', 'ip_group')                            # group_server Group By Statistics (Session_ip 통계)
+            GRUGBS = CASGBCPI(ADT, 'group_ram_usage_exceeded', 'tanium_client_subnet')                      #
+            GCUGBS = CASGBCPI(ADT, 'group_cpu_usage_exceeded', 'tanium_client_subnet')                      #
+            GLPCGBS = CASGBCPI(ADT, 'group_listen_port_count_change', 'tanium_client_subnet')               #
+            GEPCGBS = CASGBCPI(ADT, 'group_established_port_count_change', 'tanium_client_subnet')          #
+            GRSCGBS = CASGBCPI(ADT, 'group_running_service_count_exceeded', 'tanium_client_subnet')         #
+            GRPLRGBS = CASGBCPI(ADT, 'group_last_reboot', 'tanium_client_subnet')                           #
+            GDUSGBS = CASGBCPI(ADT, 'group_drive_usage_size_exceeded', 'tanium_client_subnet')              #
+            GSCGBS = CASGBCPI(ADT, 'group_server_count', 'tanium_client_subnet')                            # group_server Group By Statistics (Session_ip 통계)
             MFGBS = CASGBCPI(IPMALSDDFT, 'manufacturer', 'MF')                                  # Manufacturer Group By Statistics (Session_ip 통계)
             GPUCGBS = CASGBCPI(IPMALSDDFT, 'nvidia_smi', 'NS')                                  # Nvidia_smi Group By Statistics (Nvidia_smi 통계)
             CSO = CASCPI(MDSDDFTFON, 'online')  # Compare Statistic Online - online data를 비교 통계
             CSODFT = CTDSPPI(CSO, 'DB', 'minutely_statistics_list_online', 'count')
-            GLOTGBS = CASGBCPI(CSODFT, 'group_last_online_time_exceeded', 'ip_group')# 대역별 최근 30분 이내 오프라인 여부
+            GLOTGBS = CASGBCPI(CSODFT, 'group_last_online_time_exceeded', 'tanium_client_subnet')# 대역별 최근 30분 이내 오프라인 여부
             ONGBS = CASGBCPI(CSODFT, 'last_online_time_exceeded', 'LOTE')  # Last Online Group By Statistics (최근 30분 이내 오프라인 여부 통계)
 
 
@@ -164,18 +164,6 @@ def daily_plug_in():                                                            
 
 
 
-
-"""
-def preprocessing_minutely() :
-    CSDL = CIDBPTASPI('minutely', 'minutely_asset')
-    CSTDFF = CTDAPARTPI(CSDL, 'DB', 'minutely_asset')
-    CSTPP = CTPPI(CSTDFF, 'minutely_asset')
-    CSTDFS = CTDAPARTPI(CSTPP, 'DB', 'minutely_asset')
-    COTAPPI(CSTDFS, 'minutely')
-
-def preprocessing_daily() :
-    CIDBPTAPPI('minutely', 'minutely_preprocessing_all')
-"""
 
 
 
