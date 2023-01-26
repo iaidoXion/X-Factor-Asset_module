@@ -53,6 +53,7 @@ def plug_in(dataType) :
                     computer_id,
                     computer_name,
                     ipv_address,
+                    tanium_client_subnet,
                     asset_list_statistics_collection_date
                 from
                     """ + MSLT

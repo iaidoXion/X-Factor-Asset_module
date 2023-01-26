@@ -11,6 +11,9 @@ def plug_in(data, dataType) :
             else:
                 IPG = IPS[0]
 
+            TCS = data.tanium_client_subnet[c]
+
+
             if data.ramUsage[c] == 'unconfirmed':
                 RAM = data.ramUsage[c]
             else:
@@ -21,7 +24,7 @@ def plug_in(data, dataType) :
                 if float(data.ramUsage[c]) >= 60.0 :
                     RAM = '60Risk'
                 if float(data.ramUsage[c]) < 60.0 :
-                    RAM = 'safety'
+                    RAM = 'Safety'
 
             if data.cpuUsage[c] == 'unconfirmed':
                 CPU = data.cpuUsage[c]
@@ -33,7 +36,7 @@ def plug_in(data, dataType) :
                 elif float(data.cpuUsage[c]) >= 60.0 :
                     CPU = '60Risk'
                 elif float(data.cpuUsage[c]) < 60.0 :
-                    CPU = 'safety'
+                    CPU = 'Safety'
 
             if data.running_service_count[c] == 'unconfirmed' :
                 RPC = data.running_service_count[c]
@@ -71,13 +74,17 @@ def plug_in(data, dataType) :
 
 
 
-            DL.append([data.computer_id[c], IPG, RAM, CPU, data.listenPortCountChange[c], data.establishedPortCountChange[c], RPC, LRB, DUS])
+            DL.append([data.computer_id[c], IPG, TCS,  RAM, CPU, data.listenPortCountChange[c], data.establishedPortCountChange[c], RPC, LRB, DUS])
         elif dataType == 'online' :
             IPS = data.ipv_address[c].split('.')
             if len(IPS) > 1:
                 IPG = IPS[0] + '.' + IPS[1] + '.' + IPS[2]
             else:
                 IPG = IPS[0]
+
+
+            TCS = data.tanium_client_subnet[c]
+
             if data.asset_list_statistics_collection_date[c] == 'unconfirmed' :
                 ALSCD = data.asset_list_statistics_collection_date[c]
             else :
@@ -89,7 +96,7 @@ def plug_in(data, dataType) :
                     ALSCD = 'Yes'
                 else :
                     ALSCD = 'No'
-            DL.append([data.computer_id[c], IPG, ALSCD])
+            DL.append([data.computer_id[c], IPG, TCS, ALSCD])
         else :
             if data.today_listen_port_count[c].isdigit() and data.yesterday_listen_port_count[c].isdigit():
                 if data.today_listen_port_count[c] == data.yesterday_listen_port_count[c]:
