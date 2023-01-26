@@ -150,7 +150,7 @@ def minutely_plug_in():                                                         
 
 def daily_plug_in():                                                                        # 변수 명 Full Name : Full Name에서 대문자로 명시한 것들을 뽑아서 사용 (괄호 안의 내용은 설명)
     CSMDL = CIDBPTAOPI('minutely_asset_all')                                                # Common Sensor Minutely Data List (Module로 DB에 수집한 데이터 호출 : minutely_asset Table )
-    MSDDFT = CTDAAPI(CSMDL, 'DB')                                                           # minutely Source Data Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
+    MSDDFT = CTDAAPI(CSMDL, 'DB', 'DSB')                                                           # minutely Source Data Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
     CODBPTAOPI(MSDDFT, 'daily')                                                             # (daily_asset Table에 수집)
 
     MSLDIPDL = CIDBPTSLPI('minutely')                                                       # Minutely Statistics List Data InPut Data List (Module로 DB에 수집한 데이터 호출 : minutely_statistics_list Table)
