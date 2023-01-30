@@ -105,7 +105,7 @@ def plug_in(data, dataType) :
                 if data.asset_list_statistics_collection_date[c] == 'unconfirmed' :
                     ALSCD = data.asset_list_statistics_collection_date[c]
                 else :
-                    if data.tanium_client_subnet != 'unconfirmed':
+                    if data.tanium_client_subnet[c] != 'unconfirmed':
                         now = datetime.now()
                         thirty_minutes_str = (now - relativedelta(minutes=30)).strftime("%Y-%m-%d %H:%M:%S")
                         thirty_minutes = datetime.strptime(thirty_minutes_str, '%Y-%m-%d %H:%M:%S')
