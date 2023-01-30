@@ -32,23 +32,23 @@ def plug_in(data, dataType) :
                 if data.ramUsage[c] == 'unconfirmed':
                     RAM = data.ramUsage[c]
                 else:
-                    if float(data.ramUsage[c]) >= 95.0 :
+                    if float(data.ramUsage[c]) > 95.0 :
                         RAM = '95Risk'
-                    if float(data.ramUsage[c]) >= 75.0 :
+                    elif float(data.ramUsage[c]) > 75.0 :
                         RAM = '75Risk'
-                    if float(data.ramUsage[c]) >= 60.0 :
+                    elif float(data.ramUsage[c]) > 60.0 :
                         RAM = '60Risk'
-                    if float(data.ramUsage[c]) < 60.0 :
+                    elif float(data.ramUsage[c]) < 60.0 :
                         RAM = 'Safety'
 
                 if data.cpuUsage[c] == 'unconfirmed':
                     CPU = data.cpuUsage[c]
                 else:
-                    if float(data.cpuUsage[c]) >= 95.0:
+                    if float(data.cpuUsage[c]) > 95.0:
                         CPU = '95Risk'
-                    elif float(data.cpuUsage[c]) >= 75.0:
+                    elif float(data.cpuUsage[c]) > 75.0:
                         CPU = '75Risk'
-                    elif float(data.cpuUsage[c]) >= 60.0 :
+                    elif float(data.cpuUsage[c]) > 60.0 :
                         CPU = '60Risk'
                     elif float(data.cpuUsage[c]) < 60.0 :
                         CPU = 'Safety'
@@ -63,14 +63,15 @@ def plug_in(data, dataType) :
 
                 if data.driveUsage[c] == 'unconfirmed' :
                     DUS = data.driveUsage[c]
+
                 else :
-                    if float(data.driveUsage[c]) >= 99.0:
+                    if float(data.driveUsage[c]) > 99.0:
                         DUS = '99Risk'
-                    elif float(data.driveUsage[c]) >= 95.0:
+                    elif float(data.driveUsage[c]) > 95.0:
                         DUS = '95Risk'
-                    elif float(data.driveUsage[c]) >= 75.0:
+                    elif float(data.driveUsage[c]) > 75.0:
                         DUS = '75Risk'
-                    elif float(data.driveUsage[c]) >= 60.0 :
+                    elif float(data.driveUsage[c]) > 60.0 :
                         DUS = '60Risk'
                     elif float(data.driveUsage[c]) < 60.0 :
                         DUS = 'Safety'
@@ -100,17 +101,19 @@ def plug_in(data, dataType) :
 
                 TCS = data.tanium_client_subnet[c]
 
+
                 if data.asset_list_statistics_collection_date[c] == 'unconfirmed' :
                     ALSCD = data.asset_list_statistics_collection_date[c]
                 else :
-                    now = datetime.now()
-                    thirty_minutes_str = (now - relativedelta(minutes=30)).strftime("%Y-%m-%d %H:%M:%S")
-                    thirty_minutes = datetime.strptime(thirty_minutes_str, '%Y-%m-%d %H:%M:%S')
-                    ALSCDDT = datetime.strptime(str(data.asset_list_statistics_collection_date[c]), '%Y-%m-%d %H:%M:%S')
-                    if ALSCDDT < thirty_minutes :
-                        ALSCD = 'Yes'
-                    else :
-                        ALSCD = 'No'
+                    if data.tanium_client_subnet != 'unconfirmed':
+                        now = datetime.now()
+                        thirty_minutes_str = (now - relativedelta(minutes=30)).strftime("%Y-%m-%d %H:%M:%S")
+                        thirty_minutes = datetime.strptime(thirty_minutes_str, '%Y-%m-%d %H:%M:%S')
+                        ALSCDDT = datetime.strptime(str(data.asset_list_statistics_collection_date[c]), '%Y-%m-%d %H:%M:%S')
+                        if ALSCDDT < thirty_minutes :
+                            ALSCD = 'Yes'
+                        else :
+                            ALSCD = 'No'
                 DL.append([data.computer_id[c], IPG, TCS, ALSCD])
             else :
                 if data.today_listen_port_count[c].isdigit() and data.yesterday_listen_port_count[c].isdigit():
