@@ -27,20 +27,22 @@ def plug_in(sessionKey, projectType) :
         CSRJ = json.loads(CSRT)
         CSRJD = CSRJ['data']
         
-        dataList = []
-        
-        if PROGRESS == 'true' :
-            DATA_list = tqdm(enumerate(CSRJD['result_sets'][0]['rows']), 
-                            total=len(CSRJD['result_sets'][0]['rows']),
-                            desc='CALL_API : {}'.format(CSP))
-        else :
-            DATA_list = enumerate(CSRJD['result_sets'][0]['rows'])
-            
-        for index, d in DATA_list :
-            DL = []
-            for i in d['data'] :
-                DL.append(i)
-            dataList.append(DL)
+        if projectType == 'DSB' :
+            dataList = []
+            if PROGRESS == 'true' :
+                DATA_list = tqdm(enumerate(CSRJD['result_sets'][0]['rows']), 
+                                total=len(CSRJD['result_sets'][0]['rows']),
+                                desc='CALL_API : {}'.format(CSP))
+            else :
+                DATA_list = enumerate(CSRJD['result_sets'][0]['rows'])
+                
+            for index, d in DATA_list :
+                DL = []
+                for i in d['data'] :
+                    DL.append(i)
+                dataList.append(DL)
+        elif projectType == 'VUL' :
+            dataList = CSRJD['result_sets'][0]['rows']
         RD = {'resCode': CSRC, 'dataList': dataList}
         logging.info('Tanium API Sensor 호출 성공')
         logging.info('Sensor ID : ' + str(CSID))

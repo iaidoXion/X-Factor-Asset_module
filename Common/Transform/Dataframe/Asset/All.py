@@ -8,6 +8,7 @@ def plug_in(data, inputPlugin, project) :
         with open("setting.json", encoding="UTF-8") as f:
             SETTING = json.loads(f.read())
         PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
+        DFL = []
         if project == 'DSB' :
             DFC = [
                 'computer_id', 'computer_name', 'last_reboot', 'disk_total_space', 'disk_used_space', 'os_platform',
@@ -27,8 +28,10 @@ def plug_in(data, inputPlugin, project) :
                 'ad_query_last_logged_in_user_name', 'ad_query_last_logged_in_user_time',
                 'tanium_client_subnet','manufacturer', 'sessionIp', 'nvidiaSmi', 'online'
             ]
-            DFL = []
-
+        elif project == 'VUL' :
+            DFC = ['SW1', 'SW2', 'SW2_2', 'SW2-3', 'SW2_4', 'SW3', 'SW4', 'SW4_2']
+            
+        if project == 'DSB' :
             if PROGRESS == 'true' :
                 DATA_list = tqdm(enumerate(data),
                                 total=len(data),
@@ -215,75 +218,78 @@ def plug_in(data, inputPlugin, project) :
                         CPUDST, CPUDCPU, CPUDCPUS, CPUDTPP, CPUDTC, CPUDTLP, DFS, HCPUP, HMP, HU, IPA, TCNATIPA, LLIU,
                         LPP, LPN, LPLP, LSC, MACA, MC, openPort, OSDN, OSDPath, OSDS, OSDT, OSDP, PON, Uptime, USBWP,
                         UA, ADQLLIUD, ADQLLIUN, ADQLLIUT, TCS, manufacturer, SI, nvidiaSmi, OL])
+        elif project == 'VUL' :
+            chekc_swv = [20, 42, 9, 24]
+            dict = {}
+            dict_list = []
+            list_dict = {}
+            count = 0
+            SWV_list = []
+            dataList = []
+            for i in range(len(data)) :
+                dict = {}
+                dict_list = []
+                list_dict = {}
+                count = 0
+                SWV_list = []
+                for index, cdata in enumerate(chekc_swv) :
+                    for j in range(cdata) :
+                        SWV_list.append('SW' + str(index+1) + '-' + str(j + 1).zfill(2))
+                for k in range(len(DFC)) :
+                    count = count + 1
+                    for j in data[i]['data'][k] :
+                        if j['text'] == 'TSE-Error: No Sensor Definition for this Platform':
+                            logging.info('ComputerID :  {} has {}'.format(data[i]['cid'], j['text']))
+                            continue
+                        if j['text'] == 'TSE-Error: Python is disabled':
+                            logging.info('ComputerID :  {} has {}'.format(data[i]['cid'], j['text']))
+                            continue
+                        elif j['text'] == '[current result unavailable]' :
+                            logging.info('ComputerID :  {} has {}'.format(data[i]['cid'], j['text']))
+                            continue
+                        elif j['text'] == 'TSE-Error: Python is not available on this system.':
+                            logging.info('ComputerID :  {} has {}'.format(data[i]['cid'], j['text']))
+                            continue
+                        else :
+                            if j['text'] == 'TSE-Error: Failed to send to sensor child process: broken pipe' :
+                                dict['SWV'] = DFC[k]
+                                dict['value'] = j['text']
+                                j['text'] = dict
+                            else :
+                                if not j['text'].startswith('{') and not j['text'].endswith('}'):
+                                    j['text'] = '{' + j['text'] + '}'
+                                dict = literal_eval(j['text'])
+                                SWV_list.remove(dict['SWV'])
+                            dict_list.append(dict)
+                    if len(DFC) == count : 
+                        if not len(SWV_list) == 0 :
+                            for index in SWV_list :
+                                sub_dict = {}
+                                sub_dict['SWV'] = index
+                                sub_dict['status'] = 'None'
+                                sub_dict['value'] = 'None'
+                                dict_list.append(sub_dict)
+                    if len(dict_list) != 0 :
+                        list_dict['list'] = dict_list
+                        list_dict['cid'] = data[i]['data'][8][0]['text'] #computer_id
+                        list_dict['cpn'] = data[i]['data'][9][0]['text'] #computer_name
+                        list_dict['os'] = data[i]['data'][10][0]['text'] #Operating System
+                        list_dict['ip'] = data[i]['data'][11][0]['text'] #Tanium Client NAT IP Address
+                        list_dict['ct'] = data[i]['data'][12][0]['text'] #Chassis Type
+                        list_dict['lr'] = data[i]['data'][13][0]['text'] #Last Reboot
+                        list_dict['online'] = data[i]['data'][14][0]['text']
+                if len(list_dict) != 0 :
+                    dataList.append(list_dict)
+            for i in range(len(dataList)) :
+                dataList[i]['list'] = sorted(dataList[i]['list'], key= lambda x: x['SWV'])
+            DFL = dataList
+            logging.info('Tanium ' + project + ' Data API Call Success')
+            return DFL
 
-        # elif project == 'VUL' :
-        #     DFL = []
-        #     DFC = ['SW1', 'SW2', 'SW2_2', 'SW2-3', 'SW2_4', 'SW3', 'SW4', 'SW4_2']
-        #     chekc_swv = [20, 42, 9, 24]
-
-        #     data = data['data']['result_sets'][0]['rows']
-        #     for i in range(len(data)) :
-        #         dict = {}
-        #         dict_list = []
-        #         list_dict = {}
-        #         count = 0
-        #         SWV_list = []
-        #         for index, cdata in enumerate(chekc_swv) :
-        #             for j in range(cdata) :
-        #                 SWV_list.append('SW' + str(index+1) + '-' + str(j + 1).zfill(2))
-        #         for k in range(len(DFC)) :
-        #             count = count + 1
-        #             for j in data[i]['data'][k] :
-        #                 if j['text'] == 'TSE-Error: No Sensor Definition for this Platform':
-        #                     logging.info('ComputerID :  {} has {}'.format(data[i]['cid'], j['text']))
-        #                     continue
-        #                 if j['text'] == 'TSE-Error: Python is disabled':
-        #                     logging.info('ComputerID :  {} has {}'.format(data[i]['cid'], j['text']))
-        #                     continue
-        #                 elif j['text'] == '[current result unavailable]' :
-        #                     logging.info('ComputerID :  {} has {}'.format(data[i]['cid'], j['text']))
-        #                     continue
-        #                 elif j['text'] == 'TSE-Error: Python is not available on this system.':
-        #                     logging.info('ComputerID :  {} has {}'.format(data[i]['cid'], j['text']))
-        #                     continue
-        #                 else :
-        #                     if j['text'] == 'TSE-Error: Failed to send to sensor child process: broken pipe' :
-        #                         dict['SWV'] = DFC[k]
-        #                         dict['value'] = j['text']
-        #                         j['text'] = dict
-        #                     else :
-        #                         if not j['text'].startswith('{') and not j['text'].endswith('}'):
-        #                             j['text'] = '{' + j['text'] + '}'
-        #                         dict = literal_eval(j['text'])
-        #                         SWV_list.remove(dict['SWV'])
-        #                     dict_list.append(dict)
-        #             if len(DFC) == count :
-        #                 if not len(SWV_list) == 0 :
-        #                     for index in SWV_list :
-        #                         sub_dict = {}
-        #                         sub_dict['SWV'] = index
-        #                         sub_dict['status'] = 'None'
-        #                         sub_dict['value'] = 'None'
-        #                         dict_list.append(sub_dict)
-        #             if len(dict_list) != 0 :
-        #                 list_dict['list'] = dict_list
-        #                 list_dict['cid'] = data[i]['data'][8][0]['text'] #computer_id
-        #                 list_dict['cpn'] = data[i]['data'][9][0]['text'] #computer_name
-        #                 list_dict['os'] = data[i]['data'][10][0]['text'] #Operating System
-        #                 list_dict['ip'] = data[i]['data'][11][0]['text'] #Tanium Client NAT IP Address
-        #                 list_dict['ct'] = data[i]['data'][12][0]['text'] #Chassis Type
-        #                 list_dict['lr'] = data[i]['data'][13][0]['text'] #Last Reboot
-        #                 list_dict['online'] = data[i]['data'][14][0]['text']
-        #         if len(list_dict) != 0 :
-        #             dataList.append(list_dict)
-        #     for i in range(len(dataList)) :
-        #         dataList[i]['list'] = sorted(dataList[i]['list'], key= lambda x: x['SWV'])
-        #     returnList = {'resCode': resCode, 'dataList': dataList}
-        #     logging.info('Tanium ' + APITYPE + ' Data API Call Success')
-        #     logging.info('Tanium ' + APITYPE + ' Data API Response Code : ' + str(resCode))
         DF = pd.DataFrame(DFL, columns=DFC)
         logging.info('Asset/All.py -  ' + inputPlugin + ' 성공')
         return DF
+        
     except Exception as e:
         logging.warning('Asset/All.py - Error 발생')
         logging.warning('Error : ' + e)
