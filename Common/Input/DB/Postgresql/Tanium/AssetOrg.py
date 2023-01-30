@@ -244,6 +244,7 @@ def plug_in(dataType) :
         for index, RS in DATA_list:
         # for RS in selectRS:
             DL.append(RS)
+        logging.info('Asset Table Select connection - ' + dataType+ '성공')
         return DL
     except ConnectionError as e:
         logging.warning('Asset Table Select connection 실패')
