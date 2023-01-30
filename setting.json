@@ -7,14 +7,20 @@
       "fileName" : "log_",
       "fileFormat" : ".log"
     },
-    "PROGRESSBAR" : "TRUE",
-    "DASHBOARD" : "TRUE",
-    "VUL" : "False"
+    "PROGRESSBAR" : "true"
   },
   "CORE" : {
     "Tanium" : {
       "COREUSE" : "true",
       "ONOFFTYPE" : "online",
+      "PROJECT" :{
+          "VUL" : {
+            "USE": "True",
+            "PATH": ".\\",
+            "VUL_FILE_NAME": "question.xlsx"
+          },
+          "report" : "true"
+      },
       "CYCLE" : {
         "MINUTELY" : {
           "USE" : "true",
@@ -82,7 +88,7 @@
           "password": "xion123!",
           "SensorID": {
             "COMMON" : "4872",
-            "VUL" : "3754"
+            "VUL" : "4356"
           }
         },
         "DB" : {
@@ -117,7 +123,9 @@
               "MSL" : "minutely_statistics_list",
               "DSL" : "daily_statistics_list",
               "MS" : "minutely_statistics",
-              "DS" : "daily_statistics"
+              "DS" : "daily_statistics",
+              "VQ" : "vulnerability_list",
+              "VJ" : "vulnerability_judge"
             }
           }
         }

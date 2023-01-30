@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from CORE.Tanium import minutely_plug_in as CTMPI
+from CORE.Tanium_Vul import minutely_plug_in as CTVMPI
 from CORE.Tanium import daily_plug_in as CTDPI
 import urllib3
 import logging
@@ -17,6 +18,8 @@ def minutely() :
         print('\rminutely', end ="")
         print(now)
         CTMPI()
+        if TVU == 'true' :
+            CTVMPI('used')
     else:
         logging.info('Tanium Minutely cycle 사용여부  : ' + CMU)
 
@@ -70,6 +73,7 @@ if __name__ == "__main__":
     CDU = SETTING['CORE']['Tanium']['CYCLE']['DAILY']['USE'].lower()
     CDTH = SETTING['CORE']['Tanium']['CYCLE']['DAILY']['TIME']['hour']
     CDTM = SETTING['CORE']['Tanium']['CYCLE']['DAILY']['TIME']['minute']
+    TVU = SETTING['CORE']['Tanium']['PROJECT']['VUL']['USE'].lower()
 
     today = datetime.today().strftime("%Y%m%d")
     logFile = LOGFD + LOGFNM + today + LOGFF
