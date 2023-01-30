@@ -11,11 +11,13 @@ def main() :
     if TU == 'true' :
         if CMU == 'true' :
             CTMPI()
+            logging.info('Tanium Minutely Module 성공')
         else:
             logging.info('Tanium Minutely cycle 사용여부  : ' + CMU)
 
         if CDU == 'true' :
             CTDPI()
+            logging.info('Tanium Daily Module 성공')
         else:
             logging.info('Tanium Daily cycle 사용여부  : ' + CDU)
     else:

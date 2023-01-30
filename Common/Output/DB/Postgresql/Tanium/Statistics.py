@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import psycopg2
 import json
+import logging
 from tqdm import tqdm
 def plug_in(data, cycle):
     try:
@@ -65,5 +66,7 @@ def plug_in(data, cycle):
             insertCur.execute(IQ, (dataList))
         insertConn.commit()
         insertConn.close()
+        logging.info('Statistics Table INSERT connection - ' + cycle + '성공')
     except ConnectionError as e:
-        print(e)
+        logging.warning('Statistics Table INSERT connection 실패')
+        logging.warning('Error : ' + e)
