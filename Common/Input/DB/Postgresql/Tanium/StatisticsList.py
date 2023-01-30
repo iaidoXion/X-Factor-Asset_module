@@ -73,6 +73,7 @@ def plug_in(dataType) :
         for index, RS in DATA_list:
         # for RS in selectRS:
             DL.append(RS)
+        logging.info('Statistics List Table Select connection - ' + dataType + ' 성공')
         return DL
     except ConnectionError as e:
         logging.warning('Statistics List Table Select connection 실패')

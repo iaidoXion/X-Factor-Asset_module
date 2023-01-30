@@ -1,38 +1,43 @@
 from tqdm import tqdm
+import logging
 import json
     
 def plug_in(data) :
-    with open("setting.json", encoding="UTF-8") as f:
-        SETTING = json.loads(f.read())
-    PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
-    DL = []
-    
-    if PROGRESS == 'true' :
-        DATA_list = tqdm( range(len(data.computer_id)),
-                            total=len(data.computer_id),
-                            desc='Usage')
-    else :
-        DATA_list = range(len(data.computer_id))
-            
-    for c in DATA_list:
-    # for c in range(len(data.computer_id)):
-        if data.disk_used_space[c][0].isdigit() and data.disk_total_space[c][0].isdigit() :
-            driveUsage = int(data.disk_used_space[c][0]) / int(data.disk_total_space[c][0]) * 100
-        else :
-            driveUsage = 'unconfirmed'
+    try:
+        with open("setting.json", encoding="UTF-8") as f:
+            SETTING = json.loads(f.read())
+        PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
+        DL = []
 
-        if data.ram_use_size[c].isdigit() and data.ram_total_size[c].isdigit() :
-            ramUsage = int(data.ram_use_size[c]) / int(data.ram_total_size[c]) * 100
+        if PROGRESS == 'true' :
+            DATA_list = tqdm( range(len(data.computer_id)),
+                                total=len(data.computer_id),
+                                desc='Usage')
         else :
-            ramUsage = 'unconfirmed'
+            DATA_list = range(len(data.computer_id))
 
-        if type(data.cup_consumption[c]) == float :
-            cpuUsage = data.cup_consumption[c]
-        else :
-            cpuUsage = 'unconfirmed'
+        for c in DATA_list:
+        # for c in range(len(data.computer_id)):
+            if data.disk_used_space[c][0].isdigit() and data.disk_total_space[c][0].isdigit() :
+                driveUsage = int(data.disk_used_space[c][0]) / int(data.disk_total_space[c][0]) * 100
+            else :
+                driveUsage = 'unconfirmed'
 
-        DL.append([data.computer_id[c], str(driveUsage), str(ramUsage), str(cpuUsage)])
-    return DL
+            if data.ram_use_size[c].isdigit() and data.ram_total_size[c].isdigit() :
+                ramUsage = int(data.ram_use_size[c]) / int(data.ram_total_size[c]) * 100
+            else :
+                ramUsage = 'unconfirmed'
+
+            if type(data.cup_consumption[c]) == float :
+                cpuUsage = data.cup_consumption[c]
+            else :
+                cpuUsage = 'unconfirmed'
+            DL.append([data.computer_id[c], str(driveUsage), str(ramUsage), str(cpuUsage)])
+        logging.info('Usage.py - 성공')
+        return DL
+    except Exception as e:
+        logging.warning('Usage.py - Error 발생')
+        logging.warning('Error : ' + e)
 
 
 
