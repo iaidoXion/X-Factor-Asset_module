@@ -25,4 +25,4 @@ def plug_in(data):
         return DL
     except Exception as e:
         logging.warning('Normal.py - Error 발생')
-        logging.warning('Error : ' + e)
+        logging.warning('Error : {}'.format(str(e)))

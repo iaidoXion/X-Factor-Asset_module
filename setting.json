@@ -7,7 +7,45 @@
       "fileName" : "log_",
       "fileFormat" : ".log"
     },
-    "PROGRESSBAR" : "true"
+    "PROGRESSBAR" : "false",
+    "INSTALLDATE" : "20230131",
+    "AUTOCREATE" : {
+      "USE" : "True",
+      "TABLE" :{
+        "MA": {
+          "USE": "TRUE",
+          "NAME": "minutely_asset"
+        },
+        "DA": {
+          "USE": "TRUE",
+          "NAME": "daily_asset"
+        },
+        "MSL": {
+          "USE": "TRUE",
+          "NAME": "minutely_statistics_list"
+        },
+        "DSL": {
+          "USE": "TRUE",
+          "NAME": "daily_statistics_list"
+        },
+        "MS": {
+          "USE": "TRUE",
+          "NAME": "minutely_statistics"
+        },
+        "DS": {
+          "USE": "TRUE",
+          "NAME": "daily_statistics"
+        },
+        "VQ": {
+          "USE": "TRUE",
+          "NAME": "vulnerability_list"
+        },
+        "VJ": {
+          "USE": "TRUE",
+          "NAME": "vulnerability_judge"
+        }
+      }
+    }
   },
   "CORE" : {
     "Tanium" : {
@@ -15,7 +53,7 @@
       "ONOFFTYPE" : "online",
       "PROJECT" :{
           "VUL" : {
-            "USE": "True",
+            "USE": "False",
             "PATH": ".\\",
             "VUL_FILE_NAME": "question.xlsx"
           },

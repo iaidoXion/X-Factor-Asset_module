@@ -5,7 +5,7 @@ import logging
 import json
 import logging
 from collections import Counter
-
+from pprint import pprint
 def plug_in(data, dataType):
     try:
         if dataType == 'question':
@@ -13,8 +13,11 @@ def plug_in(data, dataType):
             good_list = []
             weak_list = []
             date_list = []
-            fullpath = data
-            QDF = pd.read_excel(fullpath)
+            QDF = pd.DataFrame(data, columns=['vulnerability_classification',
+                                              'vulnerability_code',
+                                              'vulnerability_item',
+                                              'vulnerability_explanation',
+                                              'vulnerability_standard'])
             for i in QDF['vulnerability_standard']:
                 a = i.split('취약')
                 a[1] = "취약" + a[1]
