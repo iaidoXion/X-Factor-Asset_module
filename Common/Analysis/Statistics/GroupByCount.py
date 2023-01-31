@@ -176,6 +176,6 @@ def plug_in(data, classification, itemType) :
         return RD
     except Exception as e:
         logging.warning('GroupByCount.py - ' + classification + ' Error 발생')
-        logging.warning('Error : ' + e)
+        logging.warning('Error : {}'.format(str(e)))
 
 

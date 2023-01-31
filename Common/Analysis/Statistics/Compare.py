@@ -114,6 +114,8 @@ def plug_in(data, dataType) :
                             ALSCD = 'Yes'
                         else :
                             ALSCD = 'No'
+                    else :
+                        ALSCD = 'unconfirmed'
                 DL.append([data.computer_id[c], IPG, TCS, ALSCD])
             else :
                 if data.today_listen_port_count[c].isdigit() and data.yesterday_listen_port_count[c].isdigit():
@@ -141,4 +143,4 @@ def plug_in(data, dataType) :
         return DL
     except Exception as e:
         logging.warning('Compare.py - ' + dataType + ' Error 발생')
-        logging.warning('Error : ' + e)
+        logging.warning('Error : {}'.format(str(e)))

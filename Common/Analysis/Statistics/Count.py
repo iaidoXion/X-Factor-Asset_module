@@ -38,4 +38,4 @@ def plug_in(data):
 
     except Exception as e:
         logging.warning('Count.py - Error 발생')
-        logging.warning('Error : ' + e)
+        logging.warning('Error : {}'.format(e))
