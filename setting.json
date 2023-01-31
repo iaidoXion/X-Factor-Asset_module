@@ -8,7 +8,44 @@
       "fileFormat" : ".log"
     },
     "PROGRESSBAR" : "false",
-    "INSTALLDATE" : "false"
+    "INSTALLDATE" : "20230131",
+    "AUTOCREATE" : {
+      "USE" : "True",
+      "TABLE" :{
+        "MA": {
+          "USE": "TRUE",
+          "NAME": "minutely_asset"
+        },
+        "DA": {
+          "USE": "TRUE",
+          "NAME": "daily_asset"
+        },
+        "MSL": {
+          "USE": "TRUE",
+          "NAME": "minutely_statistics_list"
+        },
+        "DSL": {
+          "USE": "TRUE",
+          "NAME": "daily_statistics_list"
+        },
+        "MS": {
+          "USE": "TRUE",
+          "NAME": "minutely_statistics"
+        },
+        "DS": {
+          "USE": "TRUE",
+          "NAME": "daily_statistics"
+        },
+        "VQ": {
+          "USE": "TRUE",
+          "NAME": "vulnerability_list"
+        },
+        "VJ": {
+          "USE": "TRUE",
+          "NAME": "vulnerability_judge"
+        }
+      }
+    }
   },
   "CORE" : {
     "Tanium" : {
@@ -18,63 +55,7 @@
           "VUL" : {
             "USE": "False",
             "PATH": ".\\",
-            "VUL_FILE_NAME": "question.xlsx",
-            "AUTO_CREATE" : {
-                "USE" : "True",
-                "INGREDIENTS" : {
-                  "TABLENAME" : "vulnerability_list",
-                  "AUTOINCREMENT" : {
-                    "USE" : "true",
-                    "name" : "seq_vulnerability_list_num"
-                    },
-                  "COLUM" : {
-                    "PK" : "COL0",
-                    "UK" : {
-                      "COL" : ""
-                    },
-                    "COL0" : {
-                        "name" : "vulnerability_num",
-                        "type" : "int4",
-                        "null" : "flase"
-                    },
-                    "COL1" : {
-                        "name" : "vulnerability_classification",
-                        "type" : "varchar(50)",
-                        "null" : "false"
-                    },
-                    "COL2" : {
-                        "name" : "vulnerability_code",
-                        "type" : "varchar(50)",
-                        "null" : "false"
-                    },
-                    "COL3" : {
-                        "name" : "vulnerability_item",
-                        "type" : "varchar(300)",
-                        "null" : "false"
-                    },
-                    "COL4" : {
-                        "name" : "vulnerability_explanation",
-                        "type" : "text",
-                        "null" : "false"
-                    },
-                    "COL5" : {
-                        "name" : "vulnerability_standard_good",
-                        "type" : "text",
-                        "null" : "false"
-                    },
-                    "COL6" : {
-                        "name" : "vulnerability_standard_weak",
-                        "type" : "text",
-                        "null" : "false"
-                    },
-                    "COL7" : {
-                        "name" : "vulnerability_create_date",
-                        "type" : "timestamp",
-                        "null" : "false"
-                    }
-                  }
-                }
-            }
+            "VUL_FILE_NAME": "question.xlsx"
           },
           "report" : "true"
       },

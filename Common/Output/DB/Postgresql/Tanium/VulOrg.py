@@ -15,8 +15,6 @@ def plug_in(data, cycle, type) :
         VJ = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['TNM']['VJ']
         VUL_STS = SETTING['CORE']['Tanium']['ONOFFTYPE']
         PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
-        
-        TVAC = SETTING['CORE']['Tanium']['PROJECT']['VUL']['AUTO_CREATE']
     if type == 'create' :
         
         success = True
@@ -24,36 +22,19 @@ def plug_in(data, cycle, type) :
         
         createConn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHOST, DBPORT, DBNM, DBUNM, DBPWD))
         createCur = createConn.cursor()
-        
+        processList = ["DROP TABLE {}".format(cycle), "DROP SEQ {}".format(cycle), "CREATE SEQ {}".format(cycle), "CREATE TABLE {}".format(cycle)]
         while success :
             if process == 0 :
-                CTQ = """ DROP TABLE vulnerability_list;"""
+                CTQ = data[0]
             if process == 1 :
-                CTQ =    """DROP SEQUENCE seq_vulnerability_list_num;"""
+                CTQ = data[1]
             if process == 2 :
-                CTQ = """ CREATE SEQUENCE seq_vulnerability_list_num
-                            INCREMENT BY 1
-                            MINVALUE 1
-                            MAXVALUE 9223372036854775807
-                            START 1
-                            CACHE 1
-                            NO CYCLE;"""
+                CTQ = data[2]
             if process == 3 :
-                CTQ = """CREATE TABLE vulnerability_list (
-                        vulnerability_num int4 NOT NULL DEFAULT nextval('seq_vulnerability_list_num'::regclass),
-                        vulnerability_classification varchar(50) NOT NULL,
-                        vulnerability_code varchar(50) NOT NULL,
-                        vulnerability_item varchar(300) NOT NULL,
-                        vulnerability_explanation text NOT NULL,
-                        vulnerability_standard_good text NOT NULL,
-                        vulnerability_standard_weak text NOT NULL,
-                        vulnerability_create_date timestamp NOT NULL,
-                        CONSTRAINT vulnerability_list_pk PRIMARY KEY (vulnerability_num),
-                        CONSTRAINT vulnerability_list_un UNIQUE (vulnerability_code)
-                        );"""
+                CTQ = data[3]
             try :
                 createCur.execute(CTQ)
-                print("{} 이 성공적으로 들어갔습니다.".format(process))
+                print("{} 이 성공했습니다.".format(processList[process]))
                 createConn.commit()
                 process = process + 1
                 if process == 4 :

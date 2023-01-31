@@ -2,6 +2,8 @@ from datetime import datetime, timedelta
 from CORE.Tanium.Dashboard import minutely_plug_in as CTMPI
 from CORE.Tanium.Dashboard import daily_plug_in as CTDPI
 from CORE.Tanium.Vul import minutely_plug_in as CTVMPI
+from Common.Output.AutoCreateTable.Query import QueryPlugIn as QPI
+from Common.Output.DB.Postgresql.Tanium.VulOrg import plug_in as CODPTV
 import urllib3
 import logging
 import json
@@ -57,42 +59,37 @@ def count() :
             count = 0
     
 def main():
-    process = []
     if TU == 'true':
-        install = True
-        
-        while install :
-            answer = input('모듈을 처음 사용하십니까? (Y/N)')
-            if answer.lower() == 'y' :
-                used = True
-                install = False
-            elif answer.lower() == 'n' :
-                used = False
-                install = False
-            else :
-                print('Y(y) or N(n) 만 눌러주세요')
-        
-        if used :
-            if CMU == 'true' :
-                CTMPI()
-                print('Tanium Minutely Module 성공')
-                logging.info('Tanium Minutely Module 성공')
-            else:
-                logging.info('Tanium Minutely cycle 사용여부  : ' + CMU)
+        if INSTALLDATE == today :
+            if AUTOCREATEUSE == 'true' :
+                for i in AUTOCREATE.values() :
+                    if i['USE'] == 'TRUE' :
+                        
+                        query = QPI(i['NAME'])
+                        
+                        CODPTV(query, i['NAME'], 'create')
+                        
+                if CMU == 'true' :
+                    CTMPI()
+                    print('Tanium Minutely Module 성공')
+                    logging.info('Tanium Minutely Module 성공')
+                else:
+                    logging.info('Tanium Minutely cycle 사용여부  : ' + CMU)
 
-            if CDU == 'true' :
-                CTDPI()
-                print('Tanium Daily Module 성공')
-                logging.info('Tanium Daily Module 성공')
-            else:
-                logging.info('Tanium Daily cycle 사용여부  : ' + CDU)
-                
-            if TVU == 'true' :
-                CTVMPI(used)
-                print('Tanium VUL Module 성공')
-                logging.info('Tanium VUL Module 성공')
-            else:
-                logging.info('Tanium VUL cycle 사용여부  : ' + CDU)
+                if CDU == 'true' :
+                    CTDPI()
+                    print('Tanium Daily Module 성공')
+                    logging.info('Tanium Daily Module 성공')
+                else:
+                    logging.info('Tanium Daily cycle 사용여부  : ' + CDU)
+                    
+                if TVU == 'true' :
+                    CTVMPI()
+                    print('Tanium VUL Module 성공')
+                    logging.info('Tanium VUL Module 성공')
+                else:
+                    logging.info('Tanium VUL cycle 사용여부  : ' + CDU)
+
         print("스케쥴링을 시작하겠습니다.")
         
         for i in reversed(range(3)) :
@@ -109,6 +106,9 @@ def main():
 if __name__ == "__main__":
     with open("setting.json", encoding="UTF-8") as f:
         SETTING = json.loads(f.read())
+    INSTALLDATE = SETTING['PROJECT']['INSTALLDATE']
+    AUTOCREATE = SETTING['PROJECT']['AUTOCREATE']['TABLE']
+    AUTOCREATEUSE = SETTING['PROJECT']['AUTOCREATE']['USE'].lower()
     LOGFD = SETTING['PROJECT']['LOG']['directory']
     LOGFNM = SETTING['PROJECT']['LOG']['fileName']
     LOGFF = SETTING['PROJECT']['LOG']['fileFormat']
