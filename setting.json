@@ -1,14 +1,14 @@
 {
   "PROJECT" : {
-    "CUSTOMER" : "NC",
+    "CUSTOMER" : "X-FACTOR",
     "TYPE" : "System",
     "LOG" : {
       "directory" : "log/",
       "fileName" : "log_",
       "fileFormat" : ".log"
     },
-    "PROGRESSBAR" : "false",
-    "INSTALLDATE" : "20230131",
+    "PROGRESSBAR" : "False",
+    "INSTALLDATE" : "20230201",
     "AUTOCREATE" : {
       "USE" : "True",
       "TABLE" :{
@@ -53,7 +53,7 @@
       "ONOFFTYPE" : "online",
       "PROJECT" :{
           "VUL" : {
-            "USE": "False",
+            "USE": "True",
             "PATH": ".\\",
             "VUL_FILE_NAME": "question.xlsx"
           },

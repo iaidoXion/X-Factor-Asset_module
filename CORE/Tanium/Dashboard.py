@@ -10,16 +10,16 @@ from Common.Transform.Dataframe.Asset.All import plug_in as CTDAAPI
 from Common.Transform.Dataframe.Asset.Part import plug_in as CTDAPPI
 from Common.Transform.Dataframe.Statistics.All import plug_in as CTDSAPI
 from Common.Transform.Dataframe.Statistics.Part import plug_in as CTDSPPI
-from Common.Transform.Preprocessing import plug_in as CTPPI
+from Common.Transform.Preprocessing.Dashboard import plug_in as CTPPI
 from Common.Transform.Merge import plug_in as CTMPI
 from Common.Analysis.Statistics.Usage import plug_in as CASUPI
 from Common.Analysis.Statistics.GroupByCount import plug_in as CASGBCPI
 from Common.Analysis.Statistics.Compare import plug_in as CASCPI
 from Common.Analysis.Statistics.Normal import plug_in as CASNPI
 from Common.Analysis.Statistics.Count import plug_in as CASCOPI
-from Common.Output.DB.Postgresql.Tanium.AssetOrg import plug_in as CODBPTAOPI
-from Common.Output.DB.Postgresql.Tanium.StatisticsList import plug_in as CODBPTSLPI
-from Common.Output.DB.Postgresql.Tanium.Statistics import plug_in as CODBPTAPI
+from Common.Output.DB.Postgresql.Tanium.DashBoard.AssetOrg import plug_in as CODBPTAOPI
+from Common.Output.DB.Postgresql.Tanium.DashBoard.StatisticsList import plug_in as CODBPTSLPI
+from Common.Output.DB.Postgresql.Tanium.DashBoard.Statistics import plug_in as CODBPTAPI
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -40,7 +40,7 @@ def minutely_plug_in():                                                         
         SK = CIATSPI()['dataList'][0]  # Sesstion Key (Tanium Sesstion Key 호출)
         SDIPDL = CIATSCPI(SK, 'DSB')['dataList']                             # Source Data InPut Data List (Tanium API Sensor Data 호출)
     # input plug in 이 API 외의 것들 구현 예정
-    SODDFT = CTDAAPI(SDIPDL, 'API', 'DSB')                                                         # Source Data Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
+    SODDFT = CTDAAPI(SDIPDL, 'API')                                                         # Source Data Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
     if SOMTPIU == 'true' :                                                                  # (Source Data MINUTELY Transform(preprocessing) plug in 사용 여부 확인 - 사용함.)
         SOPPT = CTPPI(SODDFT, 'minutely_asset_all')
         SOODL = CTDAAPI(SOPPT, 'DB')
@@ -142,7 +142,7 @@ def minutely_plug_in():                                                         
 
 def daily_plug_in():                                                                        # 변수 명 Full Name : Full Name에서 대문자로 명시한 것들을 뽑아서 사용 (괄호 안의 내용은 설명)
     CSMDL = CIDBPTAOPI('minutely_asset_all')                                                # Common Sensor Minutely Data List (Module로 DB에 수집한 데이터 호출 : minutely_asset Table )
-    MSDDFT = CTDAAPI(CSMDL, 'DB', 'DSB')                                                           # minutely Source Data Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
+    MSDDFT = CTDAAPI(CSMDL, 'DB')                                                           # minutely Source Data Data Frame Transform (호출한 데이터를 Data Frame 형태로 변형)
     CODBPTAOPI(MSDDFT, 'daily')                                                             # (daily_asset Table에 수집)
 
     MSLDIPDL = CIDBPTSLPI('minutely')                                                       # Minutely Statistics List Data InPut Data List (Module로 DB에 수집한 데이터 호출 : minutely_statistics_list Table)

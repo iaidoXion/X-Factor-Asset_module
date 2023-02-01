@@ -2,8 +2,9 @@ from datetime import datetime, timedelta
 from CORE.Tanium.Dashboard import minutely_plug_in as CTMPI
 from CORE.Tanium.Dashboard import daily_plug_in as CTDPI
 from CORE.Tanium.Vul import minutely_plug_in as CTVMPI
-from Common.Output.AutoCreateTable.Query import QueryPlugIn as QPI
-from Common.Output.DB.Postgresql.Tanium.VulOrg import plug_in as CODPTV
+from Common.ETC.thread import count as count
+from Common.Output.DB.Postgresql.AutoCreateTable.Query import QueryPlugIn as QPI
+from Common.Output.DB.Postgresql.AutoCreateTable.AutoCreateOrg import plug_in as CODPTV
 import urllib3
 import logging
 import json
@@ -26,49 +27,41 @@ def minutely() :
         CTMPI()
         if TVU == 'true' :
             CTVMPI('used')
+        logging.info('Minutely CMU Module Succesed!!')
     else:
         logging.info('Tanium Minutely cycle 사용여부  : ' + CMU)
 
 def daily():
     if CDU == 'true' :
         now = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
-        print('daily')
+        print('\rdaily', end ="")
         print(now)
         CTDPI()
+        logging.info('Minutely CDU Module Succesed!!')
     else:
         logging.info('Tanium Daily cycle 사용여부  : ' + CDU)
         
-def count() :
-    count = 0
-    running = '\\'
-    while run_main :
-        if count == 0 :
-            running = '\\'
-        elif count == 1 :
-            running = '|'
-        elif count == 2 :
-            running = '/'
-        elif count == 3 :
-            running = 'ㅡ'
-        elif count == 4 :
-            running = '|'
-        print('Module is running....{}'.format(running), end='\r')
-        time.sleep(0.5)
-        count = count +1
-        if count == 4 :
-            count = 0
+def vul() :
+    if TVU == 'true' :
+        now = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
+        print('\rVUL', end ="")
+        print(now)
+        CTVMPI('')
+        logging.info('Minutely VUL Module Succesed!!')
+    else:
+        logging.info('Tanium VUL cycle 사용여부  : ' + TVU)
     
 def main():
-    if TU == 'true':
-        if INSTALLDATE == today :
-            if AUTOCREATEUSE == 'true' :
-                for i in AUTOCREATE.values() :
-                    if i['USE'] == 'TRUE' :
-                        
-                        query = QPI(i['NAME'])
-                        
-                        CODPTV(query, i['NAME'], 'create')
-                        
+    if CUSTOMER == "X-FACTOR" :
+        if TU == 'true':
+            if INSTALLDATE == today :
+                if AUTOCREATEUSE == 'true' : #테이블 자동생성
+                    for i in AUTOCREATE.values() :
+                        if i['USE'] == 'TRUE' :
+                            query = QPI(i['NAME'])
+                            CODPTV(query, i['NAME'], 'create')
+                            
+                    logging.info('AutoCreate Success!!!')
                 if CMU == 'true' :
                     CTMPI()
                     print('Tanium Minutely Module 성공')
@@ -84,28 +77,33 @@ def main():
                     logging.info('Tanium Daily cycle 사용여부  : ' + CDU)
                     
                 if TVU == 'true' :
-                    CTVMPI()
+                    CTVMPI('first')
                     print('Tanium VUL Module 성공')
                     logging.info('Tanium VUL Module 성공')
                 else:
                     logging.info('Tanium VUL cycle 사용여부  : ' + CDU)
 
-        print("스케쥴링을 시작하겠습니다.")
-        
-        for i in reversed(range(3)) :
-            print("...........{}".format(i + 1), end="\r")
-            time.sleep(1) 
-        thread.start()
-        sched = BlockingScheduler(timezone='Asia/Seoul')
-        sched.add_job(minutely, 'interval', seconds=CMT)  # seconds='3'
-        sched.add_job(daily, 'cron', hour=CDTH, minute=CDTM)
-        sched.start()
-    else:
-        logging.info('Tanium 사용여부 : '+TU)
+            print("스케쥴링을 시작하겠습니다.")
+            
+            for i in reversed(range(3)) :
+                print("...........{}".format(i + 1), end="\r")
+                time.sleep(1) 
+                
+            thread.start()
+            sched = BlockingScheduler(timezone='Asia/Seoul')
+            sched.add_job(minutely, 'interval', seconds=CMT)  # seconds='3'
+            sched.add_job(daily, 'cron', hour=CDTH, minute=CDTM)
+            sched.add_job(vul, 'interval', seconds=CMT)  # seconds='3'
+            logging.info('Start the Scheduling~')
+            sched.start()
+        else:
+            logging.info('Tanium 사용여부 : '+TU)
 
 if __name__ == "__main__":
     with open("setting.json", encoding="UTF-8") as f:
         SETTING = json.loads(f.read())
+    CUSTOMER = SETTING['PROJECT']['CUSTOMER']
+    
     INSTALLDATE = SETTING['PROJECT']['INSTALLDATE']
     AUTOCREATE = SETTING['PROJECT']['AUTOCREATE']['TABLE']
     AUTOCREATEUSE = SETTING['PROJECT']['AUTOCREATE']['USE'].lower()
@@ -130,7 +128,6 @@ if __name__ == "__main__":
     thread.daemon = True
     
     main()
-    run_main = False
     logging.info('Module Finished')
 
 

@@ -13,9 +13,10 @@ def plug_in(dataType) :
         DBUNM = SETTING['CORE']['Tanium']['INPUT']['DB']['PS']['USER']
         DBPWD = SETTING['CORE']['Tanium']['INPUT']['DB']['PS']['PWD']
         MSLT = SETTING['CORE']['Tanium']['INPUT']['DB']['PS']['TNM']['MSL']
+        CMT = SETTING['CORE']['Tanium']['CYCLE']['MINUTELY']['TIME']
         PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
         
-        five_minutes_ago = (datetime.today() - timedelta(minutes=5)).strftime("%Y-%m-%d %H:%M:%S")
+        minutes_ago = (datetime.today() - timedelta(minutes=CMT/60)).strftime("%Y-%m-%d %H:%M:%S")
         DL = []
         selectConn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHOST, DBPORT, DBNM, DBUNM, DBPWD))
         selectCur = selectConn.cursor()
@@ -49,7 +50,7 @@ def plug_in(dataType) :
                     asset_list_statistics_collection_date
                 from  
                     """ + MSLT + """
-                where to_char(asset_list_statistics_collection_date , 'YYYY-MM-DD HH24:MI:SS') >= '"""+five_minutes_ago+"""'"""
+                where to_char(asset_list_statistics_collection_date , 'YYYY-MM-DD HH24:MI:SS') >= '"""+minutes_ago+"""'"""
         elif dataType == 'minutely_statistics_list_online':
             SQ = """
                 select

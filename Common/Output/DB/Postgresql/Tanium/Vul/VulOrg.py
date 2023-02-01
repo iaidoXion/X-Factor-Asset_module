@@ -15,41 +15,9 @@ def plug_in(data, cycle, type) :
         VJ = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['TNM']['VJ']
         VUL_STS = SETTING['CORE']['Tanium']['ONOFFTYPE']
         PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
-    if type == 'create' :
-        
-        success = True
-        process = 0
-        
-        createConn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHOST, DBPORT, DBNM, DBUNM, DBPWD))
-        createCur = createConn.cursor()
-        processList = ["DROP TABLE {}".format(cycle), "DROP SEQ {}".format(cycle), "CREATE SEQ {}".format(cycle), "CREATE TABLE {}".format(cycle)]
-        while success :
-            if process == 0 :
-                CTQ = data[0]
-            if process == 1 :
-                CTQ = data[1]
-            if process == 2 :
-                CTQ = data[2]
-            if process == 3 :
-                CTQ = data[3]
-            try :
-                createCur.execute(CTQ)
-                print("{} 이 성공했습니다.".format(processList[process]))
-                createConn.commit()
-                process = process + 1
-                if process == 4 :
-                    print(process)
-                    success = False
-                    logging.info('Table Create Successed')
-            except Exception as e :
-                print("==========================")
-                print(e)
-                print("==========================")
-                break
-        createConn.close()
-        
-    elif type == 'insert' :
+    if type == 'insert' :
         try :
+            logging.info('Start the process : {} '.format(cycle))
             if cycle == 'question' :
                 TNM = VQ
                 insertDate = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
@@ -150,7 +118,7 @@ def plug_in(data, cycle, type) :
                         VSW = data.vulnerability_standard_weak[i]
                         VCD = data.vulnerability_create_date[i]
                         dataList = VCL, VC, VI, VE, VSG, VSW, VCD
-                    if cycle == 'VUL' :
+                    elif cycle == 'VUL' :
                         CI = data.computer_id[i]
                         VC = data.vulnerability_code[i]
                         VJR = data.vulnerability_judge_result[i]
@@ -164,19 +132,23 @@ def plug_in(data, cycle, type) :
                         CCD = data.classification_cid[i]
                         ONLINE = data.online[i]
                         dataList = CI, VC, VJR, VJUT, VJRS, VJCN, VJCT, VJIP, VJLR, VJOS, CCD, ONLINE
-                    else :
-                        insertCur.execute(IQ, (dataList))
-                    
+                    logging.info('Insert DB Start : {} '.format(cycle))
+                    insertCur.execute(IQ, (dataList))
+                    logging.info('Start DB Succesed : {} '.format(cycle))
             except Exception as e:
                 if '고유 제약 조건을 위반함' in str(e) :
+                    logging.warning('Error : {} '.format(str(e)))
                     print('이미 Question이 들어가져있습니다.')
-                    return 200
+                    return 400
                 else :
                     print(e)
-                    print("existance")
-                    return str(e)
+                    logging.warning('Error : {} '.format(str(e)))
+                    return 404
             insertConn.commit()
             insertConn.close()
+            logging.info('Insert {} Process is finish '.format(cycle))
+            
             return 200
         except ConnectionError as e:
             print(e)
+            logging.warning('ConnectionError : {} '.format(str(e)))

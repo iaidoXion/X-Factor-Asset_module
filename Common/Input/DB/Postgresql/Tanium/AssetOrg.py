@@ -15,10 +15,11 @@ def plug_in(dataType) :
         MAT = SETTING['CORE']['Tanium']['INPUT']['DB']['PS']['TNM']['MA']
         DAT = SETTING['CORE']['Tanium']['INPUT']['DB']['PS']['TNM']['DA']
         COLLECTIONTYPE = SETTING['CORE']['Tanium']['ONOFFTYPE']
+        CMT = SETTING['CORE']['Tanium']['CYCLE']['MINUTELY']['TIME']
         PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
         
         yesterday = (datetime.today() - timedelta(1)).strftime("%Y-%m-%d")
-        five_minutes_ago = (datetime.today() - timedelta(minutes=5)).strftime("%Y-%m-%d %H:%M:%S")
+        minutes_ago = (datetime.today() - timedelta(minutes=CMT/60)).strftime("%Y-%m-%d %H:%M:%S")
         DL = []
         selectConn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHOST, DBPORT, DBNM, DBUNM, DBPWD))
         selectCur = selectConn.cursor()
@@ -46,7 +47,7 @@ def plug_in(dataType) :
                     from  
                         """ + MAT + """ 
                     where 
-                        to_char(asset_collection_date , 'YYYY-MM-DD HH24:MI:SS') >= '"""+five_minutes_ago+"""'"""
+                        to_char(asset_collection_date , 'YYYY-MM-DD HH24:MI:SS') >= '"""+minutes_ago+"""'"""
             else :
                 SQ = """
                     select 
@@ -82,7 +83,7 @@ def plug_in(dataType) :
                     from 
                         """ + MAT + """
                     where 
-                        to_char(asset_collection_date , 'YYYY-MM-DD HH24:MI:SS') >= '"""+five_minutes_ago+"""'"""
+                        to_char(asset_collection_date , 'YYYY-MM-DD HH24:MI:SS') >= '"""+minutes_ago+"""'"""
             else :
                 SQ = """
                     select 
@@ -150,7 +151,7 @@ def plug_in(dataType) :
                         from 
                             """+MAT+"""
                         where
-                            to_char(asset_collection_date , 'YYYY-MM-DD HH24:MI:SS') >= '"""+five_minutes_ago+"""'
+                            to_char(asset_collection_date , 'YYYY-MM-DD HH24:MI:SS') >= '"""+minutes_ago+"""'
                         ) as ma
                     LEFT JOIN 
                         (select 

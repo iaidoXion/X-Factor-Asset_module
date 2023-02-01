@@ -13,9 +13,10 @@ def plug_in(dataType) :
         DBUNM = SETTING['CORE']['Tanium']['INPUT']['DB']['PS']['USER']
         DBPWD = SETTING['CORE']['Tanium']['INPUT']['DB']['PS']['PWD']
         MST = SETTING['CORE']['Tanium']['INPUT']['DB']['PS']['TNM']['MS']
+        CMT = SETTING['CORE']['Tanium']['CYCLE']['MINUTELY']['TIME']
         PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
         
-        five_minutes_ago = (datetime.today() - timedelta(minutes=5)).strftime("%Y-%m-%d %H:%M:%S")
+        minutes_ago = (datetime.today() - timedelta(minutes=CMT/60)).strftime("%Y-%m-%d %H:%M:%S")
         DL = []
         selectConn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHOST, DBPORT, DBNM, DBUNM, DBPWD))
         selectCur = selectConn.cursor()
@@ -28,7 +29,7 @@ def plug_in(dataType) :
                 from  
             """ + MST +"""
             where 
-                to_char(statistics_collection_date , 'YYYY-MM-DD HH24:MI:SS') >= '"""+five_minutes_ago+"""'"""
+                to_char(statistics_collection_date , 'YYYY-MM-DD HH24:MI:SS') >= '"""+minutes_ago+"""'"""
         selectCur.execute(SQ)
         selectRS = selectCur.fetchall()
         
