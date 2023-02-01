@@ -20,11 +20,14 @@ def plug_in(data, dataType) :
         for c in DATA_list:
         # for c in range(len(data.computer_id)):
             if dataType == 'alarm' :
-                IPS = data.ipv_address[c].split('.')
-                if len(IPS) > 1 :
-                    IPG = IPS[0]+'.'+IPS[1]+'.'+IPS[2]
+                if data.ipv_address[c] == 'unconfirmed':
+                    IPG = 'unconfirmed'
                 else:
-                    IPG = IPS[0]
+                    IPS = data.ipv_address[c].split('.')
+                    if len(IPS) > 1:
+                        IPG = IPS[0] + '.' + IPS[1] + '.' + IPS[2]
+                    else:
+                        IPG = IPS[0]
 
                 TCS = data.tanium_client_subnet[c]
 
@@ -92,20 +95,24 @@ def plug_in(data, dataType) :
 
                 DL.append([data.computer_id[c], IPG, TCS,  RAM, CPU, data.listenPortCountChange[c], data.establishedPortCountChange[c], RPC, LRB, DUS])
             elif dataType == 'online' :
-                IPS = data.ipv_address[c].split('.')
-                if len(IPS) > 1:
-                    IPG = IPS[0] + '.' + IPS[1] + '.' + IPS[2]
+
+                if data.ipv_address[c] == 'unconfirmed':
+                    IPG = 'unconfirmed'
                 else:
-                    IPG = IPS[0]
+                    IPS = data.ipv_address[c].split('.')
+                    if len(IPS) > 1:
+                        IPG = IPS[0] + '.' + IPS[1] + '.' + IPS[2]
+                    else:
+                        IPG = IPS[0]
 
-
-                TCS = data.tanium_client_subnet[c]
-
-
+                if data.tanium_client_subnet[c] != "Can not determine Tanium Client's Subnet":
+                    TCS = data.tanium_client_subnet[c]
+                else :
+                    TCS = 'unconfirmed'
                 if data.asset_list_statistics_collection_date[c] == 'unconfirmed' :
                     ALSCD = data.asset_list_statistics_collection_date[c]
                 else :
-                    if data.tanium_client_subnet[c] != 'unconfirmed':
+                    if data.tanium_client_subnet[c] != 'unconfirmed' or data.tanium_client_subnet[c] != "Can not determine Tanium Client's Subnet":
                         now = datetime.now()
                         thirty_minutes_str = (now - relativedelta(minutes=30)).strftime("%Y-%m-%d %H:%M:%S")
                         thirty_minutes = datetime.strptime(thirty_minutes_str, '%Y-%m-%d %H:%M:%S')
@@ -116,6 +123,7 @@ def plug_in(data, dataType) :
                             ALSCD = 'No'
                     else :
                         ALSCD = 'unconfirmed'
+                #print([data.computer_id[c], IPG, TCS, ALSCD])
                 DL.append([data.computer_id[c], IPG, TCS, ALSCD])
             else :
                 if data.today_listen_port_count[c].isdigit() and data.yesterday_listen_port_count[c].isdigit():
