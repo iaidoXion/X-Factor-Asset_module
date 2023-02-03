@@ -19,17 +19,17 @@ def plug_in(data) :
         for c in DATA_list:
         # for c in range(len(data.computer_id)):
             if data.disk_used_space[c][0].isdigit() and data.disk_total_space[c][0].isdigit() :
-                driveUsage = int(data.disk_used_space[c][0]) / int(data.disk_total_space[c][0]) * 100
+                driveUsage = round(int(data.disk_used_space[c][0]) / int(data.disk_total_space[c][0]) * 100, 1)
             else :
                 driveUsage = 'unconfirmed'
 
             if data.ram_use_size[c].isdigit() and data.ram_total_size[c].isdigit() :
-                ramUsage = int(data.ram_use_size[c]) / int(data.ram_total_size[c]) * 100
+                ramUsage = round(int(data.ram_use_size[c]) / int(data.ram_total_size[c]) * 100, 1)
             else :
                 ramUsage = 'unconfirmed'
 
             if type(data.cup_consumption[c]) == float :
-                cpuUsage = data.cup_consumption[c]
+                cpuUsage = round(data.cup_consumption[c],1)
             else :
                 cpuUsage = 'unconfirmed'
             DL.append([data.computer_id[c], str(driveUsage), str(ramUsage), str(cpuUsage)])

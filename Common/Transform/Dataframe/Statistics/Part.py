@@ -68,8 +68,8 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
                         RSZ = d[11]
                         RTZ = d[12]
                         CDS = d[13]
-                        DSZ = d[14]
-                        DTS = d[15]
+                        DSZ = d[14][0]
+                        DTS = d[15][0]
                         DFL.append([CID, CNM, IP, CT, OSP, OS, IV, LR, TCS, MF, NS, RSZ, RTZ, CDS, DSZ, DTS])
 
                     elif columnsType == 'count':

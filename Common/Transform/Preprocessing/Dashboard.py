@@ -81,7 +81,7 @@ def plug_in(data, dataType):
 
             if dataType == 'minutely_daily_asset':
                 CNM = data['computer_name'][c]
-                CDS = data['cup_details_cup_speed'][c]
+                CDS = data['cup_details_cup_speed'][c].split(' ')[0]
                 if not data['last_reboot'][c].startswith('[current') and not data['last_reboot'][c].startswith('TSE-Error') and not data['last_reboot'][c].startswith('Unknown'):
                     LR = datetime.strptime(data['last_reboot'][c].replace('-', '+').split(' +')[0], "%a, %d %b %Y %H:%M:%S")
                 else:
