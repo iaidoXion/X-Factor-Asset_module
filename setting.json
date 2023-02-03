@@ -8,9 +8,12 @@
       "fileFormat" : ".log"
     },
     "PROGRESSBAR" : "False",
-    "INSTALLDATE" : "20230201",
+    "TEST" : {
+      "DAILY" : "False"
+    },
     "AUTOCREATE" : {
-      "USE" : "True",
+      "USE" : "False",
+      "DROP" : "False",
       "TABLE" :{
         "MA": {
           "USE": "TRUE",
@@ -53,11 +56,8 @@
       "ONOFFTYPE" : "online",
       "PROJECT" :{
           "VUL" : {
-            "USE": "True",
-            "PATH": ".\\",
-            "VUL_FILE_NAME": "question.xlsx"
-          },
-          "report" : "true"
+            "USE": "True"
+          }
       },
       "CYCLE" : {
         "MINUTELY" : {

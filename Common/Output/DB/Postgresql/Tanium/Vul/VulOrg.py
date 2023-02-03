@@ -132,9 +132,7 @@ def plug_in(data, cycle, type) :
                         CCD = data.classification_cid[i]
                         ONLINE = data.online[i]
                         dataList = CI, VC, VJR, VJUT, VJRS, VJCN, VJCT, VJIP, VJLR, VJOS, CCD, ONLINE
-                    logging.info('Insert DB Start : {} '.format(cycle))
                     insertCur.execute(IQ, (dataList))
-                    logging.info('Start DB Succesed : {} '.format(cycle))
             except Exception as e:
                 if '고유 제약 조건을 위반함' in str(e) :
                     logging.warning('Error : {} '.format(str(e)))

@@ -15,10 +15,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 run_main = True
 MinuitTime = 0
-
-CMU_status = False
-CDU_status = False
-TVU_status = False
+result_list = []
 def minutely() :
     if CMU == 'true':
         now = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
@@ -54,35 +51,35 @@ def vul() :
 def main():
     if CUSTOMER == "X-FACTOR" :
         if TU == 'true':
-            if INSTALLDATE == today :
-                if AUTOCREATEUSE == 'true' : #테이블 자동생성
-                    for i in AUTOCREATE.values() :
-                        if i['USE'] == 'TRUE' :
-                            query = QPI(i['NAME'])
-                            CODPTV(query, i['NAME'], 'create')
-                            
-                    logging.info('AutoCreate Success!!!')
-                if CMU == 'true' :
-                    CTMPI()
-                    print('Tanium Minutely Module 성공')
-                    logging.info('Tanium Minutely Module 성공')
-                else:
-                    logging.info('Tanium Minutely cycle 사용여부  : ' + CMU)
-
+            if AUTOCREATEUSE == 'true' : #테이블 자동생성
+                for i in AUTOCREATE.values() :
+                    if i['USE'] == 'TRUE' :
+                        query = QPI(i['NAME'])
+                        CODPTV(query, i['NAME'], 'create')
+                logging.info('AutoCreate Success!!!')
+                
+            if CMU == 'true' :
+                CTMPI()
+                print('Tanium Minutely Module 성공')
+                logging.info('Tanium Minutely Module 성공')
+            else:
+                logging.info('Tanium Minutely cycle 사용여부  : ' + CMU)
+            
+            if TVU == 'true' :
+                CTVMPI('first')
+                print('Tanium VUL Module 성공')
+                logging.info('Tanium VUL Module 성공')
+            else:
+                logging.info('Tanium VUL cycle 사용여부  : ' + CDU)
+            
+            if PTD == "true" :
                 if CDU == 'true' :
                     CTDPI()
                     print('Tanium Daily Module 성공')
                     logging.info('Tanium Daily Module 성공')
                 else:
                     logging.info('Tanium Daily cycle 사용여부  : ' + CDU)
-                    
-                if TVU == 'true' :
-                    CTVMPI('first')
-                    print('Tanium VUL Module 성공')
-                    logging.info('Tanium VUL Module 성공')
-                else:
-                    logging.info('Tanium VUL cycle 사용여부  : ' + CDU)
-
+            
             print("스케쥴링을 시작하겠습니다.")
             
             for i in reversed(range(3)) :
@@ -104,12 +101,12 @@ if __name__ == "__main__":
         SETTING = json.loads(f.read())
     CUSTOMER = SETTING['PROJECT']['CUSTOMER']
     
-    INSTALLDATE = SETTING['PROJECT']['INSTALLDATE']
     AUTOCREATE = SETTING['PROJECT']['AUTOCREATE']['TABLE']
     AUTOCREATEUSE = SETTING['PROJECT']['AUTOCREATE']['USE'].lower()
     LOGFD = SETTING['PROJECT']['LOG']['directory']
     LOGFNM = SETTING['PROJECT']['LOG']['fileName']
     LOGFF = SETTING['PROJECT']['LOG']['fileFormat']
+    PTD = SETTING['PROJECT']['TEST']['DAILY'].lower()
     TU = SETTING['CORE']['Tanium']['COREUSE'].lower()
     CMU = SETTING['CORE']['Tanium']['CYCLE']['MINUTELY']['USE'].lower()
     CMT = SETTING['CORE']['Tanium']['CYCLE']['MINUTELY']['TIME']
