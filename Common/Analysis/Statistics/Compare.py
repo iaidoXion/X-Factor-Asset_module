@@ -115,9 +115,11 @@ def plug_in(data, dataType) :
                     if data.tanium_client_subnet[c] != 'unconfirmed' or data.tanium_client_subnet[c] != "Can not determine Tanium Client's Subnet":
                         now = datetime.now()
                         thirty_minutes_str = (now - relativedelta(minutes=30)).strftime("%Y-%m-%d %H:%M:%S")
+                        five_minutes_str = (now - relativedelta(minutes=5)).strftime("%Y-%m-%d %H:%M:%S")
                         thirty_minutes = datetime.strptime(thirty_minutes_str, '%Y-%m-%d %H:%M:%S')
+                        five_minutes = datetime.strptime(five_minutes_str, '%Y-%m-%d %H:%M:%S')
                         ALSCDDT = datetime.strptime(str(data.asset_list_statistics_collection_date[c]), '%Y-%m-%d %H:%M:%S')
-                        if ALSCDDT < thirty_minutes :
+                        if five_minutes >= ALSCDDT >= thirty_minutes :
                             ALSCD = 'Yes'
                         else :
                             ALSCD = 'No'
