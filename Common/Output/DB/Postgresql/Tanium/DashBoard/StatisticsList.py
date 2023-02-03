@@ -107,8 +107,8 @@ def plug_in(data, cycle) :
             RSZ = data.ram_use_size[i]
             RTS = data.ram_total_size[i]
             CDS = data.cup_details_cup_speed[i]
-            DSZ = data.disk_used_space[i][0]
-            DTS = data.disk_total_space[i][0]
+            DSZ = data.disk_used_space[i]
+            DTS = data.disk_total_space[i]
             dataList = CI, CN, IP, CT, OP, OS, IV, LR, DUS, RUS, CPUUS, LPC, EPC, RSC, OL, TCS, MF, SIC, NS, RSZ, RTS, CDS, DSZ, DTS
             insertCur.execute(IQ, (dataList))
         insertConn.commit()
