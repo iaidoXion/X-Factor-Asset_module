@@ -129,7 +129,7 @@ def plug_in(data, dataType):
                         items = round(DTS_sum / 1024 / 1024)
                     DTS.append(str(items))
                 else:
-                    DTS.append(data['disk_total_space'][c].replace('{"', '').replace('"}', ''))
+                    DTS.append('unconfirmed')
 
                 DUS = []
                 DUS_item = []
@@ -173,7 +173,7 @@ def plug_in(data, dataType):
                         items = round(DUS_sum / 1024 / 1024)
                     DUS.append(str(items).replace('{', '').replace('}', '').replace('[', '').replace(']', ''))
                 else:
-                    DUS.append(data['disk_used_space'][c].replace('{"', '').replace('"}', '').replace('{', '').replace('}', ''))
+                    DUS.append('unconfirmed')
 
                 if not data['os_platform'][c].startswith('[current') and not data['os_platform'][c].startswith('TSE-Error') and not data['os_platform'][c].startswith('Unknown'):
                     OP = data['os_platform'][c]
@@ -219,11 +219,12 @@ def plug_in(data, dataType):
                 if not data['ram_use_size'][c].startswith('[current') and not data['ram_use_size'][c].startswith('TSE-Error') and not data['ram_use_size'][c].startswith('Unknown'):
                     RUS = data['ram_use_size'][c].split(' ')[0]
                 else:
-                    RUS = data['ram_use_size'][c]
+                    RUS = 'unconfirmed'
+
                 if not data['ram_total_size'][c].startswith('[current') and not data['ram_total_size'][c].startswith('TSE-Error') and not data['ram_total_size'][c].startswith('Unknown'):
                     RTS = data['ram_total_size'][c].split(' ')[0]
                 else:
-                    RTS = data['ram_total_size'][c]
+                    RTS = 'unconfirmed'
 
                 if not data['cup_consumption'][c].startswith('[current') and not data['cup_consumption'][c].startswith('TSE-Error'):
                     CPUC = float(data['cup_consumption'][c].split(' ')[0])
