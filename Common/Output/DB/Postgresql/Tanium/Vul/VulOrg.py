@@ -135,11 +135,11 @@ def plug_in(data, cycle, type) :
                         dataList = CI, VC, VJR, VJUT, VJRS, VJCN, VJCT, VJIP, VJLR, VJOS, CCD, ONLINE
                     insertCur.execute(IQ, (dataList))
             except Exception as e:
-                if '고유 제약 조건을 위반함' in str(e) :
+                if '고유 제약 조건을 위반함' in str(e) or 'duplicate key value violates unique constraint' in str(e):
                     logger.warning('Error : {} '.format(str(e)))
                     print('이미 Question이 들어가져있습니다.')
                     return 400
-                elif '이름의 릴레이션(relation)이 없습니다'.format(str(e)) :
+                elif '이름의 릴레이션(relation)이 없습니다'.format(str(e)) in str(e):
                     print('{} 테이블이 없습니다'.format(str(e).strip('오류:').split('이름의 릴레이션')[0]))
                     print('취약점 테이블을 생성하시거나 Autocreate를 true로 변경해주세요')
                     logger.warning('Error : {} '.format(str(e)))
@@ -157,7 +157,7 @@ def plug_in(data, cycle, type) :
             print(e)
             logger.warning('ConnectionError : {} '.format(str(e)))
         except Exception as e :
-            if '이름의 릴레이션(relation)이 없습니다'.format(str(e)) :
+            if '이름의 릴레이션(relation)이 없습니다'.format(str(e)) in str(e):
                 print('{} 테이블이 없습니다'.format(str(e).strip('오류:').split('이름의 릴레이션')[0]))
                 print('취약점 테이블을 생성하시거나 Autocreate를 true로 변경해주세요')
                 logger.warning('Error : {} '.format(str(e)))
