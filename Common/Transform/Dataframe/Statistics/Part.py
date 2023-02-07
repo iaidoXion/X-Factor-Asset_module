@@ -3,7 +3,9 @@ from tqdm import tqdm
 import pandas as pd
 import logging
 import json
+
 def plug_in(data, inputPlugin, dataType, columnsType) :
+    logger = logging.getLogger(__name__)
     try:
         with open("setting.json", encoding="UTF-8") as f:
             SETTING = json.loads(f.read())
@@ -104,8 +106,8 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
                     elif columnsType == 'count' :
                         DFL.append([CID, IP, TCS, ALSCD])
         DF = pd.DataFrame(DFL, columns=DFC)
-        logging.info('Statistics/Part.py -  ' + dataType+'/'+columnsType+ ' 성공')
+        logger.info('Statistics/Part.py -  ' + dataType+'/'+columnsType+ ' 성공')
         return DF
     except Exception as e:
-        logging.warning('Statistics/Part.py - Error 발생'+ dataType)
-        logging.warning('Error : ' + e)
+        logger.warning('Statistics/Part.py - Error 발생'+ dataType)
+        logger.warning('Error : ' + e)

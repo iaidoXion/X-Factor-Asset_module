@@ -2,6 +2,7 @@ from tqdm import tqdm
 import logging
 import json
 def plug_in(data):
+    logger = logging.getLogger(__name__)
     try :
         with open("setting.json", encoding="UTF-8") as f:
             SETTING = json.loads(f.read())
@@ -33,9 +34,9 @@ def plug_in(data):
 
             DL.append(
                 [data.computer_id[c], str(running_service_count), str(session_ip_count)])
-        logging.info('Count.py - 성공')
+        logger.info('Count.py - 성공')
         return DL
 
     except Exception as e:
-        logging.warning('Count.py - Error 발생')
-        logging.warning('Error : {}'.format(e))
+        logger.warning('Count.py - Error 발생')
+        logger.warning('Error : {}'.format(e))

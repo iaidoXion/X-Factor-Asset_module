@@ -1,8 +1,9 @@
 from tqdm import tqdm
 import logging
 import json
-    
+
 def plug_in(data) :
+    logger = logging.getLogger(__name__)
     try:
         with open("setting.json", encoding="UTF-8") as f:
             SETTING = json.loads(f.read())
@@ -33,11 +34,11 @@ def plug_in(data) :
             else :
                 cpuUsage = 'unconfirmed'
             DL.append([data.computer_id[c], str(driveUsage), str(ramUsage), str(cpuUsage)])
-        logging.info('Usage.py - 성공')
+        logger.info('Usage.py - 성공')
         return DL
     except Exception as e:
-        logging.warning('Usage.py - Error 발생')
-        logging.warning('Error : {}'.format(str(e)))
+        logger.warning('Usage.py - Error 발생')
+        logger.warning('Error : {}'.format(str(e)))
 
 
 

@@ -11,25 +11,25 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 def minutely_plug_in(use): 
+    logger = logging.getLogger(__name__)
     if use == 'first':
         VDF = VUL_TDFPI(vul_list_pd(), 'question')
         VQIDB = CODBPTAOPI(VDF, 'question', 'insert')
         if VQIDB == 200 :
-            logging.info('VUL Question is  Succesed!!')
+            logger.info('VUL Question is  Succesed!!')
 
     SK = CIATSPI()['dataList'][0]  
     
     VDIPDL = CIATSCPI(SK, 'VUL')['dataList']
-    logging.info('recived SessionKey is  Succesed!!')
+    logger.info('recived SessionKey is  Succesed!!')
     
     VUDDFT = CTDAAPI(VDIPDL, 'API', 'VUL')
-    logging.info('recived VUL Data is  Succesed!!')
+    logger.info('recived VUL Data is  Succesed!!')
     
     VULDF = VUL_TDFPI(VUDDFT, 'VUL')
-    logging.info('Trans DataFrame is Successed!!')
-    
+    logger.info('Trans DataFrame is Successed!!')
     CODBPTAOPI(VULDF, 'VUL', 'insert')
-    logging.info('DB Data is Insert')
+    logger.info('DB Data is Insert')
 
 
 

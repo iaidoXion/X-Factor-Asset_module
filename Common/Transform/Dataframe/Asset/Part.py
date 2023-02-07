@@ -4,6 +4,7 @@ import logging
 import json
 
 def plug_in(data, inputPlugin, dataType) :
+    logger = logging.getLogger(__name__)
     try:
         with open("setting.json", encoding="UTF-8") as f:
             SETTING = json.loads(f.read())
@@ -67,8 +68,8 @@ def plug_in(data, inputPlugin, dataType) :
                     DFL.append([CID, CNM, LR, DTS, DUS, OSP, OS, IV, CT, IP, TLPC, YLPC, TEPC, YEPC, RUS, RTS, IAN, RS, CC, OL, TCS, MF, SIP, NS, CDS])
 
         DF = pd.DataFrame(DFL, columns=DFC)
-        logging.info('Asset/Part.py -  ' + inputPlugin+'/'+dataType+ ' 성공')
+        logger.info('Asset/Part.py -  ' + inputPlugin+'/'+dataType+ ' 성공')
         return DF
     except Exception as e:
-        logging.warning('Asset/Part.py - Error 발생')
-        logging.warning('Error : ' + e)
+        logger.warning('Asset/Part.py - Error 발생')
+        logger.warning('Error : ' + e)

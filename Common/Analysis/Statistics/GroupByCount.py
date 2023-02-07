@@ -3,8 +3,10 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from tqdm import tqdm
 import logging
+
 import json
 def plug_in(data, classification, itemType) :
+    logger = logging.getLogger(__name__)
     try:
         with open("setting.json", encoding="UTF-8") as f:
             SETTING = json.loads(f.read())
@@ -172,10 +174,10 @@ def plug_in(data, classification, itemType) :
         for DFC in range(len(DFGS)) :
             RD.append([statistics_unique[DFC], classification, item[DFC], item_count[DFC]])
 
-        logging.info('GroupByCount.py -' + classification + ' 성공')
+        logger.info('GroupByCount.py -' + classification + ' 성공')
         return RD
     except Exception as e:
-        logging.warning('GroupByCount.py - ' + classification + ' Error 발생')
-        logging.warning('Error : {}'.format(str(e)))
+        logger.warning('GroupByCount.py - ' + classification + ' Error 발생')
+        logger.warning('Error : {}'.format(str(e)))
 
 

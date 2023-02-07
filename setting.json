@@ -9,42 +9,50 @@
     },
     "PROGRESSBAR" : "False",
     "TEST" : {
-      "DAILY" : "False"
+      "DAILY" : "false"
     },
     "AUTOCREATE" : {
-      "USE" : "False",
-      "DROP" : "False",
+      "USE" : "True",
+      "DROP" : "True",
       "TABLE" :{
         "MA": {
           "USE": "TRUE",
+          "DROP" : "True",
           "NAME": "minutely_asset"
         },
         "DA": {
           "USE": "TRUE",
+          "DROP": "True",
           "NAME": "daily_asset"
         },
         "MSL": {
           "USE": "TRUE",
+          "DROP": "True",
           "NAME": "minutely_statistics_list"
         },
         "DSL": {
           "USE": "TRUE",
+          "DROP": "True",
           "NAME": "daily_statistics_list"
         },
         "MS": {
           "USE": "TRUE",
+          "DROP": "TRUE",
           "NAME": "minutely_statistics"
         },
         "DS": {
           "USE": "TRUE",
+          "DROP": "TRUE",
           "NAME": "daily_statistics"
         },
         "VQ": {
-          "USE": "TRUE",
+          "USE": "true",
+          "DROP": "TRUE",
           "NAME": "vulnerability_list"
         },
         "VJ": {
-          "USE": "TRUE",
+          "USE": "true",
+          "DROP": "TRUE",
           "NAME": "vulnerability_judge"
         }
       }
@@ -56,7 +64,7 @@
       "ONOFFTYPE" : "online",
       "PROJECT" :{
           "VUL" : {
-            "USE": "True"
+            "USE": "true"
           }
       },
       "CYCLE" : {

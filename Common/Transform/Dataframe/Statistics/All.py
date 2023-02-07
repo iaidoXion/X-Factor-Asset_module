@@ -2,7 +2,9 @@ import pandas as pd
 from tqdm import tqdm
 import logging
 import json
+
 def plug_in(data, inputPlugin, dataType) :
+    logger = logging.getLogger(__name__)
     try:
         with open("setting.json", encoding="UTF-8") as f:
             SETTING = json.loads(f.read())
@@ -59,10 +61,10 @@ def plug_in(data, inputPlugin, dataType) :
                     IC = d[3]
                     DFL.append([MSU, classification, item, IC])
         DF = pd.DataFrame(DFL, columns=DFC)
-        logging.info('Statistics/All.py -  ' + inputPlugin+'/'+dataType+ ' 성공')
+        logger.info('Statistics/All.py -  ' + inputPlugin+'/'+dataType+ ' 성공')
         return DF
     except Exception as e:
-        logging.warning('Statistics/ALl.py - Error 발생')
-        logging.warning('Error : ' + e)
+        logger.warning('Statistics/ALl.py - Error 발생')
+        logger.warning('Error : ' + e)
 
 

@@ -3,7 +3,9 @@ import psycopg2
 import json
 import logging
 from tqdm import tqdm
+
 def plug_in(data, cycle) :
+    logger = logging.getLogger(__name__)
     try :
         with open("setting.json", encoding="UTF-8") as f:
             SETTING = json.loads(f.read())
@@ -113,7 +115,7 @@ def plug_in(data, cycle) :
             insertCur.execute(IQ, (dataList))
         insertConn.commit()
         insertConn.close()
-        logging.info('Statistics List Table INSERT connection - ' + cycle + '성공')
+        logger.info('Statistics List Table INSERT connection - ' + cycle + '성공')
     except ConnectionError as e:
-        logging.warning('Statistics List Table INSERT connection 실패')
-        logging.warning('Error : ' + e)
+        logger.warning('Statistics List Table INSERT connection 실패')
+        logger.warning('Error : ' + e)

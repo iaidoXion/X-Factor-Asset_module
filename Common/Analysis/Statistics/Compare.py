@@ -4,6 +4,7 @@ from tqdm import tqdm
 import logging
 import json
 def plug_in(data, dataType) :
+    logger = logging.getLogger(__name__)
     try :
         with open("setting.json", encoding="UTF-8") as f:
             SETTING = json.loads(f.read())
@@ -114,7 +115,7 @@ def plug_in(data, dataType) :
                 else :
                     if data.tanium_client_subnet[c] != 'unconfirmed' or data.tanium_client_subnet[c] != "Can not determine Tanium Client's Subnet":
                         now = datetime.now()
-                        thirty_minutes_str = (now - relativedelta(minutes=30)).strftime("%Y-%m-%d %H:%M:%S")
+                        thirty_minutes_str = (now - relativedelta(minutes=35)).strftime("%Y-%m-%d %H:%M:%S")
                         five_minutes_str = (now - relativedelta(minutes=5)).strftime("%Y-%m-%d %H:%M:%S")
                         thirty_minutes = datetime.strptime(thirty_minutes_str, '%Y-%m-%d %H:%M:%S')
                         five_minutes = datetime.strptime(five_minutes_str, '%Y-%m-%d %H:%M:%S')
@@ -149,8 +150,8 @@ def plug_in(data, dataType) :
                 else:
                     online = 'unconfirmed'
                 DL.append([data.computer_id[c], listenPortCountChange, establishedPortCountChange,  str(online)])
-        logging.info('Compare.py -' + dataType + ' 성공')
+        logger.info('Compare.py -' + dataType + ' 성공')
         return DL
     except Exception as e:
-        logging.warning('Compare.py - ' + dataType + ' Error 발생')
-        logging.warning('Error : {}'.format(str(e)))
+        logger.warning('Compare.py - ' + dataType + ' Error 발생')
+        logger.warning('Error : {}'.format(str(e)))

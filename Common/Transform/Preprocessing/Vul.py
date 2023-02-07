@@ -7,6 +7,7 @@ import logging
 from collections import Counter
 from pprint import pprint
 def plug_in(data, dataType):
+    logger = logging.getLogger(__name__)
     try:
         if dataType == 'question':
             a = []
@@ -44,7 +45,7 @@ def plug_in(data, dataType):
                 online_list = []
                 swv_list = []
                 date_list = []
-                logging.info('Tanium ' + dataType + ' Data Transform(Dataframe) Plug In Start')
+                logger.info('Tanium ' + dataType + ' Data Transform(Dataframe) Plug In Start')
                 for i in data:
                     for j in i['list']:
                         if 'cid' in i:
@@ -75,7 +76,7 @@ def plug_in(data, dataType):
                             swv_list.append('TSE-Error')
                         date_list.append(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
                         # class_date_list.append(datetime.now().strftime('%Y-%m-%d'))
-                logging.info('Completing list operations for putting into a data frame')
+                logger.info('Completing list operations for putting into a data frame')
                 for i in range(len(value_list)):
                     if type(value_list[i]) == list:
                         for j in range(len(value_list[i])):
@@ -108,11 +109,11 @@ def plug_in(data, dataType):
                 DF = pd.DataFrame(weak_dict)
                 DF = DF.astype({'computer_id': 'object'})
                 DF = DF.astype({'vulnerability_judge_update_time': 'datetime64'})
-                logging.info('Tanium ' + dataType + ' Data Transform(Dataframe) Plug In Finish')
+                logger.info('Tanium ' + dataType + ' Data Transform(Dataframe) Plug In Finish')
                 return DF
             except:
-                logging.warning('Error running Tanium ' + dataType + ' Data Transform (Data Frame) plugin')
+                logger.warning('Error running Tanium ' + dataType + ' Data Transform (Data Frame) plugin')
                 return 'error'
     except Exception as e:
-        logging.warning('Preprocessing_VUL.py - Error 발생')
-        logging.warning('Error : ' + e)
+        logger.warning('Preprocessing_VUL.py - Error 발생')
+        logger.warning('Error : ' + e)

@@ -2,6 +2,7 @@ from tqdm import tqdm
 import logging
 from ast import literal_eval
 def plug_in(data, inputPlugin, project) :
+    logger = logging.getLogger(__name__)
     DFC = ['SW1', 'SW2', 'SW2_2', 'SW2-3', 'SW2_4', 'SW3', 'SW4', 'SW4_2']
     
     chekc_swv = [20, 42, 9, 24]
@@ -25,16 +26,16 @@ def plug_in(data, inputPlugin, project) :
                 count = count + 1
                 for j in data[i]['data'][k] :
                     if j['text'] == 'TSE-Error: No Sensor Definition for this Platform':
-                        logging.info('ComputerID :  {} has {}'.format(data[i]['cid'], j['text']))
+                        logger.info('ComputerID :  {} has {}'.format(data[i]['cid'], j['text']))
                         continue
                     if j['text'] == 'TSE-Error: Python is disabled':
-                        logging.info('ComputerID :  {} has {}'.format(data[i]['cid'], j['text']))
+                        logger.info('ComputerID :  {} has {}'.format(data[i]['cid'], j['text']))
                         continue
                     elif j['text'] == '[current result unavailable]' :
-                        logging.info('ComputerID :  {} has {}'.format(data[i]['cid'], j['text']))
+                        logger.info('ComputerID :  {} has {}'.format(data[i]['cid'], j['text']))
                         continue
                     elif j['text'] == 'TSE-Error: Python is not available on this system.':
-                        logging.info('ComputerID :  {} has {}'.format(data[i]['cid'], j['text']))
+                        logger.info('ComputerID :  {} has {}'.format(data[i]['cid'], j['text']))
                         continue
                     else :
                         if j['text'] == 'TSE-Error: Failed to send to sensor child process: broken pipe' :
@@ -69,10 +70,10 @@ def plug_in(data, inputPlugin, project) :
         for i in range(len(dataList)) :
             dataList[i]['list'] = sorted(dataList[i]['list'], key= lambda x: x['SWV'])
         DFL = dataList
-        logging.info('Tanium ' + project + ' Data API Call Success')
+        logger.info('Tanium ' + project + ' Data API Call Success')
         
         return DFL
     
     except Exception as e:
-        logging.warning('Asset/All.py - Error 발생')
-        logging.warning('Error : ' + e)
+        logger.warning('Asset/All.py - Error 발생')
+        logger.warning('Error : ' + e)
