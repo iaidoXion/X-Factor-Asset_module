@@ -3,7 +3,9 @@ import psycopg2
 import json
 from tqdm import tqdm
 import logging
+
 def plug_in(data, cycle, type) :
+    logger = logging.getLogger(__name__)
     with open("setting.json", encoding="UTF-8") as f:
         SETTING = json.loads(f.read())
         DBHOST = SETTING['CORE']['Tanium']['OUTPUT']['DB']['PS']['HOST']
@@ -17,7 +19,7 @@ def plug_in(data, cycle, type) :
         PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
     if type == 'insert' :
         try :
-            logging.info('Start the process : {} '.format(cycle))
+            logger.info('Start the process : {} '.format(cycle))
             if cycle == 'question' :
                 TNM = VQ
                 insertDate = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
@@ -95,7 +97,6 @@ def plug_in(data, cycle, type) :
                                 );"""
                 elif VUL_STS == "Offline" :
                     return None
-
             if cycle == 'question' :
                 datalen = len(data.vulnerability_code)
             else :
@@ -135,18 +136,29 @@ def plug_in(data, cycle, type) :
                     insertCur.execute(IQ, (dataList))
             except Exception as e:
                 if '고유 제약 조건을 위반함' in str(e) :
-                    logging.warning('Error : {} '.format(str(e)))
+                    logger.warning('Error : {} '.format(str(e)))
                     print('이미 Question이 들어가져있습니다.')
                     return 400
+                elif '이름의 릴레이션(relation)이 없습니다'.format(str(e)) :
+                    print('{} 테이블이 없습니다'.format(str(e).strip('오류:').split('이름의 릴레이션')[0]))
+                    print('취약점 테이블을 생성하시거나 Autocreate를 true로 변경해주세요')
+                    logger.warning('Error : {} '.format(str(e)))
+                    quit()
                 else :
                     print(e)
-                    logging.warning('Error : {} '.format(str(e)))
+                    logger.warning('Error : {} '.format(str(e)))
                     return 404
             insertConn.commit()
             insertConn.close()
-            logging.info('Insert {} Process is finish '.format(cycle))
+            logger.info('Insert {} Process is finish '.format(cycle))
             
             return 200
         except ConnectionError as e:
             print(e)
-            logging.warning('ConnectionError : {} '.format(str(e)))
+            logger.warning('ConnectionError : {} '.format(str(e)))
+        except Exception as e :
+            if '이름의 릴레이션(relation)이 없습니다'.format(str(e)) :
+                print('{} 테이블이 없습니다'.format(str(e).strip('오류:').split('이름의 릴레이션')[0]))
+                print('취약점 테이블을 생성하시거나 Autocreate를 true로 변경해주세요')
+                logger.warning('Error : {} '.format(str(e)))
+                quit()

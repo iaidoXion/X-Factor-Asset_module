@@ -2,7 +2,9 @@ import pandas as pd
 from tqdm import tqdm
 import json
 import logging
+
 def plug_in(data, inputPlugin) :
+    logger = logging.getLogger(__name__)
     try:
         with open("setting.json", encoding="UTF-8") as f:
             SETTING = json.loads(f.read())
@@ -214,9 +216,9 @@ def plug_in(data, inputPlugin) :
                     UA, ADQLLIUD, ADQLLIUN, ADQLLIUT, TCS, manufacturer, SI, nvidiaSmi, OL])
         
         DF = pd.DataFrame(DFL, columns=DFC)
-        logging.info('Asset/All.py -  ' + inputPlugin + ' 성공')
+        logger.info('Asset/All.py -  ' + inputPlugin + ' 성공')
         return DF
         
     except Exception as e:
-        logging.warning('Asset/All.py - Error 발생')
-        logging.warning('Error : ' + e)
+        logger.warning('Asset/All.py - Error 발생')
+        logger.warning('Error : ' + e)

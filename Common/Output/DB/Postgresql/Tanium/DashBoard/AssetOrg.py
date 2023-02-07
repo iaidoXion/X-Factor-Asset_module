@@ -5,6 +5,7 @@ from tqdm import tqdm
 import logging
 
 def plug_in(data, cycle) :
+    logger = logging.getLogger(__name__)
     try :
         with open("setting.json", encoding="UTF-8") as f:
             SETTING = json.loads(f.read())
@@ -217,7 +218,7 @@ def plug_in(data, cycle) :
             insertCur.execute(IQ, (dataList))
         insertConn.commit()
         insertConn.close()
-        logging.info('Asset Table INSERT connection - ' + cycle + ' 성공')
+        logger.info('Asset Table INSERT connection - ' + cycle + ' 성공')
     except ConnectionError as e:
-        logging.warning('Asset Table INSERT connection 실패')
-        logging.warning('Error : ' + e)
+        logger.warning('Asset Table INSERT connection 실패')
+        logger.warning('Error : ' + e)

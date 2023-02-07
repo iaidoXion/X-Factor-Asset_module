@@ -7,6 +7,7 @@ import logging
 from collections import Counter
 from pprint import pprint
 def plug_in(data, dataType):
+    logger = logging.getLogger(__name__)
     try:
         with open("setting.json", encoding="UTF-8") as f:
             SETTING = json.loads(f.read())
@@ -266,11 +267,11 @@ def plug_in(data, dataType):
                 DL.append([CID, CNM, LR, DTS, DUS, OP, OS, IV, CT, IPV, LPC, YLPC, EPC, YEPC, RUS, RTS, IANM, RS, CPUC, OL, TCS, MF, SIP, NS, CDS])
             elif dataType == 'minutely_asset':
                 DL.append([CID, IANM, MF, RS, SIP])
-        logging.info('Preprocessing.py - ' + dataType + ' 성공')
+        logger.info('Preprocessing.py - ' + dataType + ' 성공')
         return DL
     except Exception as e:
-        logging.warning('Preprocessing_Dashboard.py - Error 발생')
-        logging.warning('Error : ' + e)
+        logger.warning('Preprocessing_Dashboard.py - Error 발생')
+        logger.warning('Error : ' + e)
 
 
 

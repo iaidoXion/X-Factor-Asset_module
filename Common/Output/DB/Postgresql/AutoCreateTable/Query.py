@@ -1,7 +1,9 @@
-def QueryPlugIn(name):
-    dropT = """DROP TABLE {} ;""".format(name)
-    
-    dropS = """DROP SEQUENCE seq_{}_num;""".format(name)
+def QueryPlugIn(name, all_drop_use, drop_use):
+    if all_drop_use == 'true' :
+        if drop_use =='true' :
+            dropT = """DROP TABLE {} ;""".format(name)
+            
+            dropS = """DROP SEQUENCE seq_{}_num;""".format(name)
     
     createS = """CREATE SEQUENCE seq_{}_num START 1""".format(name)
     
@@ -248,8 +250,12 @@ def QueryPlugIn(name):
                 CONSTRAINT vulnerability_judge_pk PRIMARY KEY (vulnerability_judge_num),
                 CONSTRAINT vulnerability_judge_un UNIQUE (classification_cid)
                 );"""
-    
-                    
-    QUERYLIST = [dropT, dropS, createS, createT]
-    
+    if all_drop_use == 'true' :
+        if drop_use == 'true' :
+            QUERYLIST = [dropT, dropS, createS, createT]
+        elif drop_use == 'false' :
+            QUERYLIST = [createS, createT]
+    elif all_drop_use == 'false' :
+        QUERYLIST = [createS, createT]
+        
     return QUERYLIST
