@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import logging
 from tqdm import tqdm
 def plug_in(dataType) :
+    logger = logging.getLogger(__name__)
     try:
         with open("setting.json", encoding="UTF-8") as f:
             SETTING = json.loads(f.read())
@@ -42,8 +43,8 @@ def plug_in(dataType) :
         for index, RS in DATA_list:
         # for RS in selectRS:
             DL.append(RS)
-        logging.info('Statistics Table Select connection - ' + dataType + ' 성공')
+        logger.info('Statistics Table Select connection - ' + dataType + ' 성공')
         return DL
     except ConnectionError as e:
-        logging.warning('Statistics Table Select connection 실패')
-        logging.warning('Error : ' + e)
+        logger.warning('Statistics Table Select connection 실패')
+        logger.warning('Error : ' + e)

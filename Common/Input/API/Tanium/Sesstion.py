@@ -10,6 +10,7 @@ APIUNM = SETTING['CORE']['Tanium']['INPUT']['API']['username']
 APIPWD = SETTING['CORE']['Tanium']['INPUT']['API']['password']
 
 def plug_in() :
+    logger = logging.getLogger(__name__)
     try:
         SKH = '{"username": "'+APIUNM+'", "domain": "", "password": "'+APIPWD+'"}'
         SKURL = APIURL + SKP
@@ -20,8 +21,8 @@ def plug_in() :
         SK = SKRJ['data']['session']
         dataList = [SK]
         RD = {'resCode': SKRC, 'dataList': dataList}
-        logging.info('Tanium API Sesstion Key 호출 성공')
-        logging.info('Sesstion Key : '+str(SK))
+        logger.info('Tanium API Sesstion Key 호출 성공')
+        logger.info('Sesstion Key : '+str(SK))
         return RD
     except :
-        logging.warning('Tanium API Sesstion Key 호출 Error 발생')
+        logger.warning('Tanium API Sesstion Key 호출 Error 발생')

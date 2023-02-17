@@ -65,6 +65,6 @@ def plug_in(data, inputPlugin, dataType) :
         return DF
     except Exception as e:
         logger.warning('Statistics/ALl.py - Error 발생')
-        logger.warning('Error : ' + e)
+        logger.warning('Error : ' + str(e))
 
 

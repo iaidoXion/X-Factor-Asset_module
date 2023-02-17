@@ -9,4 +9,4 @@ def plug_in(leftDF, rightDF) :
         return RD
     except Exception as e:
         logger.warning('Merge.py - Error 발생')
-        logger.warning('Error : ' + e)
+        logger.warning('Error : ' + str(e))
