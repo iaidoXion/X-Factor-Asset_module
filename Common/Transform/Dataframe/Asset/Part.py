@@ -72,4 +72,4 @@ def plug_in(data, inputPlugin, dataType) :
         return DF
     except Exception as e:
         logger.warning('Asset/Part.py - Error 발생')
-        logger.warning('Error : ' + e)
+        logger.warning('Error : ' + str(e))

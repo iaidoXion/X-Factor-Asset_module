@@ -71,4 +71,4 @@ def plug_in(data, cycle):
         logger.info('Statistics Table INSERT connection - ' + cycle + '성공')
     except ConnectionError as e:
         logger.warning('Statistics Table INSERT connection 실패')
-        logger.warning('Error : ' + e)
+        logger.warning('Error : ' + str(e))

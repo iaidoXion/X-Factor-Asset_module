@@ -1,11 +1,10 @@
-from datetime import datetime, timedelta
-import pandas as pd
-from tqdm import tqdm
-import logging
 import json
 import logging
-from collections import Counter
-from pprint import pprint
+from datetime import datetime
+
+from tqdm import tqdm
+
+
 def plug_in(data, dataType):
     logger = logging.getLogger(__name__)
     try:
@@ -52,21 +51,19 @@ def plug_in(data, dataType):
                 MF = 'unconfirmed'
 
             #세션ip 전처리 추가 예정(server별 session상위5개)
-            if data['session_ip'][c].startswith('{"[current') or data['session_ip'][c].startswith('{"TSE-Error') or data['session_ip'][c].startswith('{"[Unknown') or data['session_ip'][c] == ' ':
-                SIP = ['unconfirmed']
-            elif data['session_ip'][c].startswith('{"[no result'):
-                SIP = ['no results']
-            else:
-                if data['session_ip'][c][2] == '(':
+            if not data['session_ip'][c].startswith('{"[current') and not data['session_ip'][c].startswith('{"TSE-Error') and not data['session_ip'][c].startswith('{"[Unknown') and not data['session_ip'][c] == ' ':
+                if data['session_ip'][c].startswith('{"[no result'):
+                    SIP = ['no results']
+                elif data['session_ip'][c][2] == '(':
                     SIP = data['session_ip'][c].replace('{', '[').replace('}', ']')
                     SIP = eval(SIP)
                     SIPL = []
                     for a in range(len(SIP)):
-                        if SIP[a].startswith('[hash'):
-                            SIPL.append('hash collision')
-                        else:
+                        if not SIP[a].startswith('[hash') and not SIP[a].startswith('Warning'):
                             b = eval(SIP[a])
                             SIPL.append(b[1])
+                        else:
+                            continue
                     SIP = []
                     SIP.append(SIPL)
 
@@ -75,14 +72,22 @@ def plug_in(data, dataType):
                     SIP = eval(SIP)
                     SIPL = []
                     for a in range(len(SIP)) :
-                        abc = SIP[a].split(' ')
-                        SIPL.append(abc[1])
+                        if not SIP[a].startswith('[hash') and not SIP[a].startswith('Warning'):
+                            abc = SIP[a].split(' ')
+                            SIPL.append(abc[1])
+                        else:
+                            continue
                     SIP = []
                     SIP.append(SIPL)
+            else:
+                SIP = ['unconfirmed']
 
             if dataType == 'minutely_daily_asset':
                 CNM = data['computer_name'][c]
-                CDS = data['cup_details_cup_speed'][c].split(' ')[0]
+                if data['cup_details_cup_speed'][c] == '' or data['cup_details_cup_speed'][c].startswith('[current'):
+                    CDS = 'unconfirmed'
+                else:
+                    CDS = data['cup_details_cup_speed'][c].split(' ')[0]
                 if not data['last_reboot'][c].startswith('[current') and not data['last_reboot'][c].startswith('TSE-Error') and not data['last_reboot'][c].startswith('Unknown'):
                     LR = datetime.strptime(data['last_reboot'][c].replace('-', '+').split(' +')[0], "%a, %d %b %Y %H:%M:%S")
                 else:
@@ -232,7 +237,6 @@ def plug_in(data, dataType):
                 else:
                     CPUC = data['cup_consumption'][c]
 
-
                 if not data['online'][c].startswith('[current') and not data['online'][c].startswith(
                         'TSE-Error') and not data['online'][c].startswith('Unknown'):
                     OL = data['online'][c]
@@ -271,7 +275,7 @@ def plug_in(data, dataType):
         return DL
     except Exception as e:
         logger.warning('Preprocessing_Dashboard.py - Error 발생')
-        logger.warning('Error : ' + e)
+        logger.warning('Error : ' + str(e))
 
 
 

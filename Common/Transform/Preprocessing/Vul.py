@@ -116,4 +116,4 @@ def plug_in(data, dataType):
                 return 'error'
     except Exception as e:
         logger.warning('Preprocessing_VUL.py - Error 발생')
-        logger.warning('Error : ' + e)
+        logger.warning('Error : ' + str(e))

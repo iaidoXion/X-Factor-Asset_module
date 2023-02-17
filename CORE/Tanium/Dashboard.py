@@ -1,6 +1,11 @@
+import smtplib
+from email.mime.text import MIMEText
 
 import urllib3
 import json
+
+import win32com.client
+
 from Common.Input.API.Tanium.Sesstion import plug_in as CIATSPI
 from Common.Input.API.Tanium.Sensor.Common import plug_in as CIATSCPI
 from Common.Input.DB.Postgresql.Tanium.AssetOrg import plug_in as CIDBPTAOPI
@@ -46,7 +51,7 @@ def minutely_plug_in():                                                         
         SOODL = CTDAAPI(SOPPT, 'DB')
     else :                                                                                  # (Source Data MINUTELY Transform(preprocessing) plug in 사용 여부 확인 - 사용안함.)
         SOODL = SODDFT
-    
+
     if SOMOPIDBPU == 'true' :                                                               # (Source Data MINUTELY Output plug in postgresql DB 사용 여부 확인 - 사용함.)
         CODBPTAOPI(SOODL, 'minutely')                                                       # (minutely_asset Table에 수집)
     # output plug in 이 postgresql DB 외의 것들 구현 예정

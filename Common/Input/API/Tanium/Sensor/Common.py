@@ -14,6 +14,7 @@ PROGRESS = SETTING['PROJECT']['PROGRESSBAR'].lower()
 
 
 def plug_in(sessionKey, projectType) :
+    logger = logging.getLogger(__name__)
     try:
         if projectType == 'DSB' :
             CSID = SETTING['CORE']['Tanium']['INPUT']['API']['SensorID']['COMMON']
@@ -44,10 +45,10 @@ def plug_in(sessionKey, projectType) :
         elif projectType == 'VUL' :
             dataList = CSRJD['result_sets'][0]['rows']
         RD = {'resCode': CSRC, 'dataList': dataList}
-        logging.info('Tanium API Sensor 호출 성공')
-        logging.info('Sensor ID : ' + str(CSID))
+        logger.info('Tanium API Sensor 호출 성공')
+        logger.info('Sensor ID : ' + str(CSID))
         
         return RD
     except :
-        logging.warning('Tanium API Sensor 호출 Error 발생')
-        logging.warning('Sensor ID : '+str(CSID))
+        logger.warning('Tanium API Sensor 호출 Error 발생')
+        logger.warning('Sensor ID : '+str(CSID))

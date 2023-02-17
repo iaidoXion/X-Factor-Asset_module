@@ -110,4 +110,4 @@ def plug_in(data, inputPlugin, dataType, columnsType) :
         return DF
     except Exception as e:
         logger.warning('Statistics/Part.py - Error 발생'+ dataType)
-        logger.warning('Error : ' + e)
+        logger.warning('Error : ' + str(e))

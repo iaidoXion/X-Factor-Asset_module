@@ -221,4 +221,4 @@ def plug_in(data, inputPlugin) :
         
     except Exception as e:
         logger.warning('Asset/All.py - Error 발생')
-        logger.warning('Error : ' + e)
+        logger.warning('Error : ' + str(e))
