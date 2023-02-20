@@ -1,10 +1,9 @@
-import smtplib
-from email.mime.text import MIMEText
+
 
 import urllib3
 import json
 
-import win32com.client
+
 
 from Common.Input.API.Tanium.Sesstion import plug_in as CIATSPI
 from Common.Input.API.Tanium.Sensor.Common import plug_in as CIATSCPI
